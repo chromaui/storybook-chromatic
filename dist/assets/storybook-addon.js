@@ -23,12 +23,6 @@ var _window = window,
     __STORYBOOK_CLIENT_API__ = _window.__STORYBOOK_CLIENT_API__,
     __STORYBOOK_ADDONS_CHANNEL__ = _window.__STORYBOOK_ADDONS_CHANNEL__;
 
-// Simulate Storybook 3.4's API for @storybook/react < 3.4
-
-if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
-  __STORYBOOK_CLIENT_API__ = require('@storybook/react');
-  __STORYBOOK_ADDONS_CHANNEL__ = require('@storybook/addons').default.getChannel();
-}
 
 var runtime = 'storybook';
 (0, _client2.default)({
