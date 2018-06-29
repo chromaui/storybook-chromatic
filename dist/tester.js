@@ -1482,7 +1482,7 @@ var waitForBuild = function () {
 
             if (inProgressCount !== lastInProgressCount) {
               lastInProgressCount = inProgressCount;
-              log(inProgressCount + '/' + pluralize(specCount, 'spec') + ' remain to test. ' + ('(' + pluralize(changeCount, 'change') + ', ' + pluralize(errorCount, 'error') + ')'));
+              log(inProgressCount + '/' + pluralize(specCount, 'story') + ' remain to test. ' + ('(' + pluralize(changeCount, 'change') + ', ' + pluralize(errorCount, 'error') + ')'));
             }
 
             _context.next = 10;
@@ -1584,6 +1584,10 @@ function log(msg) {
 function pluralize(n, noun, noNumber) {
   var pluralizedNoun = n === 1 ? noun : noun + 's';
 
+  if (pluralizedNoun.endsWith('ys')) {
+    pluralizedNoun = pluralizedNoun.replace(/ys$/, 'ies');
+  }
+
   return noNumber ? pluralizedNoun : n + ' ' + pluralizedNoun;
 }
 
@@ -1635,7 +1639,7 @@ exports.default = function () {
               break;
             }
 
-            throw new Error('You must provide an storybook code  -- visit https://www.chromaticqa.com to get your code.' + '\nPass your storybook code with the `CHROMATIC_APP_CODE` environment variable or the `--app-code` flag.');
+            throw new Error('You must provide an app code  -- visit https://www.chromaticqa.com to get your code.' + '\nPass your app code with the `CHROMATIC_APP_CODE` environment variable or the `--app-code` flag.');
 
           case 5:
             if (scriptName || commandName || noStart) {
@@ -1664,12 +1668,12 @@ exports.default = function () {
             _context2.prev = 15;
             _context2.t0 = _context2['catch'](7);
 
-            if (!(_context2.t0[0] && _context2.t0[0].message && _context2.t0[0].message.match('No storybook with code'))) {
+            if (!(_context2.t0[0] && _context2.t0[0].message && _context2.t0[0].message.match('No app with code'))) {
               _context2.next = 19;
               break;
             }
 
-            throw new Error('Incorrect storybook code \'' + appCode + '\' -- visit https://www.chromaticqa.com to get your code');
+            throw new Error('Incorrect app code \'' + appCode + '\' -- visit https://www.chromaticqa.com to get your code');
 
           case 19:
             throw _context2.t0;
@@ -1812,10 +1816,10 @@ exports.default = function () {
               break;
             }
 
-            throw new Error('--only argument must provided in the from "componentName:specName"');
+            throw new Error('--only argument must provided in the from "componentName:storyName"');
 
           case 77:
-            log('Running only spec \'' + match[2] + '\' of component \'' + match[1] + '\'');
+            log('Running only story \'' + match[2] + '\' of component \'' + match[1] + '\'');
 
             predicate = function predicate(_ref9) {
               var name = _ref9.name,
@@ -1837,11 +1841,11 @@ exports.default = function () {
               break;
             }
 
-            throw new Error('Cannot run a build with no specs. Please add some specs!');
+            throw new Error('Cannot run a build with no stories. Please add some stories!');
 
           case 85:
 
-            log('Found ' + runtimeSpecs.length + ' specs');
+            log('Found ' + pluralize(runtimeSpecs.length, 'story'));
 
             // REPOSITORY_URL is for netlify: https://www.netlify.com/docs/continuous-deployment/
             fromCI = inputFromCI || !!process.env.CI || !!process.env.REPOSITORY_URL;
@@ -1878,7 +1882,7 @@ exports.default = function () {
             webUrl = _ref10$createBuild.webUrl;
             onlineHint = 'View it online at ' + webUrl;
 
-            log('Started Build ' + number + ' ' + ('(' + pluralize(componentCount, 'component') + ', ' + pluralize(specCount, 'spec') + ').\n\n' + onlineHint + '.'));
+            log('Started Build ' + number + ' ' + ('(' + pluralize(componentCount, 'component') + ', ' + pluralize(specCount, 'story') + ').\n\n' + onlineHint + '.'));
 
             _context2.next = 103;
             return waitForBuild(client, {
