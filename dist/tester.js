@@ -1940,13 +1940,13 @@ exports.default = function () {
             changeCount = _ref11.changeCount;
             errorCount = _ref11.errorCount;
             _context2.t2 = status;
-            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 112 : _context2.t2 === 'BUILD_ACCEPTED' ? 115 : _context2.t2 === 'BUILD_PENDING' ? 115 : _context2.t2 === 'BUILD_DENIED' ? 115 : _context2.t2 === 'BUILD_FAILED' ? 119 : _context2.t2 === 'BUILD_TIMED_OUT' ? 122 : _context2.t2 === 'BUILD_ERROR' ? 125 : 128;
+            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 112 : _context2.t2 === 'BUILD_ACCEPTED' ? 115 : _context2.t2 === 'BUILD_PENDING' ? 115 : _context2.t2 === 'BUILD_DENIED' ? 115 : _context2.t2 === 'BUILD_FAILED' ? 119 : _context2.t2 === 'BUILD_TIMED_OUT' ? 122 : _context2.t2 === 'BUILD_ERROR' ? 122 : 125;
             break;
 
           case 112:
             log('Build ' + number + ' passed! ' + onlineHint + '.');
             exitCode = 0;
-            return _context2.abrupt('break', 129);
+            return _context2.abrupt('break', 126);
 
           case 115:
             log('Build ' + number + ' has ' + pluralize(changeCount, 'change') + '. ' + onlineHint + '.');
@@ -1954,76 +1954,71 @@ exports.default = function () {
             if (exitCode !== 0) {
               log('Pass --exit-zero-on-changes if you want this command to exit successfully in this case.\n  Alternatively, pass --auto-accept-changes if you want changed builds to pass on this branch.\n  Read more: http://docs.chromaticqa.com/test');
             }
-            return _context2.abrupt('break', 129);
+            return _context2.abrupt('break', 126);
 
           case 119:
             log('Build ' + number + ' has ' + pluralize(errorCount, 'error') + '. ' + onlineHint + '.');
             exitCode = 2;
-            return _context2.abrupt('break', 129);
+            return _context2.abrupt('break', 126);
 
           case 122:
-            log('Build ' + number + ' has timed out. Ensure your machine is connected to the internet and please try again.');
+            log('Build ' + number + ' has failed to run. Our apologies. Please try again.');
             exitCode = 3;
-            return _context2.abrupt('break', 129);
+            return _context2.abrupt('break', 126);
 
           case 125:
-            log('Build ' + number + ' has failed to run. Our apologies. Please try again.');
-            exitCode = 4;
-            return _context2.abrupt('break', 129);
-
-          case 128:
             throw new Error('Unexpected build status: ' + status);
 
-          case 129:
-            _context2.next = 139;
+          case 126:
+            _context2.next = 136;
             break;
 
-          case 131:
-            _context2.prev = 131;
+          case 128:
+            _context2.prev = 128;
             _context2.t3 = _context2['catch'](91);
 
             if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
-              _context2.next = 138;
+              _context2.next = 135;
               break;
             }
 
             log(_context2.t3[0].message);
             exitCode = 255;
-            _context2.next = 139;
+            _context2.next = 136;
             break;
 
-          case 138:
+          case 135:
             throw _context2.t3;
 
-          case 139:
-            _context2.prev = 139;
+          case 136:
+            _context2.prev = 136;
 
             if (tunnel) {
               tunnel.close();
             }
 
             if (!child) {
-              _context2.next = 144;
+              _context2.next = 141;
               break;
             }
 
-            _context2.next = 144;
+            _context2.next = 141;
             return (0, _util.promisify)(_treeKill2.default)(child.pid, 'SIGHUP');
 
-          case 144:
-            return _context2.finish(139);
+          case 141:
+            return _context2.finish(136);
 
-          case 145:
+          case 142:
             if (!(!(0, _packageJson.checkPackageJson)() && originalArgv && !fromCI && interactive)) {
-              _context2.next = 152;
+              _context2.next = 149;
               break;
             }
 
             scriptCommand = ('chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '');
-            _context2.next = 149;
+            _context2.next = 146;
             return (0, _nodeAsk.confirm)("\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?");
 
-          case 149:
+          case 146:
             confirmed = _context2.sent;
 
             if (confirmed) {
@@ -2035,15 +2030,15 @@ exports.default = function () {
 
             log('\nMake sure you set the `CHROMATIC_APP_CODE` environment variable when running builds (in particular on your CI server).', { noPrefix: true });
 
-          case 152:
+          case 149:
             return _context2.abrupt('return', exitCode);
 
-          case 153:
+          case 150:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, this, [[7, 15], [91, 131, 139, 145]]);
+    }, _callee2, this, [[7, 15], [91, 128, 136, 142]]);
   }));
 
   function runTest(_x4) {
