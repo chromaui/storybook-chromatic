@@ -407,15 +407,17 @@ var execGitCommand = function () {
             _context.prev = 4;
             _context.t0 = _context['catch'](0);
 
-            if (_context.t0.message && _context.t0.message.match('Not a git repository')) {
-              // eslint-disable-next-line no-console
-              console.error('Unable to execute git command \'' + command + '\'.\n');
-              // eslint-disable-next-line no-console
-              console.error('Chromatic only works in git projects.\n' + 'Contact us at support@hichroma.com if you need to use Chromatic outside of one.\n\n');
+            if (!(_context.t0.message && _context.t0.message.match('Not a git repository'))) {
+              _context.next = 8;
+              break;
             }
-            throw _context.t0;
+
+            throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic only works in git projects.\nContact us at support@hichroma.com if you need to use Chromatic outside of one.\n');
 
           case 8:
+            throw _context.t0;
+
+          case 9:
           case 'end':
             return _context.stop();
         }
