@@ -1121,10 +1121,14 @@ exports.default = function () {
                 }
 
                 if (!dom.window.__chromaticRuntimeSpecs__) {
-                  throw new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com');
+                  dom.window.close();
+                  reject(new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com'));
+                  return;
                 }
 
                 var specs = dom.window.__chromaticRuntimeSpecs__();
+
+                console.log('d');
 
                 dom.window.close();
                 resolve(specs);
