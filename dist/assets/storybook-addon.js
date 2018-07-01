@@ -23,12 +23,6 @@ var _window = window,
     __STORYBOOK_CLIENT_API__ = _window.__STORYBOOK_CLIENT_API__,
     __STORYBOOK_ADDONS_CHANNEL__ = _window.__STORYBOOK_ADDONS_CHANNEL__;
 
-// Simulate Storybook 3.4's API for @storybook/react < 3.4
-
-if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
-  __STORYBOOK_CLIENT_API__ = require('@storybook/react');
-  __STORYBOOK_ADDONS_CHANNEL__ = require('@storybook/addons').default.getChannel();
-}
 
 var runtime = 'storybook';
 (0, _client2.default)({
@@ -45,6 +39,16 @@ var runtime = 'storybook';
         name = input.name;
 
     __STORYBOOK_ADDONS_CHANNEL__.emit('setCurrentStory', { kind: kind, story: name });
+
+    // If the story has rendered with an error, SB does not return any kind of error
+    // (we will fix this...) However, in the meantime, you can pick this up via a class on the body
+    if (document.body.classList.contains('sb-show-errordisplay')) {
+      var message = document.getElementById('error-message').textContent;
+      var stack = document.getElementById('error-stack').textContent;
+      var error = new Error(message);
+      error.stack = stack;
+      throw error;
+    }
 
     return document.getElementById('root');
   },
