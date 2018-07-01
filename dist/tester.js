@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 25);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -164,7 +164,7 @@ var _createClass2 = __webpack_require__(6);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _apolloFetch = __webpack_require__(25);
+var _apolloFetch = __webpack_require__(26);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -322,7 +322,7 @@ var _asyncToGenerator2 = __webpack_require__(0);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _localtunnel = __webpack_require__(32);
+var _localtunnel = __webpack_require__(33);
 
 var _localtunnel2 = _interopRequireDefault(_localtunnel);
 
@@ -382,7 +382,7 @@ var _toConsumableArray2 = __webpack_require__(8);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _slicedToArray2 = __webpack_require__(28);
+var _slicedToArray2 = __webpack_require__(29);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -407,15 +407,17 @@ var execGitCommand = function () {
             _context.prev = 4;
             _context.t0 = _context['catch'](0);
 
-            if (_context.t0.message && _context.t0.message.match('Not a git repository')) {
-              // eslint-disable-next-line no-console
-              console.error('Unable to execute git command \'' + command + '\'.\n');
-              // eslint-disable-next-line no-console
-              console.error('Chromatic only works in git projects.\n' + 'Contact us at support@hichroma.com if you need to use Chromatic outside of one.\n\n');
+            if (!(_context.t0.message && _context.t0.message.match('Not a git repository'))) {
+              _context.next = 8;
+              break;
             }
-            throw _context.t0;
+
+            throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic only works in git projects.\nContact us at support@hichroma.com if you need to use Chromatic outside of one.\n');
 
           case 8:
+            throw _context.t0;
+
+          case 9:
           case 'end':
             return _context.stop();
         }
@@ -865,7 +867,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _values = __webpack_require__(27);
+var _values = __webpack_require__(28);
 
 var _values2 = _interopRequireDefault(_values);
 
@@ -876,7 +878,7 @@ var _path = __webpack_require__(10);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _jsonfile = __webpack_require__(31);
+var _jsonfile = __webpack_require__(32);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -930,7 +932,7 @@ var _promise = __webpack_require__(2);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _keys = __webpack_require__(26);
+var _keys = __webpack_require__(27);
 
 var _keys2 = _interopRequireDefault(_keys);
 
@@ -946,7 +948,7 @@ var _createClass2 = __webpack_require__(6);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _jsdom = __webpack_require__(30);
+var _jsdom = __webpack_require__(31);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1121,10 +1123,14 @@ exports.default = function () {
                 }
 
                 if (!dom.window.__chromaticRuntimeSpecs__) {
-                  throw new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com');
+                  dom.window.close();
+                  reject(new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com'));
+                  return;
                 }
 
                 var specs = dom.window.__chromaticRuntimeSpecs__();
+
+                console.log('d');
 
                 dom.window.close();
                 resolve(specs);
@@ -1299,7 +1305,7 @@ var waitForResponse = function () {
 
 var _child_process = __webpack_require__(9);
 
-var _isomorphicFetch = __webpack_require__(29);
+var _isomorphicFetch = __webpack_require__(30);
 
 var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
@@ -1396,42 +1402,78 @@ exports.default = function () {
 
 /***/ }),
 /* 18 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = {"name":"storybook-chromatic","version":"0.10.0-beta.5-dev","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getStorybookInfo;
+// Figure out the storybook version and view layer
+
+var viewLayers = ['react', 'angular', 'vue', 'polymer', 'mithril', 'marko', 'html'];
+
+// This hack is simply to stop webpack from trying to do something with this require
+// This code is bundled by webpack but runs in node
+// eslint-disable-next-line no-eval
+var require2 = eval('require');
+
+function getStorybookInfo() {
+  while (viewLayers.length > 0) {
+    var viewLayer = viewLayers.shift();
+    try {
+      var _require = require2('@storybook/' + viewLayer + '/package.json'),
+          storybookVersion = _require.version;
+
+      return { viewLayer: viewLayer, storybookVersion: storybookVersion };
+    } catch (err) {
+      // This is OK
+    }
+  }
+
+  throw new Error('Couldn\'t discover storybook version. Try upgrading the storybook-chromatic package?');
+}
 
 /***/ }),
 /* 19 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/core-js/json/stringify");
+module.exports = {"name":"storybook-chromatic","version":"0.10.0-beta.8","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
 
 /***/ }),
 /* 20 */
 /***/ (function(module, exports) {
 
-module.exports = require("env-ci");
+module.exports = require("babel-runtime/core-js/json/stringify");
 
 /***/ }),
 /* 21 */
 /***/ (function(module, exports) {
 
-module.exports = require("node-ask");
+module.exports = require("env-ci");
 
 /***/ }),
 /* 22 */
 /***/ (function(module, exports) {
 
-module.exports = require("tree-kill");
+module.exports = require("node-ask");
 
 /***/ }),
 /* 23 */
 /***/ (function(module, exports) {
 
-module.exports = require("url");
+module.exports = require("tree-kill");
 
 /***/ }),
 /* 24 */
+/***/ (function(module, exports) {
+
+module.exports = require("url");
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1449,7 +1491,7 @@ var _promise = __webpack_require__(2);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(20);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -1511,25 +1553,29 @@ var waitForBuild = function () {
 
 var _util = __webpack_require__(4);
 
-var _nodeAsk = __webpack_require__(21);
+var _nodeAsk = __webpack_require__(22);
 
 var _debug = __webpack_require__(3);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _treeKill = __webpack_require__(22);
+var _treeKill = __webpack_require__(23);
 
 var _treeKill2 = _interopRequireDefault(_treeKill);
 
-var _envCi = __webpack_require__(20);
+var _envCi = __webpack_require__(21);
 
 var _envCi2 = _interopRequireDefault(_envCi);
 
-var _url = __webpack_require__(23);
+var _url = __webpack_require__(24);
 
 var _runtimes = __webpack_require__(16);
 
 var _runtimes2 = _interopRequireDefault(_runtimes);
+
+var _storybook = __webpack_require__(18);
+
+var _storybook2 = _interopRequireDefault(_storybook);
 
 var _startApp = __webpack_require__(17);
 
@@ -1547,7 +1593,7 @@ var _GraphQLClient2 = _interopRequireDefault(_GraphQLClient);
 
 var _git = __webpack_require__(14);
 
-var _package = __webpack_require__(18);
+var _package = __webpack_require__(19);
 
 var _environment = __webpack_require__(12);
 
@@ -1621,7 +1667,7 @@ exports.default = function () {
         _ref4$originalArgv = _ref4.originalArgv,
         originalArgv = _ref4$originalArgv === undefined ? false : _ref4$originalArgv;
 
-    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, baselineCommits, child, _ref8, port, pathname, query, hash, isolatorUrl, tunnel, isolatorUrlObject, predicate, match, runtimeSpecs, fromCI, exitCode, _ref10, _ref10$createBuild, number, specCount, componentCount, webUrl, onlineHint, _ref11, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
+    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, baselineCommits, child, _ref8, port, pathname, query, hash, isolatorUrl, tunnel, isolatorUrlObject, predicate, match, runtimeSpecs, fromCI, _getStorybookInfo, storybookVersion, viewLayer, exitCode, _ref10, _ref10$createBuild, number, specCount, componentCount, webUrl, onlineHint, _ref11, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
 
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
@@ -1849,13 +1895,15 @@ exports.default = function () {
 
             // REPOSITORY_URL is for netlify: https://www.netlify.com/docs/continuous-deployment/
             fromCI = inputFromCI || !!process.env.CI || !!process.env.REPOSITORY_URL;
+            _getStorybookInfo = (0, _storybook2.default)(), storybookVersion = _getStorybookInfo.storybookVersion, viewLayer = _getStorybookInfo.viewLayer;
+
 
             debug('Detected build fromCI:' + fromCI);
-            debug('Detected package version:' + _package.version);
+            debug('Detected package version:' + _package.version + ', storybook version:' + storybookVersion + ', view layer: ' + viewLayer);
 
             exitCode = 5;
-            _context2.prev = 90;
-            _context2.next = 93;
+            _context2.prev = 91;
+            _context2.next = 94;
             return client.runQuery(TesterCreateBuildMutation, {
               input: {
                 autoAcceptChanges: autoAcceptChanges,
@@ -1867,13 +1915,15 @@ exports.default = function () {
                 fromCI: fromCI,
                 isTravisPrBuild: isTravisPrBuild,
                 packageVersion: _package.version,
+                storybookVersion: storybookVersion,
+                viewLayer: viewLayer,
                 committerEmail: committerEmail,
                 committerName: committerName
               },
               isolatorUrl: isolatorUrl
             });
 
-          case 93:
+          case 94:
             _ref10 = _context2.sent;
             _ref10$createBuild = _ref10.createBuild;
             number = _ref10$createBuild.number;
@@ -1884,102 +1934,97 @@ exports.default = function () {
 
             log('Started Build ' + number + ' ' + ('(' + pluralize(componentCount, 'component') + ', ' + pluralize(specCount, 'story') + ').\n\n' + onlineHint + '.'));
 
-            _context2.next = 103;
+            _context2.next = 104;
             return waitForBuild(client, {
               buildNumber: number
             });
 
-          case 103:
+          case 104:
             _ref11 = _context2.sent;
             status = _ref11.status;
             buildAutoAcceptChanges = _ref11.autoAcceptChanges;
             changeCount = _ref11.changeCount;
             errorCount = _ref11.errorCount;
             _context2.t2 = status;
-            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 111 : _context2.t2 === 'BUILD_ACCEPTED' ? 114 : _context2.t2 === 'BUILD_PENDING' ? 114 : _context2.t2 === 'BUILD_DENIED' ? 114 : _context2.t2 === 'BUILD_FAILED' ? 118 : _context2.t2 === 'BUILD_TIMED_OUT' ? 121 : _context2.t2 === 'BUILD_ERROR' ? 124 : 127;
+            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 112 : _context2.t2 === 'BUILD_ACCEPTED' ? 115 : _context2.t2 === 'BUILD_PENDING' ? 115 : _context2.t2 === 'BUILD_DENIED' ? 115 : _context2.t2 === 'BUILD_FAILED' ? 119 : _context2.t2 === 'BUILD_TIMED_OUT' ? 122 : _context2.t2 === 'BUILD_ERROR' ? 122 : 125;
             break;
 
-          case 111:
+          case 112:
             log('Build ' + number + ' passed! ' + onlineHint + '.');
             exitCode = 0;
-            return _context2.abrupt('break', 128);
+            return _context2.abrupt('break', 126);
 
-          case 114:
+          case 115:
             log('Build ' + number + ' has ' + pluralize(changeCount, 'change') + '. ' + onlineHint + '.');
             exitCode = exitZeroOnChanges || buildAutoAcceptChanges ? 0 : 1;
             if (exitCode !== 0) {
               log('Pass --exit-zero-on-changes if you want this command to exit successfully in this case.\n  Alternatively, pass --auto-accept-changes if you want changed builds to pass on this branch.\n  Read more: http://docs.chromaticqa.com/test');
             }
-            return _context2.abrupt('break', 128);
+            return _context2.abrupt('break', 126);
 
-          case 118:
+          case 119:
             log('Build ' + number + ' has ' + pluralize(errorCount, 'error') + '. ' + onlineHint + '.');
             exitCode = 2;
-            return _context2.abrupt('break', 128);
+            return _context2.abrupt('break', 126);
 
-          case 121:
-            log('Build ' + number + ' has timed out. Ensure your machine is connected to the internet and please try again.');
-            exitCode = 3;
-            return _context2.abrupt('break', 128);
-
-          case 124:
+          case 122:
             log('Build ' + number + ' has failed to run. Our apologies. Please try again.');
-            exitCode = 4;
-            return _context2.abrupt('break', 128);
+            exitCode = 3;
+            return _context2.abrupt('break', 126);
 
-          case 127:
+          case 125:
             throw new Error('Unexpected build status: ' + status);
 
-          case 128:
-            _context2.next = 138;
+          case 126:
+            _context2.next = 136;
             break;
 
-          case 130:
-            _context2.prev = 130;
-            _context2.t3 = _context2['catch'](90);
+          case 128:
+            _context2.prev = 128;
+            _context2.t3 = _context2['catch'](91);
 
             if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
-              _context2.next = 137;
+              _context2.next = 135;
               break;
             }
 
             log(_context2.t3[0].message);
             exitCode = 255;
-            _context2.next = 138;
+            _context2.next = 136;
             break;
 
-          case 137:
+          case 135:
             throw _context2.t3;
 
-          case 138:
-            _context2.prev = 138;
+          case 136:
+            _context2.prev = 136;
 
             if (tunnel) {
               tunnel.close();
             }
 
             if (!child) {
-              _context2.next = 143;
+              _context2.next = 141;
               break;
             }
 
-            _context2.next = 143;
+            _context2.next = 141;
             return (0, _util.promisify)(_treeKill2.default)(child.pid, 'SIGHUP');
 
-          case 143:
-            return _context2.finish(138);
+          case 141:
+            return _context2.finish(136);
 
-          case 144:
+          case 142:
             if (!(!(0, _packageJson.checkPackageJson)() && originalArgv && !fromCI && interactive)) {
-              _context2.next = 151;
+              _context2.next = 149;
               break;
             }
 
             scriptCommand = ('chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '');
-            _context2.next = 148;
+            _context2.next = 146;
             return (0, _nodeAsk.confirm)("\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?");
 
-          case 148:
+          case 146:
             confirmed = _context2.sent;
 
             if (confirmed) {
@@ -1991,15 +2036,15 @@ exports.default = function () {
 
             log('\nMake sure you set the `CHROMATIC_APP_CODE` environment variable when running builds (in particular on your CI server).', { noPrefix: true });
 
-          case 151:
+          case 149:
             return _context2.abrupt('return', exitCode);
 
-          case 152:
+          case 150:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, this, [[7, 15], [90, 130, 138, 144]]);
+    }, _callee2, this, [[7, 15], [91, 128, 136, 142]]);
   }));
 
   function runTest(_x4) {
@@ -2010,49 +2055,49 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 module.exports = require("apollo-fetch");
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/object/keys");
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/object/values");
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/helpers/slicedToArray");
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-fetch");
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsdom");
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsonfile");
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("localtunnel");
