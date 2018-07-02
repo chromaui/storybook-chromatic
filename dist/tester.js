@@ -1446,18 +1446,18 @@ var viewLayers = ['react', 'angular', 'vue', 'polymer', 'mithril', 'marko', 'htm
 var require2 = eval('require');
 
 function getStorybookInfo() {
-  // Allow setting storybook version via STORYBOOK_VERSION='react@4.0-alpha.8' for unusual
+  // Allow setting storybook version via CHROMATIC_STORYBOOK_VERSION='react@4.0-alpha.8' for unusual
   // cases (such as our permacache examples)
-  var STORYBOOK_VERSION = process.env.STORYBOOK_VERSION;
+  var CHROMATIC_STORYBOOK_VERSION = process.env.CHROMATIC_STORYBOOK_VERSION;
 
-  if (STORYBOOK_VERSION) {
-    var _STORYBOOK_VERSION$sp = STORYBOOK_VERSION.split('@'),
-        _STORYBOOK_VERSION$sp2 = (0, _slicedToArray3.default)(_STORYBOOK_VERSION$sp, 2),
-        viewLayer = _STORYBOOK_VERSION$sp2[0],
-        storybookVersion = _STORYBOOK_VERSION$sp2[1];
+  if (CHROMATIC_STORYBOOK_VERSION) {
+    var _CHROMATIC_STORYBOOK_ = CHROMATIC_STORYBOOK_VERSION.split('@'),
+        _CHROMATIC_STORYBOOK_2 = (0, _slicedToArray3.default)(_CHROMATIC_STORYBOOK_, 2),
+        viewLayer = _CHROMATIC_STORYBOOK_2[0],
+        storybookVersion = _CHROMATIC_STORYBOOK_2[1];
 
     if (!viewLayer || !storybookVersion) {
-      throw new Error('STORYBOOK_VERSION misspecified -- use "viewLayer@version"');
+      throw new Error('CHROMATIC_STORYBOOK_VERSION misspecified -- use "viewLayer@version"');
     }
     return { viewLayer: viewLayer, storybookVersion: storybookVersion };
   }
