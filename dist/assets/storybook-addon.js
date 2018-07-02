@@ -53,6 +53,10 @@ var runtime = 'storybook';
     return document.getElementById('root');
   },
   specs: function specs() {
+    if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
+      throw new Error('Chromatic requires Storybook version at least 3.4. Please update your storybook!');
+    }
+
     return __STORYBOOK_CLIENT_API__.getStorybook().map(function (_ref2) {
       var kind = _ref2.kind,
           stories = _ref2.stories;
