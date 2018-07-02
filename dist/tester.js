@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 25);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -119,22 +119,28 @@ module.exports = require("babel-runtime/helpers/extends");
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/toConsumableArray");
+module.exports = require("babel-runtime/helpers/slicedToArray");
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("child_process");
+module.exports = require("babel-runtime/helpers/toConsumableArray");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("path");
+module.exports = require("child_process");
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -164,7 +170,7 @@ var _createClass2 = __webpack_require__(6);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _apolloFetch = __webpack_require__(26);
+var _apolloFetch = __webpack_require__(27);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -277,7 +283,7 @@ var GraphQLClient = function () {
 exports.default = GraphQLClient;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -304,7 +310,7 @@ exports.CHROMATIC_CREATE_TUNNEL = CHROMATIC_CREATE_TUNNEL;
 exports.CHROMATIC_APP_CODE = CHROMATIC_APP_CODE;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -367,7 +373,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -378,11 +384,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getBaselineCommits = exports.getBranch = exports.getCommit = exports.FETCH_N_INITIAL_BUILD_COMMITS = undefined;
 
-var _toConsumableArray2 = __webpack_require__(8);
+var _toConsumableArray2 = __webpack_require__(9);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _slicedToArray2 = __webpack_require__(29);
+var _slicedToArray2 = __webpack_require__(8);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -845,7 +851,7 @@ var getBaselineCommits = exports.getBaselineCommits = function () {
   };
 }();
 
-var _child_process = __webpack_require__(9);
+var _child_process = __webpack_require__(10);
 
 var _debug = __webpack_require__(3);
 
@@ -868,7 +874,7 @@ function commitsForCLI(commits) {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -878,14 +884,14 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _values = __webpack_require__(28);
+var _values = __webpack_require__(29);
 
 var _values2 = _interopRequireDefault(_values);
 
 exports.checkPackageJson = checkPackageJson;
 exports.addScriptToPackageJson = addScriptToPackageJson;
 
-var _path = __webpack_require__(10);
+var _path = __webpack_require__(11);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -925,7 +931,7 @@ function addScriptToPackageJson(scriptName, scriptCommand) {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -943,7 +949,7 @@ var _promise = __webpack_require__(2);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _keys = __webpack_require__(27);
+var _keys = __webpack_require__(28);
 
 var _keys2 = _interopRequireDefault(_keys);
 
@@ -1164,7 +1170,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1175,7 +1181,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.checkResponse = undefined;
 
-var _toConsumableArray2 = __webpack_require__(8);
+var _toConsumableArray2 = __webpack_require__(9);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -1314,13 +1320,13 @@ var waitForResponse = function () {
   };
 }();
 
-var _child_process = __webpack_require__(9);
+var _child_process = __webpack_require__(10);
 
 var _isomorphicFetch = __webpack_require__(30);
 
 var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
-var _path = __webpack_require__(10);
+var _path = __webpack_require__(11);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -1412,7 +1418,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1421,7 +1427,15 @@ exports.default = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _slicedToArray2 = __webpack_require__(8);
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
 exports.default = getStorybookInfo;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 // Figure out the storybook version and view layer
 
 var viewLayers = ['react', 'angular', 'vue', 'polymer', 'mithril', 'marko', 'html'];
@@ -1432,13 +1446,29 @@ var viewLayers = ['react', 'angular', 'vue', 'polymer', 'mithril', 'marko', 'htm
 var require2 = eval('require');
 
 function getStorybookInfo() {
-  while (viewLayers.length > 0) {
-    var viewLayer = viewLayers.shift();
-    try {
-      var _require = require2('@storybook/' + viewLayer + '/package.json'),
-          storybookVersion = _require.version;
+  // Allow setting storybook version via CHROMATIC_STORYBOOK_VERSION='react@4.0-alpha.8' for unusual
+  // cases (such as our permacache examples)
+  var CHROMATIC_STORYBOOK_VERSION = process.env.CHROMATIC_STORYBOOK_VERSION;
 
-      return { viewLayer: viewLayer, storybookVersion: storybookVersion };
+  if (CHROMATIC_STORYBOOK_VERSION) {
+    var _CHROMATIC_STORYBOOK_ = CHROMATIC_STORYBOOK_VERSION.split('@'),
+        _CHROMATIC_STORYBOOK_2 = (0, _slicedToArray3.default)(_CHROMATIC_STORYBOOK_, 2),
+        viewLayer = _CHROMATIC_STORYBOOK_2[0],
+        storybookVersion = _CHROMATIC_STORYBOOK_2[1];
+
+    if (!viewLayer || !storybookVersion) {
+      throw new Error('CHROMATIC_STORYBOOK_VERSION misspecified -- use "viewLayer@version"');
+    }
+    return { viewLayer: viewLayer, storybookVersion: storybookVersion };
+  }
+
+  while (viewLayers.length > 0) {
+    var _viewLayer = viewLayers.shift();
+    try {
+      var _require = require2('@storybook/' + _viewLayer + '/package.json'),
+          _storybookVersion = _require.version;
+
+      return { viewLayer: _viewLayer, storybookVersion: _storybookVersion };
     } catch (err) {
       // This is OK
     }
@@ -1448,43 +1478,43 @@ function getStorybookInfo() {
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = {"name":"storybook-chromatic","version":"0.10.0-beta.11","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/json/stringify");
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = require("env-ci");
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 module.exports = require("node-ask");
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 module.exports = require("tree-kill");
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 module.exports = require("url");
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1502,7 +1532,7 @@ var _promise = __webpack_require__(2);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _stringify = __webpack_require__(20);
+var _stringify = __webpack_require__(21);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -1564,49 +1594,49 @@ var waitForBuild = function () {
 
 var _util = __webpack_require__(4);
 
-var _nodeAsk = __webpack_require__(22);
+var _nodeAsk = __webpack_require__(23);
 
 var _debug = __webpack_require__(3);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _treeKill = __webpack_require__(23);
+var _treeKill = __webpack_require__(24);
 
 var _treeKill2 = _interopRequireDefault(_treeKill);
 
-var _envCi = __webpack_require__(21);
+var _envCi = __webpack_require__(22);
 
 var _envCi2 = _interopRequireDefault(_envCi);
 
-var _url = __webpack_require__(24);
+var _url = __webpack_require__(25);
 
-var _runtimes = __webpack_require__(16);
+var _runtimes = __webpack_require__(17);
 
 var _runtimes2 = _interopRequireDefault(_runtimes);
 
-var _storybook = __webpack_require__(18);
+var _storybook = __webpack_require__(19);
 
 var _storybook2 = _interopRequireDefault(_storybook);
 
-var _startApp = __webpack_require__(17);
+var _startApp = __webpack_require__(18);
 
 var _startApp2 = _interopRequireDefault(_startApp);
 
-var _tunnel = __webpack_require__(13);
+var _tunnel = __webpack_require__(14);
 
 var _tunnel2 = _interopRequireDefault(_tunnel);
 
-var _packageJson = __webpack_require__(15);
+var _packageJson = __webpack_require__(16);
 
-var _GraphQLClient = __webpack_require__(11);
+var _GraphQLClient = __webpack_require__(12);
 
 var _GraphQLClient2 = _interopRequireDefault(_GraphQLClient);
 
-var _git = __webpack_require__(14);
+var _git = __webpack_require__(15);
 
-var _package = __webpack_require__(19);
+var _package = __webpack_require__(20);
 
-var _environment = __webpack_require__(12);
+var _environment = __webpack_require__(13);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2067,28 +2097,22 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports) {
 
 module.exports = require("apollo-fetch");
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/object/keys");
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports) {
-
-module.exports = require("babel-runtime/core-js/object/values");
-
-/***/ }),
 /* 29 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/slicedToArray");
+module.exports = require("babel-runtime/core-js/object/values");
 
 /***/ }),
 /* 30 */
