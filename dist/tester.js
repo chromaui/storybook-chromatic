@@ -396,6 +396,8 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var execGitCommand = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(command) {
+    var _error$message, message;
+
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -406,18 +408,27 @@ var execGitCommand = function () {
           case 4:
             _context.prev = 4;
             _context.t0 = _context['catch'](0);
+            _error$message = _context.t0.message, message = _error$message === undefined ? '' : _error$message;
 
-            if (!(_context.t0.message && _context.t0.message.match('Not a git repository'))) {
-              _context.next = 8;
+            if (!message.match('Not a git repository')) {
+              _context.next = 9;
               break;
             }
 
             throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic only works in git projects.\nContact us at support@hichroma.com if you need to use Chromatic outside of one.\n');
 
-          case 8:
+          case 9:
+            if (!message.match('does not have any commits yet')) {
+              _context.next = 11;
+              break;
+            }
+
+            throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic requires that you have created a commit before it can be run.\n');
+
+          case 11:
             throw _context.t0;
 
-          case 9:
+          case 12:
           case 'end':
             return _context.stop();
         }
@@ -1089,51 +1100,51 @@ exports.default = function () {
 
             return _context.abrupt('return', new _promise2.default(function (resolve, reject) {
               return dom.window.document.addEventListener('DOMContentLoaded', function () {
-                var separator = '=========================';
+                try {
+                  var separator = '=========================';
 
-                if (!dom.window.__chromaticRuntimeSpecs__ && !dom.window.__STORYBOOK_CLIENT_API__) {
-                  console.error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.\n' + 'Have you installed the Chromatic widget or addon correctly?\n');
+                  if (!dom.window.__chromaticRuntimeSpecs__ && !dom.window.__STORYBOOK_CLIENT_API__) {
+                    console.error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.\n' + 'Have you installed the Chromatic widget or addon correctly?\n');
 
-                  if (!verbose && logs.length) {
-                    console.error('Your app\'s output:\n' + separator + '\n');
-                    logs.forEach(function (_ref3) {
-                      var logType = _ref3.logType,
-                          log = _ref3.log;
+                    if (!verbose && logs.length) {
+                      console.error('Your app\'s output:\n' + separator + '\n');
+                      logs.forEach(function (_ref3) {
+                        var logType = _ref3.logType,
+                            log = _ref3.log;
+                        return console[logType](log);
+                      });
+                      console.error('\n' + separator + '\n');
+                    }
+                    throw new Error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.');
+                  }
+
+                  // If their app logged something to console.error, it's probably, but
+                  // not definitely an issue. See https://github.com/hichroma/chromatic/issues/757
+                  if (logs.find(function (log) {
+                    return log.logType === 'error';
+                  })) {
+                    console.error('\nYour app logged the following to the error console:\n' + separator);
+                    logs.filter(function (log) {
+                      return log.logType === 'error';
+                    }).forEach(function (_ref4) {
+                      var logType = _ref4.logType,
+                          log = _ref4.log;
                       return console[logType](log);
                     });
-                    console.error('\n' + separator + '\n');
+                    console.error('\n' + separator + '\nThis may lead to some stories not working right or getting detected by Chromatic' + '\nWe suggest you fix the errors, but we will continue anyway..\n');
                   }
-                  reject(new Error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.'));
-                }
 
-                // If their app logged something to console.error, it's probably, but
-                // not definitely an issue. See https://github.com/hichroma/chromatic/issues/757
-                if (logs.find(function (log) {
-                  return log.logType === 'error';
-                })) {
-                  console.error('\nYour app logged the following to the error console:\n' + separator);
-                  logs.filter(function (log) {
-                    return log.logType === 'error';
-                  }).forEach(function (_ref4) {
-                    var logType = _ref4.logType,
-                        log = _ref4.log;
-                    return console[logType](log);
-                  });
-                  console.error('\n' + separator + '\nThis may lead to some stories not working right or getting detected by Chromatic' + '\nWe suggest you fix the errors, but we will continue anyway..\n');
-                }
+                  if (!dom.window.__chromaticRuntimeSpecs__) {
+                    throw new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com');
+                  }
 
-                if (!dom.window.__chromaticRuntimeSpecs__) {
+                  var specs = dom.window.__chromaticRuntimeSpecs__();
                   dom.window.close();
-                  reject(new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com'));
-                  return;
+                  resolve(specs);
+                } catch (err) {
+                  dom.window.close();
+                  reject(err);
                 }
-
-                var specs = dom.window.__chromaticRuntimeSpecs__();
-
-                console.log('d');
-
-                dom.window.close();
-                resolve(specs);
               });
             }));
 
@@ -1440,7 +1451,7 @@ function getStorybookInfo() {
 /* 19 */
 /***/ (function(module, exports) {
 
-module.exports = {"name":"storybook-chromatic","version":"0.10.0-beta.8","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
+module.exports = {"name":"storybook-chromatic","version":"0.10.0-beta.10","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
 
 /***/ }),
 /* 20 */
@@ -1984,7 +1995,7 @@ exports.default = function () {
             _context2.prev = 129;
             _context2.t3 = _context2['catch'](46);
 
-            if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
+            if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
               _context2.next = 136;
               break;
             }
