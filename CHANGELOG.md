@@ -1,4 +1,4 @@
-# 1.0.0 - 2018
+# 1.0.0 - 2018-07-02
 
 * Renamed the package from `react-chromatic` to `storybook-chromatic`, to indicate support for all view layers that Storybook supports!
 
