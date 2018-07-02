@@ -396,6 +396,8 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var execGitCommand = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(command) {
+    var _error$message, message;
+
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -406,18 +408,27 @@ var execGitCommand = function () {
           case 4:
             _context.prev = 4;
             _context.t0 = _context['catch'](0);
+            _error$message = _context.t0.message, message = _error$message === undefined ? '' : _error$message;
 
-            if (!(_context.t0.message && _context.t0.message.match('Not a git repository'))) {
-              _context.next = 8;
+            if (!message.match('Not a git repository')) {
+              _context.next = 9;
               break;
             }
 
             throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic only works in git projects.\nContact us at support@hichroma.com if you need to use Chromatic outside of one.\n');
 
-          case 8:
+          case 9:
+            if (!message.match('does not have any commits yet')) {
+              _context.next = 11;
+              break;
+            }
+
+            throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic requires that you have created a commit before it can be run.\n');
+
+          case 11:
             throw _context.t0;
 
-          case 9:
+          case 12:
           case 'end':
             return _context.stop();
         }
