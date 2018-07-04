@@ -155,6 +155,9 @@ function configure(_ref) {
     } else if (message === 'renderSpec') {
       try {
         renderSpecToDom(rest.spec);
+        source.postMessage({
+          message: 'renderedSpec'
+        }, origin);
       } catch (error) {
         source.postMessage({
           message: 'renderSpecError',
