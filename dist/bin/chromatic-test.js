@@ -61,6 +61,7 @@ var executeTest = exports.executeTest = function () {
 // Normal usage, outside of test
 
 
+exports.findOption = findOption;
 exports.parseArgv = parseArgv;
 
 var _commander = require('commander');
@@ -84,8 +85,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Ensure NODE_ENV is set
 process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 
+// This is not exactly clever but it works most of the time
 function findOption(storybookScript, shortName, longName) {
-  var parts = storybookScript.split(/[\s+|=]/);
+  var parts = storybookScript.split(/[\s='"]+/);
   var index = parts.indexOf(longName);
   if (index === -1) {
     index = parts.indexOf(shortName);
