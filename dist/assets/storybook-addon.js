@@ -14,7 +14,7 @@ var _client2 = _interopRequireDefault(_client);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-if (!location.pathname.match('/iframe.html')) {
+if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
   console.error('storybook-chromatic should be installed in your `.storybook/config.js`');
 } /* eslint-env browser */
 /* eslint-disable import/no-extraneous-dependencies, global-require */
