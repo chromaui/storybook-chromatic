@@ -2058,11 +2058,11 @@ exports.default = function () {
 
           case 143:
             if (!(!(0, _packageJson.checkPackageJson)() && originalArgv && !fromCI && interactive)) {
-              _context2.next = 150;
+              _context2.next = 149;
               break;
             }
 
-            scriptCommand = ('chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '');
+            scriptCommand = ('CHROMATIC_APP_CODE=' + appCode + ' chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '');
             _context2.next = 147;
             return (0, _nodeAsk.confirm)("\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?");
 
@@ -2071,17 +2071,15 @@ exports.default = function () {
 
             if (confirmed) {
               (0, _packageJson.addScriptToPackageJson)('chromatic', scriptCommand);
-              log('\nAdded script `chromatic`. You can now run it here or in CI with `npm run chromatic` (or `yarn chromatic`)', { noPrefix: true });
+              log('\nAdded script `chromatic`. You can now run it here or in CI with `npm run chromatic` (or `yarn chromatic`)\n\nNOTE: I wrote your app code to the `CHROMATIC_APP_CODE` environment variable. The app code cannot be used to read snapshot data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from `package.json` and set it via an environment variable instead.', { noPrefix: true });
             } else {
               log('\nNo problem. You can add it later with:\n{\n  "scripts": {\n    "chromatic": "' + scriptCommand + '"\n  }\n}', { noPrefix: true });
             }
 
-            log('\nMake sure you set the `CHROMATIC_APP_CODE` environment variable when running builds (in particular on your CI server).', { noPrefix: true });
-
-          case 150:
+          case 149:
             return _context2.abrupt('return', exitCode);
 
-          case 151:
+          case 150:
           case 'end':
             return _context2.stop();
         }
