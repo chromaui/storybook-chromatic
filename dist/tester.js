@@ -2062,7 +2062,7 @@ exports.default = function () {
               break;
             }
 
-            scriptCommand = ('CHROMATIC_APP_CODE=' + appCode + ' chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '');
+            scriptCommand = ('CHROMATIC_APP_CODE=' + appCode + ' chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '').trim();
             _context2.next = 147;
             return (0, _nodeAsk.confirm)("\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?");
 
