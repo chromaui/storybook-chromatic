@@ -14,15 +14,10 @@ var _client2 = _interopRequireDefault(_client);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-if (!location.pathname.match('/iframe.html')) {
+if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
   console.error('storybook-chromatic should be installed in your `.storybook/config.js`');
 } /* eslint-env browser */
 /* eslint-disable import/no-extraneous-dependencies, global-require */
-
-var _window = window,
-    __STORYBOOK_CLIENT_API__ = _window.__STORYBOOK_CLIENT_API__,
-    __STORYBOOK_ADDONS_CHANNEL__ = _window.__STORYBOOK_ADDONS_CHANNEL__;
-
 
 var runtime = 'storybook';
 (0, _client2.default)({
@@ -30,6 +25,14 @@ var runtime = 'storybook';
   renderSpec: function renderSpec(_ref) {
     var specRuntime = _ref.runtime,
         input = _ref.input;
+    var _window = window,
+        __STORYBOOK_CLIENT_API__ = _window.__STORYBOOK_CLIENT_API__,
+        __STORYBOOK_ADDONS_CHANNEL__ = _window.__STORYBOOK_ADDONS_CHANNEL__;
+
+
+    if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
+      throw new Error('Chromatic requires Storybook version at least 3.4. Please update your storybook!');
+    }
 
     if (specRuntime !== runtime) {
       throw new Error('Storybook plugin cannot handle ' + specRuntime + ' specs');
@@ -53,6 +56,11 @@ var runtime = 'storybook';
     return document.getElementById('root');
   },
   specs: function specs() {
+    var _window2 = window,
+        __STORYBOOK_CLIENT_API__ = _window2.__STORYBOOK_CLIENT_API__,
+        __STORYBOOK_ADDONS_CHANNEL__ = _window2.__STORYBOOK_ADDONS_CHANNEL__;
+
+
     if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
       throw new Error('Chromatic requires Storybook version at least 3.4. Please update your storybook!');
     }
