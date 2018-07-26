@@ -1,3 +1,9 @@
+# 1.0.1 - 2018-07-26
+
+* We now set the `CHROMATIC_APP_CODE` variable for you, with explicit instructions to remove it (and set via CI) in less secure applications.
+
+* Some small bugfixes to support unusual usages.
+
 # 1.0.0 - 2018-07-02
 
 * Renamed the package from `react-chromatic` to `storybook-chromatic`, to indicate support for all view layers that Storybook supports!
