@@ -1481,7 +1481,7 @@ function getStorybookInfo() {
 /* 20 */
 /***/ (function(module, exports) {
 
-module.exports = {"name":"storybook-chromatic","version":"1.0.1-dev","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
+module.exports = {"name":"storybook-chromatic","version":"1.0.1","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
 
 /***/ }),
 /* 21 */
@@ -2058,11 +2058,11 @@ exports.default = function () {
 
           case 143:
             if (!(!(0, _packageJson.checkPackageJson)() && originalArgv && !fromCI && interactive)) {
-              _context2.next = 150;
+              _context2.next = 149;
               break;
             }
 
-            scriptCommand = ('chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '');
+            scriptCommand = ('CHROMATIC_APP_CODE=' + appCode + ' chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '').trim();
             _context2.next = 147;
             return (0, _nodeAsk.confirm)("\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?");
 
@@ -2071,17 +2071,15 @@ exports.default = function () {
 
             if (confirmed) {
               (0, _packageJson.addScriptToPackageJson)('chromatic', scriptCommand);
-              log('\nAdded script `chromatic`. You can now run it here or in CI with `npm run chromatic` (or `yarn chromatic`)', { noPrefix: true });
+              log('\nAdded script `chromatic`. You can now run it here or in CI with `npm run chromatic` (or `yarn chromatic`)\n\nNOTE: I wrote your app code to the `CHROMATIC_APP_CODE` environment variable. The app code cannot be used to read snapshot data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from `package.json` and set it via an environment variable instead.', { noPrefix: true });
             } else {
               log('\nNo problem. You can add it later with:\n{\n  "scripts": {\n    "chromatic": "' + scriptCommand + '"\n  }\n}', { noPrefix: true });
             }
 
-            log('\nMake sure you set the `CHROMATIC_APP_CODE` environment variable when running builds (in particular on your CI server).', { noPrefix: true });
-
-          case 150:
+          case 149:
             return _context2.abrupt('return', exitCode);
 
-          case 151:
+          case 150:
           case 'end':
             return _context2.stop();
         }
