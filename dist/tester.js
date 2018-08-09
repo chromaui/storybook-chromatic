@@ -1808,9 +1808,10 @@ exports.default = function () {
             if (branch === 'HEAD' || !branch) {
               branch = (0, _envCi2.default)().branch;
 
-              // $HEAD is for netlify: https://www.netlify.com/docs/continuous-deployment/
               if (branch === 'HEAD' || !branch) {
-                branch = process.env.HEAD || branch || 'HEAD';
+                // $HEAD is for netlify: https://www.netlify.com/docs/continuous-deployment/
+                // $GERRIT_BRANCH is for Gerrit/Jenkins: https://wiki.jenkins.io/display/JENKINS/Gerrit+Trigger
+                branch = process.env.HEAD || process.env.GERRIT_BRANCH || branch || 'HEAD';
               }
             }
 
