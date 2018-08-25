@@ -40,8 +40,18 @@ var runtime = 'storybook';
 
     var kind = input.kind,
         name = input.name;
+    // We need to emulate the event sent by the manager to the preview.
+    // In SB@4+ if we emit a message on the channel it will get picked up by the preview
+    // (note that we are on the preview side). However, in SB@3.4, perhaps more correctly,
+    // if we emit a message, it won't be picked up by the preview. So we need to reach
+    // in and simulate receiving an event
+    // eslint-disable-next-line no-underscore-dangle
 
-    __STORYBOOK_ADDONS_CHANNEL__.emit('setCurrentStory', { kind: kind, story: name });
+    __STORYBOOK_ADDONS_CHANNEL__._handleEvent({
+      type: 'setCurrentStory',
+      args: [{ kind: kind, story: name }],
+      from: 'chromatic'
+    });
 
     // If the story has rendered with an error, SB does not return any kind of error
     // (we will fix this...) However, in the meantime, you can pick this up via a class on the body
