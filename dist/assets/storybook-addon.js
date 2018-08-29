@@ -14,21 +14,10 @@ var _client2 = _interopRequireDefault(_client);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-if (!location.pathname.match('/iframe.html')) {
+if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
   console.error('storybook-chromatic should be installed in your `.storybook/config.js`');
 } /* eslint-env browser */
 /* eslint-disable import/no-extraneous-dependencies, global-require */
-
-var _window = window,
-    __STORYBOOK_CLIENT_API__ = _window.__STORYBOOK_CLIENT_API__,
-    __STORYBOOK_ADDONS_CHANNEL__ = _window.__STORYBOOK_ADDONS_CHANNEL__;
-
-// Simulate Storybook 3.4's API for @storybook/react < 3.4
-
-if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
-  __STORYBOOK_CLIENT_API__ = require('@storybook/react');
-  __STORYBOOK_ADDONS_CHANNEL__ = require('@storybook/addons').default.getChannel();
-}
 
 var runtime = 'storybook';
 (0, _client2.default)({
@@ -36,6 +25,14 @@ var runtime = 'storybook';
   renderSpec: function renderSpec(_ref) {
     var specRuntime = _ref.runtime,
         input = _ref.input;
+    var _window = window,
+        __STORYBOOK_CLIENT_API__ = _window.__STORYBOOK_CLIENT_API__,
+        __STORYBOOK_ADDONS_CHANNEL__ = _window.__STORYBOOK_ADDONS_CHANNEL__;
+
+
+    if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
+      throw new Error('Chromatic requires Storybook version at least 3.4. Please update your storybook!');
+    }
 
     if (specRuntime !== runtime) {
       throw new Error('Storybook plugin cannot handle ' + specRuntime + ' specs');
@@ -43,12 +40,41 @@ var runtime = 'storybook';
 
     var kind = input.kind,
         name = input.name;
+    // We need to emulate the event sent by the manager to the preview.
+    // In SB@4+ if we emit a message on the channel it will get picked up by the preview
+    // (note that we are on the preview side). However, in SB@3.4, perhaps more correctly,
+    // if we emit a message, it won't be picked up by the preview. So we need to reach
+    // in and simulate receiving an event
+    // eslint-disable-next-line no-underscore-dangle
 
-    __STORYBOOK_ADDONS_CHANNEL__.emit('setCurrentStory', { kind: kind, story: name });
+    __STORYBOOK_ADDONS_CHANNEL__._handleEvent({
+      type: 'setCurrentStory',
+      args: [{ kind: kind, story: name }],
+      from: 'chromatic'
+    });
+
+    // If the story has rendered with an error, SB does not return any kind of error
+    // (we will fix this...) However, in the meantime, you can pick this up via a class on the body
+    if (document.body.classList.contains('sb-show-errordisplay')) {
+      var message = document.getElementById('error-message').textContent;
+      var stack = document.getElementById('error-stack').textContent;
+      var error = new Error(message);
+      error.stack = stack;
+      throw error;
+    }
 
     return document.getElementById('root');
   },
   specs: function specs() {
+    var _window2 = window,
+        __STORYBOOK_CLIENT_API__ = _window2.__STORYBOOK_CLIENT_API__,
+        __STORYBOOK_ADDONS_CHANNEL__ = _window2.__STORYBOOK_ADDONS_CHANNEL__;
+
+
+    if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
+      throw new Error('Chromatic requires Storybook version at least 3.4. Please update your storybook!');
+    }
+
     return __STORYBOOK_CLIENT_API__.getStorybook().map(function (_ref2) {
       var kind = _ref2.kind,
           stories = _ref2.stories;
