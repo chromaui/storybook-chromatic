@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -119,22 +119,28 @@ module.exports = require("babel-runtime/helpers/extends");
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/toConsumableArray");
+module.exports = require("babel-runtime/helpers/slicedToArray");
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("child_process");
+module.exports = require("babel-runtime/helpers/toConsumableArray");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("path");
+module.exports = require("child_process");
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -164,7 +170,7 @@ var _createClass2 = __webpack_require__(6);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _apolloFetch = __webpack_require__(25);
+var _apolloFetch = __webpack_require__(28);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -277,7 +283,7 @@ var GraphQLClient = function () {
 exports.default = GraphQLClient;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -304,7 +310,7 @@ exports.CHROMATIC_CREATE_TUNNEL = CHROMATIC_CREATE_TUNNEL;
 exports.CHROMATIC_APP_CODE = CHROMATIC_APP_CODE;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -322,7 +328,7 @@ var _asyncToGenerator2 = __webpack_require__(0);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _localtunnel = __webpack_require__(32);
+var _localtunnel = __webpack_require__(34);
 
 var _localtunnel2 = _interopRequireDefault(_localtunnel);
 
@@ -367,7 +373,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -378,11 +384,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getBaselineCommits = exports.getBranch = exports.getCommit = exports.FETCH_N_INITIAL_BUILD_COMMITS = undefined;
 
-var _toConsumableArray2 = __webpack_require__(8);
+var _toConsumableArray2 = __webpack_require__(9);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _slicedToArray2 = __webpack_require__(28);
+var _slicedToArray2 = __webpack_require__(8);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -396,6 +402,8 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var execGitCommand = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(command) {
+    var _error$message, message;
+
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -406,16 +414,27 @@ var execGitCommand = function () {
           case 4:
             _context.prev = 4;
             _context.t0 = _context['catch'](0);
+            _error$message = _context.t0.message, message = _error$message === undefined ? '' : _error$message;
 
-            if (_context.t0.message && _context.t0.message.match('Not a git repository')) {
-              // eslint-disable-next-line no-console
-              console.error('Unable to execute git command \'' + command + '\'.\n');
-              // eslint-disable-next-line no-console
-              console.error('Chromatic only works in git projects.\n' + 'Contact us at support@hichroma.com if you need to use Chromatic outside of one.\n\n');
+            if (!message.match('Not a git repository')) {
+              _context.next = 9;
+              break;
             }
+
+            throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic only works in git projects.\nContact us at support@hichroma.com if you need to use Chromatic outside of one.\n');
+
+          case 9:
+            if (!message.match('does not have any commits yet')) {
+              _context.next = 11;
+              break;
+            }
+
+            throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic requires that you have created a commit before it can be run.\n');
+
+          case 11:
             throw _context.t0;
 
-          case 8:
+          case 12:
           case 'end':
             return _context.stop();
         }
@@ -832,7 +851,7 @@ var getBaselineCommits = exports.getBaselineCommits = function () {
   };
 }();
 
-var _child_process = __webpack_require__(9);
+var _child_process = __webpack_require__(10);
 
 var _debug = __webpack_require__(3);
 
@@ -855,7 +874,7 @@ function commitsForCLI(commits) {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -865,18 +884,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _values = __webpack_require__(27);
+var _values = __webpack_require__(30);
 
 var _values2 = _interopRequireDefault(_values);
 
 exports.checkPackageJson = checkPackageJson;
 exports.addScriptToPackageJson = addScriptToPackageJson;
 
-var _path = __webpack_require__(10);
+var _path = __webpack_require__(11);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _jsonfile = __webpack_require__(31);
+var _jsonfile = __webpack_require__(33);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -912,7 +931,7 @@ function addScriptToPackageJson(scriptName, scriptCommand) {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -930,7 +949,7 @@ var _promise = __webpack_require__(2);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _keys = __webpack_require__(26);
+var _keys = __webpack_require__(29);
 
 var _keys2 = _interopRequireDefault(_keys);
 
@@ -946,7 +965,7 @@ var _createClass2 = __webpack_require__(6);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _jsdom = __webpack_require__(30);
+var _jsdom = __webpack_require__(32);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1087,47 +1106,51 @@ exports.default = function () {
 
             return _context.abrupt('return', new _promise2.default(function (resolve, reject) {
               return dom.window.document.addEventListener('DOMContentLoaded', function () {
-                var separator = '=========================';
+                try {
+                  var separator = '=========================';
 
-                if (!dom.window.__chromaticRuntimeSpecs__ && !dom.window.__STORYBOOK_CLIENT_API__) {
-                  console.error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.\n' + 'Have you installed the Chromatic widget or addon correctly?\n');
+                  if (!dom.window.__chromaticRuntimeSpecs__ && !dom.window.__STORYBOOK_CLIENT_API__) {
+                    console.error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.\n' + 'Have you installed the Chromatic widget or addon correctly?\n');
 
-                  if (!verbose && logs.length) {
-                    console.error('Your app\'s output:\n' + separator + '\n');
-                    logs.forEach(function (_ref3) {
-                      var logType = _ref3.logType,
-                          log = _ref3.log;
+                    if (!verbose && logs.length) {
+                      console.error('Your app\'s output:\n' + separator + '\n');
+                      logs.forEach(function (_ref3) {
+                        var logType = _ref3.logType,
+                            log = _ref3.log;
+                        return console[logType](log);
+                      });
+                      console.error('\n' + separator + '\n');
+                    }
+                    throw new Error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.');
+                  }
+
+                  // If their app logged something to console.error, it's probably, but
+                  // not definitely an issue. See https://github.com/hichroma/chromatic/issues/757
+                  if (logs.find(function (log) {
+                    return log.logType === 'error';
+                  })) {
+                    console.error('\nYour app logged the following to the error console:\n' + separator);
+                    logs.filter(function (log) {
+                      return log.logType === 'error';
+                    }).forEach(function (_ref4) {
+                      var logType = _ref4.logType,
+                          log = _ref4.log;
                       return console[logType](log);
                     });
-                    console.error('\n' + separator + '\n');
+                    console.error('\n' + separator + '\nThis may lead to some stories not working right or getting detected by Chromatic' + '\nWe suggest you fix the errors, but we will continue anyway..\n');
                   }
-                  reject(new Error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.'));
+
+                  if (!dom.window.__chromaticRuntimeSpecs__) {
+                    throw new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com');
+                  }
+
+                  var specs = dom.window.__chromaticRuntimeSpecs__();
+                  dom.window.close();
+                  resolve(specs);
+                } catch (err) {
+                  dom.window.close();
+                  reject(err);
                 }
-
-                // If their app logged something to console.error, it's probably, but
-                // not definitely an issue. See https://github.com/hichroma/chromatic/issues/757
-                if (logs.find(function (log) {
-                  return log.logType === 'error';
-                })) {
-                  console.error('\nYour app logged the following to the error console:\n' + separator);
-                  logs.filter(function (log) {
-                    return log.logType === 'error';
-                  }).forEach(function (_ref4) {
-                    var logType = _ref4.logType,
-                        log = _ref4.log;
-                    return console[logType](log);
-                  });
-                  console.error('\n' + separator + '\nThis may lead to some stories not working right or getting detected by Chromatic' + '\nWe suggest you fix the errors, but we will continue anyway..\n');
-                }
-
-                if (!dom.window.__chromaticRuntimeSpecs__) {
-                  throw new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com');
-                }
-
-                var specs = dom.window.__chromaticRuntimeSpecs__();
-
-                dom.window.close();
-                resolve(specs);
               });
             }));
 
@@ -1147,7 +1170,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1158,7 +1181,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.checkResponse = undefined;
 
-var _toConsumableArray2 = __webpack_require__(8);
+var _toConsumableArray2 = __webpack_require__(9);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
@@ -1297,13 +1320,13 @@ var waitForResponse = function () {
   };
 }();
 
-var _child_process = __webpack_require__(9);
+var _child_process = __webpack_require__(10);
 
-var _isomorphicFetch = __webpack_require__(29);
+var _isomorphicFetch = __webpack_require__(31);
 
 var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
-var _path = __webpack_require__(10);
+var _path = __webpack_require__(11);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -1395,43 +1418,109 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = {"name":"storybook-chromatic","version":"0.10.0-beta.5-dev","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
-
-/***/ }),
 /* 19 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("babel-runtime/core-js/json/stringify");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray2 = __webpack_require__(8);
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
+exports.default = getStorybookInfo;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Figure out the storybook version and view layer
+
+var viewLayers = ['react', 'angular', 'vue', 'polymer', 'mithril', 'marko', 'html'];
+
+// This hack is simply to stop webpack from trying to do something with this require
+// This code is bundled by webpack but runs in node
+// eslint-disable-next-line no-eval
+var require2 = eval('require');
+
+function getStorybookInfo() {
+  // Allow setting storybook version via CHROMATIC_STORYBOOK_VERSION='react@4.0-alpha.8' for unusual
+  // cases (such as our permacache examples)
+  var CHROMATIC_STORYBOOK_VERSION = process.env.CHROMATIC_STORYBOOK_VERSION;
+
+  if (CHROMATIC_STORYBOOK_VERSION) {
+    var _CHROMATIC_STORYBOOK_ = CHROMATIC_STORYBOOK_VERSION.split('@'),
+        _CHROMATIC_STORYBOOK_2 = (0, _slicedToArray3.default)(_CHROMATIC_STORYBOOK_, 2),
+        viewLayer = _CHROMATIC_STORYBOOK_2[0],
+        storybookVersion = _CHROMATIC_STORYBOOK_2[1];
+
+    if (!viewLayer || !storybookVersion) {
+      throw new Error('CHROMATIC_STORYBOOK_VERSION misspecified -- use "viewLayer@version"');
+    }
+    return { viewLayer: viewLayer, storybookVersion: storybookVersion };
+  }
+
+  while (viewLayers.length > 0) {
+    var _viewLayer = viewLayers.shift();
+    try {
+      var _require = require2('@storybook/' + _viewLayer + '/package.json'),
+          _storybookVersion = _require.version;
+
+      return { viewLayer: _viewLayer, storybookVersion: _storybookVersion };
+    } catch (err) {
+      // This is OK
+    }
+  }
+
+  throw new Error('Couldn\'t discover storybook version. Try upgrading the storybook-chromatic package?');
+}
 
 /***/ }),
 /* 20 */
 /***/ (function(module, exports) {
 
-module.exports = require("env-ci");
+module.exports = {"name":"storybook-chromatic","version":"1.0.1","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0","uuid":"^3.3.2"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
 
 /***/ }),
 /* 21 */
 /***/ (function(module, exports) {
 
-module.exports = require("node-ask");
+module.exports = require("babel-runtime/core-js/json/stringify");
 
 /***/ }),
 /* 22 */
 /***/ (function(module, exports) {
 
-module.exports = require("tree-kill");
+module.exports = require("env-ci");
 
 /***/ }),
 /* 23 */
 /***/ (function(module, exports) {
 
-module.exports = require("url");
+module.exports = require("node-ask");
 
 /***/ }),
 /* 24 */
+/***/ (function(module, exports) {
+
+module.exports = require("tree-kill");
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+module.exports = require("url");
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = require("uuid");
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1449,7 +1538,7 @@ var _promise = __webpack_require__(2);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(21);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -1511,45 +1600,51 @@ var waitForBuild = function () {
 
 var _util = __webpack_require__(4);
 
-var _nodeAsk = __webpack_require__(21);
+var _nodeAsk = __webpack_require__(23);
 
 var _debug = __webpack_require__(3);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _treeKill = __webpack_require__(22);
+var _treeKill = __webpack_require__(24);
 
 var _treeKill2 = _interopRequireDefault(_treeKill);
 
-var _envCi = __webpack_require__(20);
+var _envCi = __webpack_require__(22);
 
 var _envCi2 = _interopRequireDefault(_envCi);
 
-var _url = __webpack_require__(23);
+var _url = __webpack_require__(25);
 
-var _runtimes = __webpack_require__(16);
+var _uuid = __webpack_require__(26);
+
+var _runtimes = __webpack_require__(17);
 
 var _runtimes2 = _interopRequireDefault(_runtimes);
 
-var _startApp = __webpack_require__(17);
+var _storybook = __webpack_require__(19);
+
+var _storybook2 = _interopRequireDefault(_storybook);
+
+var _startApp = __webpack_require__(18);
 
 var _startApp2 = _interopRequireDefault(_startApp);
 
-var _tunnel = __webpack_require__(13);
+var _tunnel = __webpack_require__(14);
 
 var _tunnel2 = _interopRequireDefault(_tunnel);
 
-var _packageJson = __webpack_require__(15);
+var _packageJson = __webpack_require__(16);
 
-var _GraphQLClient = __webpack_require__(11);
+var _GraphQLClient = __webpack_require__(12);
 
 var _GraphQLClient2 = _interopRequireDefault(_GraphQLClient);
 
-var _git = __webpack_require__(14);
+var _git = __webpack_require__(15);
 
-var _package = __webpack_require__(18);
+var _package = __webpack_require__(20);
 
-var _environment = __webpack_require__(12);
+var _environment = __webpack_require__(13);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1619,15 +1714,22 @@ exports.default = function () {
         _ref4$createTunnel = _ref4.createTunnel,
         createTunnel = _ref4$createTunnel === undefined ? true : _ref4$createTunnel,
         _ref4$originalArgv = _ref4.originalArgv,
-        originalArgv = _ref4$originalArgv === undefined ? false : _ref4$originalArgv;
+        originalArgv = _ref4$originalArgv === undefined ? false : _ref4$originalArgv,
+        _ref4$sessionId = _ref4.sessionId,
+        sessionId = _ref4$sessionId === undefined ? (0, _uuid.v4)() : _ref4$sessionId;
 
-    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, baselineCommits, child, _ref8, port, pathname, query, hash, isolatorUrl, tunnel, isolatorUrlObject, predicate, match, runtimeSpecs, fromCI, exitCode, _ref10, _ref10$createBuild, number, specCount, componentCount, webUrl, onlineHint, _ref11, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
+    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, baselineCommits, child, tunnel, fromCI, exitCode, _ref8, port, pathname, query, hash, isolatorUrl, isolatorUrlObject, predicate, match, runtimeSpecs, _getStorybookInfo, storybookVersion, viewLayer, _ref10, _ref10$createBuild, number, specCount, componentCount, webUrl, onlineHint, _ref11, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
 
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            client = new _GraphQLClient2.default({ uri: indexUrl + '/graphql' });
+            debug('Creating build with session id: ' + sessionId);
+
+            client = new _GraphQLClient2.default({
+              uri: indexUrl + '/graphql',
+              headers: { 'x-chromatic-session-id': sessionId }
+            });
             _process$env = process.env, TRAVIS_EVENT_TYPE = _process$env.TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG = _process$env.TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG = _process$env.TRAVIS_REPO_SLUG;
 
             if (TRAVIS_EVENT_TYPE === 'pull_request' && TRAVIS_PULL_REQUEST_SLUG === TRAVIS_REPO_SLUG) {
@@ -1635,63 +1737,63 @@ exports.default = function () {
             }
 
             if (appCode) {
-              _context2.next = 5;
+              _context2.next = 6;
               break;
             }
 
             throw new Error('You must provide an app code  -- visit https://www.chromaticqa.com to get your code.' + '\nPass your app code with the `CHROMATIC_APP_CODE` environment variable or the `--app-code` flag.');
 
-          case 5:
+          case 6:
             if (scriptName || commandName || noStart) {
-              _context2.next = 7;
+              _context2.next = 8;
               break;
             }
 
             throw new Error('Either scriptName, commandName or noStart is required');
 
-          case 7:
-            _context2.prev = 7;
-            _context2.next = 10;
+          case 8:
+            _context2.prev = 8;
+            _context2.next = 11;
             return client.runQuery(TesterCreateAppTokenMutation, {
               appCode: appCode
             });
 
-          case 10:
+          case 11:
             _ref6 = _context2.sent;
             jwtToken = _ref6.createAppToken;
 
             client.setJwtToken(jwtToken);
-            _context2.next = 20;
+            _context2.next = 21;
             break;
 
-          case 15:
-            _context2.prev = 15;
-            _context2.t0 = _context2['catch'](7);
+          case 16:
+            _context2.prev = 16;
+            _context2.t0 = _context2['catch'](8);
 
             if (!(_context2.t0[0] && _context2.t0[0].message && _context2.t0[0].message.match('No app with code'))) {
-              _context2.next = 19;
+              _context2.next = 20;
               break;
             }
 
             throw new Error('Incorrect app code \'' + appCode + '\' -- visit https://www.chromaticqa.com to get your code');
 
-          case 19:
+          case 20:
             throw _context2.t0;
 
-          case 20:
-            _context2.next = 22;
+          case 21:
+            _context2.next = 23;
             return (0, _git.getCommit)();
 
-          case 22:
+          case 23:
             _ref7 = _context2.sent;
             commit = _ref7.commit;
             committedAt = _ref7.committedAt;
             committerEmail = _ref7.committerEmail;
             committerName = _ref7.committerName;
-            _context2.next = 29;
+            _context2.next = 30;
             return (0, _git.getBranch)();
 
-          case 29:
+          case 30:
             branch = _context2.sent;
             isTravisPrBuild = process.env.TRAVIS_EVENT_TYPE === 'pull_request';
 
@@ -1700,7 +1802,7 @@ exports.default = function () {
             // history of the project (so approvals will get lost). We also have to ensure we use the right branch.
 
             if (!isTravisPrBuild) {
-              _context2.next = 36;
+              _context2.next = 37;
               break;
             }
 
@@ -1708,83 +1810,88 @@ exports.default = function () {
             branch = process.env.TRAVIS_PULL_REQUEST_BRANCH;
 
             if (!(!commit || !branch)) {
-              _context2.next = 36;
+              _context2.next = 37;
               break;
             }
 
             throw new Error('`TRAVIS_EVENT_TYPE` environment variable set to \'pull_request\', \nbut `TRAVIS_PULL_REQUEST_SHA` and `TRAVIS_PULL_REQUEST_BRANCH` are not both set.\n\nRead more here: https://docs.chromaticqa.com/setup_ci#travis');
 
-          case 36:
+          case 37:
 
             // On certain CI systems, a branch is not checked out
             // (instead a detached head is used for the commit).
             if (branch === 'HEAD' || !branch) {
               branch = (0, _envCi2.default)().branch;
 
-              // $HEAD is for netlify: https://www.netlify.com/docs/continuous-deployment/
               if (branch === 'HEAD' || !branch) {
-                branch = process.env.HEAD || branch || 'HEAD';
+                // $HEAD is for netlify: https://www.netlify.com/docs/continuous-deployment/
+                // $GERRIT_BRANCH is for Gerrit/Jenkins: https://wiki.jenkins.io/display/JENKINS/Gerrit+Trigger
+                // $CI_BRANCH is a general setting that lots of systems use
+                branch = process.env.HEAD || process.env.GERRIT_BRANCH || process.env.CI_BRANCH || branch || 'HEAD';
               }
             }
 
             debug('git info: ' + (0, _stringify2.default)({ commit: commit, committedAt: committedAt, branch: branch }));
 
-            _context2.next = 40;
+            _context2.next = 41;
             return (0, _git.getBaselineCommits)(client);
 
-          case 40:
+          case 41:
             baselineCommits = _context2.sent;
 
             debug('Found baselineCommits: ' + baselineCommits);
 
             child = void 0;
+            tunnel = void 0;
+            fromCI = void 0;
+            exitCode = 5;
+            _context2.prev = 47;
 
             if (noStart) {
-              _context2.next = 51;
+              _context2.next = 56;
               break;
             }
 
             log('Starting storybook');
-            _context2.next = 47;
+            _context2.next = 52;
             return (0, _startApp2.default)({ scriptName: scriptName, commandName: commandName, url: url });
 
-          case 47:
+          case 52:
             child = _context2.sent;
 
             log('Started storybook at ' + url);
-            _context2.next = 56;
+            _context2.next = 61;
             break;
 
-          case 51:
-            _context2.next = 53;
+          case 56:
+            _context2.next = 58;
             return (0, _startApp.checkResponse)(url);
 
-          case 53:
+          case 58:
             if (_context2.sent) {
-              _context2.next = 55;
+              _context2.next = 60;
               break;
             }
 
             throw new Error('No server responding at ' + url + ' -- make sure you\'ve started it.');
 
-          case 55:
+          case 60:
             log('Detected storybook at ' + url);
 
-          case 56:
+          case 61:
             _ref8 = new _url.URL(url), port = _ref8.port, pathname = _ref8.pathname, query = _ref8.query, hash = _ref8.hash;
             isolatorUrl = url;
-            tunnel = void 0;
 
             if (!createTunnel) {
-              _context2.next = 70;
+              _context2.next = 74;
               break;
             }
 
             log('Opening tunnel to Chromatic capture servers');
-            _context2.next = 63;
+            _context2.next = 67;
             return (0, _tunnel2.default)({ tunnelUrl: tunnelUrl, port: port });
 
-          case 63:
+          case 67:
             tunnel = _context2.sent;
 
             debug('Opened tunnel to ' + tunnel.url);
@@ -1795,7 +1902,7 @@ exports.default = function () {
             isolatorUrlObject.hash = hash;
             isolatorUrl = isolatorUrlObject.toString();
 
-          case 70:
+          case 74:
 
             debug('Connecting to ' + isolatorUrl);
             log('Uploading and verifying build (this may take a few minutes depending on your connection)');
@@ -1805,20 +1912,20 @@ exports.default = function () {
             };
 
             if (!only) {
-              _context2.next = 79;
+              _context2.next = 83;
               break;
             }
 
             match = only.match(/(.*):([^:]*)/);
 
             if (match) {
-              _context2.next = 77;
+              _context2.next = 81;
               break;
             }
 
             throw new Error('--only argument must provided in the from "componentName:storyName"');
 
-          case 77:
+          case 81:
             log('Running only story \'' + match[2] + '\' of component \'' + match[1] + '\'');
 
             predicate = function predicate(_ref9) {
@@ -1828,34 +1935,34 @@ exports.default = function () {
               return name === match[2] && (componentName || otherComponentName) === match[1];
             };
 
-          case 79:
-            _context2.next = 81;
+          case 83:
+            _context2.next = 85;
             return (0, _runtimes2.default)(isolatorUrl, { verbose: verbose });
 
-          case 81:
+          case 85:
             _context2.t1 = predicate;
             runtimeSpecs = _context2.sent.filter(_context2.t1);
 
             if (!(runtimeSpecs.length === 0)) {
-              _context2.next = 85;
+              _context2.next = 89;
               break;
             }
 
             throw new Error('Cannot run a build with no stories. Please add some stories!');
 
-          case 85:
+          case 89:
 
             log('Found ' + pluralize(runtimeSpecs.length, 'story'));
 
             // REPOSITORY_URL is for netlify: https://www.netlify.com/docs/continuous-deployment/
             fromCI = inputFromCI || !!process.env.CI || !!process.env.REPOSITORY_URL;
+            _getStorybookInfo = (0, _storybook2.default)(), storybookVersion = _getStorybookInfo.storybookVersion, viewLayer = _getStorybookInfo.viewLayer;
+
 
             debug('Detected build fromCI:' + fromCI);
-            debug('Detected package version:' + _package.version);
+            debug('Detected package version:' + _package.version + ', storybook version:' + storybookVersion + ', view layer: ' + viewLayer);
 
-            exitCode = 5;
-            _context2.prev = 90;
-            _context2.next = 93;
+            _context2.next = 96;
             return client.runQuery(TesterCreateBuildMutation, {
               input: {
                 autoAcceptChanges: autoAcceptChanges,
@@ -1867,13 +1974,15 @@ exports.default = function () {
                 fromCI: fromCI,
                 isTravisPrBuild: isTravisPrBuild,
                 packageVersion: _package.version,
+                storybookVersion: storybookVersion,
+                viewLayer: viewLayer,
                 committerEmail: committerEmail,
                 committerName: committerName
               },
               isolatorUrl: isolatorUrl
             });
 
-          case 93:
+          case 96:
             _ref10 = _context2.sent;
             _ref10$createBuild = _ref10.createBuild;
             number = _ref10$createBuild.number;
@@ -1884,27 +1993,27 @@ exports.default = function () {
 
             log('Started Build ' + number + ' ' + ('(' + pluralize(componentCount, 'component') + ', ' + pluralize(specCount, 'story') + ').\n\n' + onlineHint + '.'));
 
-            _context2.next = 103;
+            _context2.next = 106;
             return waitForBuild(client, {
               buildNumber: number
             });
 
-          case 103:
+          case 106:
             _ref11 = _context2.sent;
             status = _ref11.status;
             buildAutoAcceptChanges = _ref11.autoAcceptChanges;
             changeCount = _ref11.changeCount;
             errorCount = _ref11.errorCount;
             _context2.t2 = status;
-            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 111 : _context2.t2 === 'BUILD_ACCEPTED' ? 114 : _context2.t2 === 'BUILD_PENDING' ? 114 : _context2.t2 === 'BUILD_DENIED' ? 114 : _context2.t2 === 'BUILD_FAILED' ? 118 : _context2.t2 === 'BUILD_TIMED_OUT' ? 121 : _context2.t2 === 'BUILD_ERROR' ? 124 : 127;
+            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 114 : _context2.t2 === 'BUILD_ACCEPTED' ? 117 : _context2.t2 === 'BUILD_PENDING' ? 117 : _context2.t2 === 'BUILD_DENIED' ? 117 : _context2.t2 === 'BUILD_FAILED' ? 121 : _context2.t2 === 'BUILD_TIMED_OUT' ? 124 : _context2.t2 === 'BUILD_ERROR' ? 124 : 127;
             break;
 
-          case 111:
+          case 114:
             log('Build ' + number + ' passed! ' + onlineHint + '.');
             exitCode = 0;
             return _context2.abrupt('break', 128);
 
-          case 114:
+          case 117:
             log('Build ' + number + ' has ' + pluralize(changeCount, 'change') + '. ' + onlineHint + '.');
             exitCode = exitZeroOnChanges || buildAutoAcceptChanges ? 0 : 1;
             if (exitCode !== 0) {
@@ -1912,19 +2021,14 @@ exports.default = function () {
             }
             return _context2.abrupt('break', 128);
 
-          case 118:
+          case 121:
             log('Build ' + number + ' has ' + pluralize(errorCount, 'error') + '. ' + onlineHint + '.');
             exitCode = 2;
             return _context2.abrupt('break', 128);
 
-          case 121:
-            log('Build ' + number + ' has timed out. Ensure your machine is connected to the internet and please try again.');
-            exitCode = 3;
-            return _context2.abrupt('break', 128);
-
           case 124:
             log('Build ' + number + ' has failed to run. Our apologies. Please try again.');
-            exitCode = 4;
+            exitCode = 3;
             return _context2.abrupt('break', 128);
 
           case 127:
@@ -1936,9 +2040,9 @@ exports.default = function () {
 
           case 130:
             _context2.prev = 130;
-            _context2.t3 = _context2['catch'](90);
+            _context2.t3 = _context2['catch'](47);
 
-            if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
+            if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
               _context2.next = 137;
               break;
             }
@@ -1971,11 +2075,11 @@ exports.default = function () {
 
           case 144:
             if (!(!(0, _packageJson.checkPackageJson)() && originalArgv && !fromCI && interactive)) {
-              _context2.next = 151;
+              _context2.next = 150;
               break;
             }
 
-            scriptCommand = ('chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '');
+            scriptCommand = ('CHROMATIC_APP_CODE=' + appCode + ' chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '').trim();
             _context2.next = 148;
             return (0, _nodeAsk.confirm)("\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?");
 
@@ -1984,22 +2088,20 @@ exports.default = function () {
 
             if (confirmed) {
               (0, _packageJson.addScriptToPackageJson)('chromatic', scriptCommand);
-              log('\nAdded script `chromatic`. You can now run it here or in CI with `npm run chromatic` (or `yarn chromatic`)', { noPrefix: true });
+              log('\nAdded script `chromatic`. You can now run it here or in CI with `npm run chromatic` (or `yarn chromatic`)\n\nNOTE: I wrote your app code to the `CHROMATIC_APP_CODE` environment variable. The app code cannot be used to read snapshot data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from `package.json` and set it via an environment variable instead.', { noPrefix: true });
             } else {
               log('\nNo problem. You can add it later with:\n{\n  "scripts": {\n    "chromatic": "' + scriptCommand + '"\n  }\n}', { noPrefix: true });
             }
 
-            log('\nMake sure you set the `CHROMATIC_APP_CODE` environment variable when running builds (in particular on your CI server).', { noPrefix: true });
-
-          case 151:
+          case 150:
             return _context2.abrupt('return', exitCode);
 
-          case 152:
+          case 151:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, this, [[7, 15], [90, 130, 138, 144]]);
+    }, _callee2, this, [[8, 16], [47, 130, 138, 144]]);
   }));
 
   function runTest(_x4) {
@@ -2010,49 +2112,43 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, exports) {
 
 module.exports = require("apollo-fetch");
 
 /***/ }),
-/* 26 */
+/* 29 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/object/keys");
 
 /***/ }),
-/* 27 */
+/* 30 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/object/values");
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports) {
-
-module.exports = require("babel-runtime/helpers/slicedToArray");
-
-/***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports) {
 
 module.exports = require("isomorphic-fetch");
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsdom");
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsonfile");
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("localtunnel");

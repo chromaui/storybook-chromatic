@@ -1,6 +1,6 @@
 {
   "name": "storybook-chromatic",
-  "version": "0.10.0-beta.5-dev",
+  "version": "1.0.1",
   "description": "Visual Testing for Storybook",
   "browser": "./dist/assets/storybook-addon.js",
   "main": "./dist/assets/null-server.js",
@@ -25,7 +25,8 @@
     "jsonfile": "^4.0.0",
     "localtunnel": "^1.8.3",
     "node-ask": "^1.0.1",
-    "tree-kill": "^1.1.0"
+    "tree-kill": "^1.1.0",
+    "uuid": "^3.3.2"
   },
   "peerDependencies": {
     "@storybook/addons": "3.* || 4.*",
