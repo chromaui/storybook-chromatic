@@ -43,7 +43,7 @@ var executeTest = exports.executeTest = function () {
             _context.prev = 8;
             _context.t0 = _context['catch'](1);
 
-            console.error('**Chromatic build failed. Please note the session id: \'' + sessionId + '\'**\n');
+            console.error('**Chromatic build failed. Please note the session id: \'' + sessionId + '\' and contact support@hichroma.com -or- open a support ticket at https://chromaticqa.com**\n');
             // eslint-disable-next-line no-console
             console.error(_context.t0);
             // Not sure what exit code to use but this can mean error.
