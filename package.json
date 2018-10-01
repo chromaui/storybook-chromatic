@@ -23,7 +23,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jsdom": "^11.5.1",
     "jsonfile": "^4.0.0",
-    "@chromaui/localtunnel": "1.9.1-chromatic.1",
+    "@chromaui/localtunnel": "1.9.1-chromatic.2",
     "loggly": "^1.1.1",
     "node-ask": "^1.0.1",
     "strip-color": "^0.1.0",
