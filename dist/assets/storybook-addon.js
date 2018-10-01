@@ -4,9 +4,9 @@ var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _stringify = require('babel-runtime/core-js/json/stringify');
+var _extends2 = require('babel-runtime/helpers/extends');
 
-var _stringify2 = _interopRequireDefault(_stringify);
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _client = require('../client');
 
@@ -24,7 +24,8 @@ var runtime = 'storybook';
   runtime: runtime,
   renderSpec: function renderSpec(_ref) {
     var specRuntime = _ref.runtime,
-        input = _ref.input;
+        story = _ref.name,
+        kind = _ref.component.name;
     var _window = window,
         __STORYBOOK_CLIENT_API__ = _window.__STORYBOOK_CLIENT_API__,
         __STORYBOOK_ADDONS_CHANNEL__ = _window.__STORYBOOK_ADDONS_CHANNEL__;
@@ -38,18 +39,15 @@ var runtime = 'storybook';
       throw new Error('Storybook plugin cannot handle ' + specRuntime + ' specs');
     }
 
-    var kind = input.kind,
-        name = input.name;
     // We need to emulate the event sent by the manager to the preview.
     // In SB@4+ if we emit a message on the channel it will get picked up by the preview
     // (note that we are on the preview side). However, in SB@3.4, perhaps more correctly,
     // if we emit a message, it won't be picked up by the preview. So we need to reach
     // in and simulate receiving an event
     // eslint-disable-next-line no-underscore-dangle
-
     __STORYBOOK_ADDONS_CHANNEL__._handleEvent({
       type: 'setCurrentStory',
-      args: [{ kind: kind, story: name }],
+      args: [{ kind: kind, story: story }],
       from: 'chromatic'
     });
 
@@ -75,11 +73,27 @@ var runtime = 'storybook';
       throw new Error('Chromatic requires Storybook version at least 3.4. Please update your storybook!');
     }
 
+    // eslint-disable-next-line no-underscore-dangle
+    var storyStore = __STORYBOOK_CLIENT_API__._storyStore;
+
     return __STORYBOOK_CLIENT_API__.getStorybook().map(function (_ref2) {
       var kind = _ref2.kind,
           stories = _ref2.stories;
       return stories.map(function (_ref3) {
         var name = _ref3.name;
+
+        // Annoying to have to do this, we should support this in .getStorybook
+        var _storyStore$getStoryA = storyStore.getStoryAndParameters(kind, name),
+            chromatic = _storyStore$getStoryA.parameters.chromatic;
+
+        var parameters = void 0;
+        if (chromatic) {
+          var viewports = chromatic.viewports,
+              delay = chromatic.delay;
+
+          parameters = (0, _extends3.default)({}, viewports && { viewports: viewports }, delay && { delay: delay });
+        }
+
         return {
           name: name,
           component: {
@@ -87,10 +101,7 @@ var runtime = 'storybook';
             displayName: kind.split('/').slice(-1)[0]
           },
           runtime: runtime,
-          input: (0, _stringify2.default)({
-            kind: kind,
-            name: name
-          })
+          parameters: parameters
         };
       });
     }).reduce(function (a, b) {
