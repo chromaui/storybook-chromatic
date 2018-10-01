@@ -1,3 +1,7 @@
+# 1.0.2 - 2018-08-23
+
+* Fix a bug with Live View and Storybook@3.4
+
 # 1.0.1 - 2018-07-26
 
 * We now set the `CHROMATIC_APP_CODE` variable for you, with explicit instructions to remove it (and set via CI) in less secure applications.

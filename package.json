@@ -1,6 +1,6 @@
 {
   "name": "storybook-chromatic",
-  "version": "1.0.1",
+  "version": "1.0.3-dev",
   "description": "Visual Testing for Storybook",
   "browser": "./dist/assets/storybook-addon.js",
   "main": "./dist/assets/null-server.js",
@@ -23,7 +23,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jsdom": "^11.5.1",
     "jsonfile": "^4.0.0",
-    "localtunnel": "^1.8.3",
+    "@chromaui/localtunnel": "1.9.1-chromatic.1",
     "loggly": "^1.1.1",
     "node-ask": "^1.0.1",
     "strip-color": "^0.1.0",

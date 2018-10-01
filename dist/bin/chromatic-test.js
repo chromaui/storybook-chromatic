@@ -43,7 +43,7 @@ var executeTest = exports.executeTest = function () {
             _context.prev = 8;
             _context.t0 = _context['catch'](1);
 
-            console.error('**Chromatic build failed. Please note the session id: \'' + sessionId + '\'**\n');
+            console.error('**Chromatic build failed. Please note the session id: \'' + sessionId + '\' and contact support@hichroma.com -or- open a support ticket at https://chromaticqa.com**\n');
             // eslint-disable-next-line no-console
             console.error(_context.t0);
             // Not sure what exit code to use but this can mean error.
@@ -105,7 +105,7 @@ function findOption(storybookScript, shortName, longName) {
 }
 
 function parseArgv(argv) {
-  var commander = new _commander.Command().option('-a, --app-code [code]', 'the code for your app, get from chromaticqa.com').option('-s, --script-name [name]', 'The npm script that starts your storybook [storybook]').option('-e, --exec [command]', 'Alternatively, a full command to run to start your storybook.').option('-S, --do-not-start', "Don't attempt to start; use if your storybook is already running").option('-p, --storybook-port [port]', 'What port is your Storybook running on (auto detected from -s, if set)?').option('-u, --storybook-url [url]', 'Storybook is already running at url (implies -S)').option('--ci', 'This build is running on CI, non-interactively (alternatively, pass CI=true)').option('--auto-accept-changes', 'Accept any (non-error) changes or new stories for this build').option('--exit-zero-on-changes', "Use a 0 exit code if changes are detected (i.e. don't stop the build)").option('--no-interactive', 'Do not prompt for package.json changes').option('--only [component:story]', 'Only run a single story (for debugging purposes)').option('--debug', 'Output more debugging information')
+  var commander = new _commander.Command().option('-a, --app-code [code]', 'the code for your app, get from chromaticqa.com').option('-s, --script-name [name]', 'The npm script that starts your storybook [storybook]').option('-e, --exec [command]', 'Alternatively, a full command to run to start your storybook.').option('-S, --do-not-start', "Don't attempt to start; use if your storybook is already running").option('-p, --storybook-port [port]', 'What port is your Storybook running on (auto detected from -s, if set)?').option('-u, --storybook-url [url]', 'Storybook is already running at (external) url (implies -S)').option('--ci', 'This build is running on CI, non-interactively (alternatively, pass CI=true)').option('--auto-accept-changes', 'Accept any (non-error) changes or new stories for this build').option('--exit-zero-on-changes', "Use a 0 exit code if changes are detected (i.e. don't stop the build)").option('--no-interactive', 'Do not prompt for package.json changes').option('--only [component:story]', 'Only run a single story (for debugging purposes)').option('--debug', 'Output more debugging information')
 
   // We keep this for back compat it does nothing (ie. it is the default)
   .option('--storybook-addon', '(deprecated) use the storybook addon').parse(argv);
