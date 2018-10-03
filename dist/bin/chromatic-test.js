@@ -20,37 +20,41 @@ var _extends3 = _interopRequireDefault(_extends2);
 
 var executeTest = exports.executeTest = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(argv) {
-    var exitCode;
+    var sessionId, exitCode;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return (0, _tester2.default)(parseArgv(argv));
+            sessionId = (0, _uuid.v4)();
+            _context.prev = 1;
+            _context.next = 4;
+            return (0, _tester2.default)((0, _extends3.default)({}, parseArgv(argv), {
+              sessionId: sessionId
+            }));
 
-          case 3:
+          case 4:
             exitCode = _context.sent;
 
             process.exit(exitCode);
-            _context.next = 11;
+            _context.next = 13;
             break;
 
-          case 7:
-            _context.prev = 7;
-            _context.t0 = _context['catch'](0);
+          case 8:
+            _context.prev = 8;
+            _context.t0 = _context['catch'](1);
 
+            console.error('**Chromatic build failed. Please note the session id: \'' + sessionId + '\' and contact support@hichroma.com -or- open a support ticket at https://chromaticqa.com**\n');
             // eslint-disable-next-line no-console
             console.error(_context.t0);
             // Not sure what exit code to use but this can mean error.
             process.exit(255);
 
-          case 11:
+          case 13:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[0, 7]]);
+    }, _callee, this, [[1, 8]]);
   }));
 
   return function executeTest(_x) {
@@ -61,6 +65,7 @@ var executeTest = exports.executeTest = function () {
 // Normal usage, outside of test
 
 
+exports.findOption = findOption;
 exports.parseArgv = parseArgv;
 
 var _commander = require('commander');
@@ -73,6 +78,8 @@ var _jsonfile = require('jsonfile');
 
 var _url = require('url');
 
+var _uuid = require('uuid');
+
 var _tester = require('../tester');
 
 var _tester2 = _interopRequireDefault(_tester);
@@ -84,8 +91,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Ensure NODE_ENV is set
 process.env.NODE_ENV = process.env.NODE_ENV || 'test';
 
+// This is not exactly clever but it works most of the time
 function findOption(storybookScript, shortName, longName) {
-  var parts = storybookScript.split(/[\s+|=]/);
+  var parts = storybookScript.split(/[\s='"]+/);
   var index = parts.indexOf(longName);
   if (index === -1) {
     index = parts.indexOf(shortName);
@@ -97,7 +105,7 @@ function findOption(storybookScript, shortName, longName) {
 }
 
 function parseArgv(argv) {
-  var commander = new _commander.Command().option('-a, --app-code [code]', 'the code for your app, get from chromaticqa.com').option('-s, --script-name [name]', 'The npm script that starts your storybook [storybook]').option('-e, --exec [command]', 'Alternatively, a full command to run to start your storybook.').option('-S, --do-not-start', "Don't attempt to start; use if your storybook is already running").option('-p, --storybook-port [port]', 'What port is your Storybook running on (auto detected from -s, if set)?').option('-u, --storybook-url [url]', 'Storybook is already running at url (implies -S)').option('--ci', 'This build is running on CI, non-interactively (alternatively, pass CI=true)').option('--auto-accept-changes', 'Accept any (non-error) changes or new stories for this build').option('--exit-zero-on-changes', "Use a 0 exit code if changes are detected (i.e. don't stop the build)").option('--no-interactive', 'Do not prompt for package.json changes').option('--only [component:story]', 'Only run a single story (for debugging purposes)').option('--debug', 'Output more debugging information')
+  var commander = new _commander.Command().option('-a, --app-code [code]', 'the code for your app, get from chromaticqa.com').option('-s, --script-name [name]', 'The npm script that starts your storybook [storybook]').option('-e, --exec [command]', 'Alternatively, a full command to run to start your storybook.').option('-S, --do-not-start', "Don't attempt to start; use if your storybook is already running").option('-p, --storybook-port [port]', 'What port is your Storybook running on (auto detected from -s, if set)?').option('-u, --storybook-url [url]', 'Storybook is already running at (external) url (implies -S)').option('--ci', 'This build is running on CI, non-interactively (alternatively, pass CI=true)').option('--auto-accept-changes', 'Accept any (non-error) changes or new stories for this build').option('--exit-zero-on-changes', "Use a 0 exit code if changes are detected (i.e. don't stop the build)").option('--no-interactive', 'Do not prompt for package.json changes').option('--only [component:story]', 'Only run a single story (for debugging purposes)').option('--debug', 'Output more debugging information')
 
   // We keep this for back compat it does nothing (ie. it is the default)
   .option('--storybook-addon', '(deprecated) use the storybook addon').parse(argv);
@@ -162,7 +170,7 @@ function parseArgv(argv) {
     url = 'http://localhost:' + port;
   }
 
-  var parsedUrl = new _url.URL(url);
+  var parsedUrl = (0, _url.parse)(url);
   var suffix = 'iframe.html';
   if (!parsedUrl.pathname.endsWith(suffix)) {
     if (!parsedUrl.pathname.endsWith('/')) {
@@ -171,7 +179,7 @@ function parseArgv(argv) {
     parsedUrl.pathname += suffix;
   }
 
-  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.toString(), scriptName: scriptName });
+  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.format(), scriptName: scriptName });
 }
 
 if (require.main === module) {
