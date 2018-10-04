@@ -170,7 +170,7 @@ function parseArgv(argv) {
     url = 'http://localhost:' + port;
   }
 
-  var parsedUrl = new _url.URL(url);
+  var parsedUrl = (0, _url.parse)(url);
   var suffix = 'iframe.html';
   if (!parsedUrl.pathname.endsWith(suffix)) {
     if (!parsedUrl.pathname.endsWith('/')) {
@@ -179,7 +179,7 @@ function parseArgv(argv) {
     parsedUrl.pathname += suffix;
   }
 
-  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.toString(), scriptName: scriptName });
+  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.format(), scriptName: scriptName });
 }
 
 if (require.main === module) {
