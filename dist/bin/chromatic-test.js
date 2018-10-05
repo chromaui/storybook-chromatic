@@ -118,7 +118,7 @@ function parseArgv(argv) {
     noStart: !!commander.doNotStart,
     port: commander.storybookPort,
     url: commander.storybookUrl,
-    dirname: commander.storybookDirectory,
+    dirname: commander.storybookBuildDir,
     only: commander.only,
     fromCI: !!commander.ci,
     autoAcceptChanges: !!commander.autoAcceptChanges,
