@@ -1,3 +1,11 @@
+# 1.0.3 - TBR
+
+* Added --storybook-build-dir flag to allow you to run chromatic on a built storybook
+
+* Support running on windows
+
+* Pass `chromatic` parameters from Storybook@4
+
 # 1.0.2 - 2018-08-23
 
 * Fix a bug with Live View and Storybook@3.4
