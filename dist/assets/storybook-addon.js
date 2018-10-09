@@ -82,16 +82,18 @@ var runtime = 'storybook';
       return stories.map(function (_ref3) {
         var name = _ref3.name;
 
-        // Annoying to have to do this, we should support this in .getStorybook
-        var _storyStore$getStoryA = storyStore.getStoryAndParameters(kind, name),
-            chromatic = _storyStore$getStoryA.parameters.chromatic;
-
         var parameters = void 0;
-        if (chromatic) {
-          var viewports = chromatic.viewports,
-              delay = chromatic.delay;
+        if (storyStore.getStoryAndParameters) {
+          // Annoying to have to do this, we should support this in .getStorybook
+          var _storyStore$getStoryA = storyStore.getStoryAndParameters(kind, name),
+              chromatic = _storyStore$getStoryA.parameters.chromatic;
 
-          parameters = (0, _extends3.default)({}, viewports && { viewports: viewports }, delay && { delay: delay });
+          if (chromatic) {
+            var viewports = chromatic.viewports,
+                delay = chromatic.delay;
+
+            parameters = (0, _extends3.default)({}, viewports && { viewports: viewports }, delay && { delay: delay });
+          }
         }
 
         return {
