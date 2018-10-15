@@ -125,4 +125,28 @@ it('allows you to set a URL with iframe.html already set', function () {
     createTunnel: false
   });
 });
+
+describe('findOption', function () {
+  it('handles short names', function () {
+    var port = (0, _chromaticTest.findOption)('start-storybook -p 9001', '-p', '--port');
+    expect(port).toBe('9001');
+  });
+  it('handles long names', function () {
+    var port = (0, _chromaticTest.findOption)('start-storybook --port 9001', '-p', '--port');
+    expect(port).toBe('9001');
+  });
+  it('handles equals', function () {
+    var port = (0, _chromaticTest.findOption)('start-storybook --port=9001', '-p', '--port');
+    expect(port).toBe('9001');
+  });
+  it('handles double space', function () {
+    var port = (0, _chromaticTest.findOption)('start-storybook --port  9001', '-p', '--port');
+    expect(port).toBe('9001');
+  });
+
+  it('handles complex scripts', function () {
+    var port = (0, _chromaticTest.findOption)("node verify-node-version.js && concurrently --raw --kill-others 'yarn relay --watch' 'start-storybook -s ./public -p 9001'", '-p', '--port');
+    expect(port).toBe('9001');
+  });
+});
 //# sourceMappingURL=chromatic-test.test.js.map
