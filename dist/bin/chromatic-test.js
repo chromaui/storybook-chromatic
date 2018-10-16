@@ -20,41 +20,37 @@ var _extends3 = _interopRequireDefault(_extends2);
 
 var executeTest = exports.executeTest = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(argv) {
-    var sessionId, exitCode;
+    var exitCode;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            sessionId = (0, _uuid.v4)();
-            _context.prev = 1;
-            _context.next = 4;
-            return (0, _tester2.default)((0, _extends3.default)({}, parseArgv(argv), {
-              sessionId: sessionId
-            }));
+            _context.prev = 0;
+            _context.next = 3;
+            return (0, _tester2.default)(parseArgv(argv));
 
-          case 4:
+          case 3:
             exitCode = _context.sent;
 
             process.exit(exitCode);
-            _context.next = 13;
+            _context.next = 11;
             break;
 
-          case 8:
-            _context.prev = 8;
-            _context.t0 = _context['catch'](1);
+          case 7:
+            _context.prev = 7;
+            _context.t0 = _context['catch'](0);
 
-            console.error('**Chromatic build failed. Please note the session id: \'' + sessionId + '\' and contact support@hichroma.com -or- open a support ticket at https://chromaticqa.com**\n');
             // eslint-disable-next-line no-console
             console.error(_context.t0);
             // Not sure what exit code to use but this can mean error.
             process.exit(255);
 
-          case 13:
+          case 11:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[1, 8]]);
+    }, _callee, this, [[0, 7]]);
   }));
 
   return function executeTest(_x) {
@@ -77,8 +73,6 @@ var _path2 = _interopRequireDefault(_path);
 var _jsonfile = require('jsonfile');
 
 var _url = require('url');
-
-var _uuid = require('uuid');
 
 var _tester = require('../tester');
 
@@ -183,7 +177,7 @@ function parseArgv(argv) {
     return (0, _extends3.default)({}, commanderOptions, { noStart: true, dirname: dirname });
   }
 
-  var parsedUrl = (0, _url.parse)(url);
+  var parsedUrl = new _url.URL(url);
   var suffix = 'iframe.html';
   if (!parsedUrl.pathname.endsWith(suffix)) {
     if (!parsedUrl.pathname.endsWith('/')) {
@@ -192,7 +186,7 @@ function parseArgv(argv) {
     parsedUrl.pathname += suffix;
   }
 
-  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.format(), scriptName: scriptName });
+  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.toString(), scriptName: scriptName });
 }
 
 if (require.main === module) {

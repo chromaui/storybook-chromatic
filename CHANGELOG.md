@@ -1,3 +1,9 @@
+# 1.1.0 - 2018-10-15
+
+* Fix to work on Windows CI
+
+* Added a `--storybook-build-dir` parameter that allows you to upload a pre-built storybook.
+
 # 1.0.2 - 2018-08-23
 
 * Fix a bug with Live View and Storybook@3.4

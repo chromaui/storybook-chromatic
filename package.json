@@ -1,6 +1,6 @@
 {
   "name": "storybook-chromatic",
-  "version": "1.0.3-beta.0",
+  "version": "1.1.0",
   "description": "Visual Testing for Storybook",
   "browser": "./dist/assets/storybook-addon.js",
   "main": "./dist/assets/null-server.js",
@@ -15,21 +15,17 @@
     "chromatic": "./dist/bin/chromatic.js"
   },
   "dependencies": {
-    "@chromaui/localtunnel": "1.9.1-chromatic.2",
     "apollo-fetch": "^0.6.0",
     "babel-runtime": "^6.26.0",
     "commander": "^2.9.0",
     "debug": "^3.0.1",
-    "denodeify": "^1.2.1",
     "env-ci": "^2.1.0",
     "isomorphic-fetch": "^2.2.1",
     "jsdom": "^11.5.1",
     "jsonfile": "^4.0.0",
-    "loggly": "^1.1.1",
+    "localtunnel": "^1.8.3",
     "node-ask": "^1.0.1",
-    "strip-color": "^0.1.0",
-    "tree-kill": "^1.1.0",
-    "uuid": "^3.3.2"
+    "tree-kill": "^1.1.0"
   },
   "peerDependencies": {
     "@storybook/addons": "3.* || 4.*",
