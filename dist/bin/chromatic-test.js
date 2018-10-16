@@ -36,7 +36,7 @@ var executeTest = exports.executeTest = function () {
             exitCode = _context.sent;
 
             process.exit(exitCode);
-            _context.next = 13;
+            _context.next = 14;
             break;
 
           case 8:
@@ -44,12 +44,21 @@ var executeTest = exports.executeTest = function () {
             _context.t0 = _context['catch'](1);
 
             console.error('**Chromatic build failed. Please note the session id: \'' + sessionId + '\' and contact support@hichroma.com -or- open a support ticket at https://chromaticqa.com**\n');
-            // eslint-disable-next-line no-console
-            console.error(_context.t0);
+            if (_context.t0.length) {
+              // eslint-disable-next-line no-console
+              // This is a GraphQL Error, our server is reasonable
+              _context.t0.map(function (e) {
+                return console.error(e.message);
+              });
+            } else {
+              // eslint-disable-next-line no-console
+              console.error(_context.t0);
+            }
+            console.log();
             // Not sure what exit code to use but this can mean error.
             process.exit(255);
 
-          case 13:
+          case 14:
           case 'end':
             return _context.stop();
         }
