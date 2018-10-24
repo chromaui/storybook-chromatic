@@ -36,7 +36,7 @@ var executeTest = exports.executeTest = function () {
             exitCode = _context.sent;
 
             process.exit(exitCode);
-            _context.next = 13;
+            _context.next = 14;
             break;
 
           case 8:
@@ -44,12 +44,21 @@ var executeTest = exports.executeTest = function () {
             _context.t0 = _context['catch'](1);
 
             console.error('**Chromatic build failed. Please note the session id: \'' + sessionId + '\' and contact support@hichroma.com -or- open a support ticket at https://chromaticqa.com**\n');
-            // eslint-disable-next-line no-console
-            console.error(_context.t0);
+            if (_context.t0.length) {
+              // eslint-disable-next-line no-console
+              // This is a GraphQL Error, our server is reasonable
+              _context.t0.map(function (e) {
+                return console.error(e.message);
+              });
+            } else {
+              // eslint-disable-next-line no-console
+              console.error(_context.t0);
+            }
+            console.log();
             // Not sure what exit code to use but this can mean error.
             process.exit(255);
 
-          case 13:
+          case 14:
           case 'end':
             return _context.stop();
         }
@@ -105,7 +114,7 @@ function findOption(storybookScript, shortName, longName) {
 }
 
 function parseArgv(argv) {
-  var commander = new _commander.Command().option('-a, --app-code [code]', 'the code for your app, get from chromaticqa.com').option('-s, --script-name [name]', 'The npm script that starts your storybook [storybook]').option('-e, --exec [command]', 'Alternatively, a full command to run to start your storybook.').option('-S, --do-not-start', "Don't attempt to start; use if your storybook is already running").option('-p, --storybook-port [port]', 'What port is your Storybook running on (auto detected from -s, if set)?').option('-u, --storybook-url [url]', 'Storybook is already running at (external) url (implies -S)').option('--ci', 'This build is running on CI, non-interactively (alternatively, pass CI=true)').option('--auto-accept-changes', 'Accept any (non-error) changes or new stories for this build').option('--exit-zero-on-changes', "Use a 0 exit code if changes are detected (i.e. don't stop the build)").option('--no-interactive', 'Do not prompt for package.json changes').option('--only [component:story]', 'Only run a single story (for debugging purposes)').option('--debug', 'Output more debugging information')
+  var commander = new _commander.Command().option('-a, --app-code [code]', 'the code for your app, get from chromaticqa.com').option('-s, --script-name [name]', 'The npm script that starts your storybook [storybook]').option('-e, --exec [command]', 'Alternatively, a full command to run to start your storybook.').option('-S, --do-not-start', "Don't attempt to start; use if your storybook is already running").option('-p, --storybook-port [port]', 'What port is your Storybook running on (auto detected from -s, if set)?').option('-u, --storybook-url [url]', 'Storybook is already running at (external) url (implies -S)').option('-d, --storybook-build-dir [dirname]', 'Provide a directory with your built storybook, implies -S').option('--ci', 'This build is running on CI, non-interactively (alternatively, pass CI=true)').option('--auto-accept-changes', 'Accept any (non-error) changes or new stories for this build').option('--exit-zero-on-changes', "Use a 0 exit code if changes are detected (i.e. don't stop the build)").option('--no-interactive', 'Do not prompt for package.json changes').option('--only [component:story]', 'Only run a single story (for debugging purposes)').option('--debug', 'Output more debugging information')
 
   // We keep this for back compat it does nothing (ie. it is the default)
   .option('--storybook-addon', '(deprecated) use the storybook addon').parse(argv);
@@ -118,6 +127,7 @@ function parseArgv(argv) {
     noStart: !!commander.doNotStart,
     port: commander.storybookPort,
     url: commander.storybookUrl,
+    dirname: commander.storybookBuildDir,
     only: commander.only,
     fromCI: !!commander.ci,
     autoAcceptChanges: !!commander.autoAcceptChanges,
@@ -130,8 +140,11 @@ function parseArgv(argv) {
 
   var packageJson = (0, _jsonfile.readFileSync)(_path2.default.resolve('./package.json'));
   var commandName = commanderOptions.commandName;
+  // eslint-disable-next-line prefer-const
+
   var port = commanderOptions.port,
       url = commanderOptions.url,
+      dirname = commanderOptions.dirname,
       noStart = commanderOptions.noStart,
       scriptName = commanderOptions.scriptName;
 
@@ -140,10 +153,15 @@ function parseArgv(argv) {
     throw new Error('Cannot use both --scriptName and --commandName');
   }
 
-  if (url) {
+  if (url || dirname) {
     if (scriptName || commandName) {
-      throw new Error('Cannot use ' + (scriptName ? '--scriptName' : '--exec') + ' with --storybook-url, it implies --do-not-start');
+      throw new Error('Cannot use ' + (scriptName ? '--scriptName' : '--exec') + ' with ' + (url ? '--storybook-url' : '--storybook-directory') + ', it implies --do-not-start');
     }
+
+    if (url && dirname) {
+      throw new Error('Cannot use both --storybook-url and --storybook-directory');
+    }
+
     noStart = true;
   } else {
     if (commandName) {
@@ -170,7 +188,11 @@ function parseArgv(argv) {
     url = 'http://localhost:' + port;
   }
 
-  var parsedUrl = new _url.URL(url);
+  if (dirname) {
+    return (0, _extends3.default)({}, commanderOptions, { noStart: true, dirname: dirname });
+  }
+
+  var parsedUrl = (0, _url.parse)(url);
   var suffix = 'iframe.html';
   if (!parsedUrl.pathname.endsWith(suffix)) {
     if (!parsedUrl.pathname.endsWith('/')) {
@@ -179,7 +201,7 @@ function parseArgv(argv) {
     parsedUrl.pathname += suffix;
   }
 
-  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.toString(), scriptName: scriptName });
+  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.format(), scriptName: scriptName });
 }
 
 if (require.main === module) {
