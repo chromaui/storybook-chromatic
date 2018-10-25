@@ -1,10 +1,12 @@
-# 1.0.3 - TBR
-
-* Added --storybook-build-dir flag to allow you to run chromatic on a built storybook
-
-* Support running on windows
+# 1.2.0-dev
 
 * Pass `chromatic` parameters from Storybook@4
+
+# 1.1.0 - 2018-10-15
+
+* Fix to work on Windows CI
+
+* Added a `--storybook-build-dir` parameter that allows you to upload a pre-built storybook.
 
 # 1.0.2 - 2018-08-23
 
