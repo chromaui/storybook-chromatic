@@ -15,7 +15,7 @@
     "chromatic": "./dist/bin/chromatic.js"
   },
   "dependencies": {
-    "@chromaui/localtunnel": "1.9.1-chromatic.2",
+    "@chromaui/localtunnel": "1.9.1-chromatic.3",
     "apollo-fetch": "^0.6.0",
     "babel-runtime": "^6.26.0",
     "commander": "^2.9.0",
