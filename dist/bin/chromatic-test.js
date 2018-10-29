@@ -20,37 +20,50 @@ var _extends3 = _interopRequireDefault(_extends2);
 
 var executeTest = exports.executeTest = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(argv) {
-    var exitCode;
+    var sessionId, exitCode;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return (0, _tester2.default)(parseArgv(argv));
+            sessionId = (0, _uuid.v4)();
+            _context.prev = 1;
+            _context.next = 4;
+            return (0, _tester2.default)((0, _extends3.default)({}, parseArgv(argv), {
+              sessionId: sessionId
+            }));
 
-          case 3:
+          case 4:
             exitCode = _context.sent;
 
             process.exit(exitCode);
-            _context.next = 11;
+            _context.next = 14;
             break;
 
-          case 7:
-            _context.prev = 7;
-            _context.t0 = _context['catch'](0);
+          case 8:
+            _context.prev = 8;
+            _context.t0 = _context['catch'](1);
 
-            // eslint-disable-next-line no-console
-            console.error(_context.t0);
+            console.error('**Chromatic build failed. Please note the session id: \'' + sessionId + '\' and contact support@hichroma.com -or- open a support ticket at https://chromaticqa.com**\n');
+            if (_context.t0.length) {
+              // eslint-disable-next-line no-console
+              // This is a GraphQL Error, our server is reasonable
+              _context.t0.map(function (e) {
+                return console.error(e.message);
+              });
+            } else {
+              // eslint-disable-next-line no-console
+              console.error(_context.t0);
+            }
+            console.log();
             // Not sure what exit code to use but this can mean error.
             process.exit(255);
 
-          case 11:
+          case 14:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[0, 7]]);
+    }, _callee, this, [[1, 8]]);
   }));
 
   return function executeTest(_x) {
@@ -73,6 +86,8 @@ var _path2 = _interopRequireDefault(_path);
 var _jsonfile = require('jsonfile');
 
 var _url = require('url');
+
+var _uuid = require('uuid');
 
 var _tester = require('../tester');
 
@@ -177,7 +192,7 @@ function parseArgv(argv) {
     return (0, _extends3.default)({}, commanderOptions, { noStart: true, dirname: dirname });
   }
 
-  var parsedUrl = new _url.URL(url);
+  var parsedUrl = (0, _url.parse)(url);
   var suffix = 'iframe.html';
   if (!parsedUrl.pathname.endsWith(suffix)) {
     if (!parsedUrl.pathname.endsWith('/')) {
@@ -186,7 +201,7 @@ function parseArgv(argv) {
     parsedUrl.pathname += suffix;
   }
 
-  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.toString(), scriptName: scriptName });
+  return (0, _extends3.default)({}, commanderOptions, { noStart: noStart, url: parsedUrl.format(), scriptName: scriptName });
 }
 
 if (require.main === module) {

@@ -1,3 +1,7 @@
+# 1.2.0-dev
+
+* Pass `chromatic` parameters from Storybook@4
+
 # 1.1.0 - 2018-10-15
 
 * Fix to work on Windows CI
