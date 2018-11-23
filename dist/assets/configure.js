@@ -26,7 +26,8 @@ if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
 var runtime = 'storybook';
 
 exports.default = function () {
-  return (0, _client2.default)({
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return (0, _client2.default)((0, _extends3.default)({
     runtime: runtime,
     renderSpec: function renderSpec(_ref) {
       var specRuntime = _ref.runtime,
@@ -116,6 +117,6 @@ exports.default = function () {
         return [].concat((0, _toConsumableArray3.default)(a), (0, _toConsumableArray3.default)(b));
       }, []); // flatten
     }
-  });
+  }, options));
 };
 //# sourceMappingURL=configure.js.map
