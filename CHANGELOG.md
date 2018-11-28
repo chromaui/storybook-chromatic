@@ -1,6 +1,15 @@
-# 1.2.0-dev
+# 1.2.0 - 2018-10-29
 
-* Pass `chromatic` parameters from Storybook@4
+* Pass `chromatic` parameters from Storybook@4, supporting:
+
+  * Viewports: http://docs.chromaticqa.com/viewports
+  * Delay: http://docs.chromaticqa.com/delay
+
+* Better logging from the package to allow us to debug build problems.
+
+* Fix regression for node v6
+
+* Fix for supporting stories that use Canvas APIs in JSDOM
 
 # 1.1.0 - 2018-10-15
 
