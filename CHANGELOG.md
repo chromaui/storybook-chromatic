@@ -1,3 +1,8 @@
+# 1.2.0 - 2018-12-04
+
+* Update logging dependency from `loggly` to `node-loggly-bulk` due to security vulnerabilities.
+  NOTE: this package was only used by our CLI tool and so there is no need for concern, but this new version should avoid tripping security tools.
+
 # 1.2.0 - 2018-10-29
 
 * Pass `chromatic` parameters from Storybook@4, supporting:
