@@ -32,8 +32,8 @@ it('sets reasonable defaults', function () {
     url: 'http://localhost:1337/iframe.html',
     noStart: false,
     fromCI: false,
-    autoAcceptChanges: false,
-    exitZeroOnChanges: false,
+    autoAcceptChanges: undefined,
+    exitZeroOnChanges: undefined,
     interactive: true,
     verbose: false,
     createTunnel: true,
@@ -123,6 +123,30 @@ it('allows you to set a URL with iframe.html already set', function () {
     noStart: true,
     url: 'https://google.com/iframe.html?param=foo',
     createTunnel: false
+  });
+});
+
+describe('findOption', function () {
+  it('handles short names', function () {
+    var port = (0, _chromaticTest.findOption)('start-storybook -p 9001', '-p', '--port');
+    expect(port).toBe('9001');
+  });
+  it('handles long names', function () {
+    var port = (0, _chromaticTest.findOption)('start-storybook --port 9001', '-p', '--port');
+    expect(port).toBe('9001');
+  });
+  it('handles equals', function () {
+    var port = (0, _chromaticTest.findOption)('start-storybook --port=9001', '-p', '--port');
+    expect(port).toBe('9001');
+  });
+  it('handles double space', function () {
+    var port = (0, _chromaticTest.findOption)('start-storybook --port  9001', '-p', '--port');
+    expect(port).toBe('9001');
+  });
+
+  it('handles complex scripts', function () {
+    var port = (0, _chromaticTest.findOption)("node verify-node-version.js && concurrently --raw --kill-others 'yarn relay --watch' 'start-storybook -s ./public -p 9001'", '-p', '--port');
+    expect(port).toBe('9001');
   });
 });
 //# sourceMappingURL=chromatic-test.test.js.map
