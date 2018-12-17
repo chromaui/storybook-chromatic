@@ -13,10 +13,13 @@ var _process$env = process.env,
     CHROMATIC_TUNNEL_URL = _process$env$CHROMATI3 === undefined ? 'https://tunnel.chromaticqa.com' : _process$env$CHROMATI3,
     _process$env$CHROMATI4 = _process$env.CHROMATIC_CREATE_TUNNEL,
     CHROMATIC_CREATE_TUNNEL = _process$env$CHROMATI4 === undefined ? 'true' : _process$env$CHROMATI4,
-    CHROMATIC_APP_CODE = _process$env.CHROMATIC_APP_CODE;
+    CHROMATIC_APP_CODE = _process$env.CHROMATIC_APP_CODE,
+    _process$env$LOGGLY_C = _process$env.LOGGLY_CUSTOMER_TOKEN,
+    LOGGLY_CUSTOMER_TOKEN = _process$env$LOGGLY_C === undefined ? 'b5e26204-cdc5-4c78-a9cc-c69eb7fabad3' : _process$env$LOGGLY_C;
 exports.CHROMATIC_SERVER_PORT = CHROMATIC_SERVER_PORT;
 exports.CHROMATIC_INDEX_URL = CHROMATIC_INDEX_URL;
 exports.CHROMATIC_TUNNEL_URL = CHROMATIC_TUNNEL_URL;
 exports.CHROMATIC_CREATE_TUNNEL = CHROMATIC_CREATE_TUNNEL;
 exports.CHROMATIC_APP_CODE = CHROMATIC_APP_CODE;
+exports.LOGGLY_CUSTOMER_TOKEN = LOGGLY_CUSTOMER_TOKEN;
 //# sourceMappingURL=environment.js.map
