@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 30);
+/******/ 	return __webpack_require__(__webpack_require__.s = 31);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -206,7 +206,7 @@ var _createClass2 = __webpack_require__(10);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _apolloFetch = __webpack_require__(32);
+var _apolloFetch = __webpack_require__(33);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -337,7 +337,7 @@ var _asyncToGenerator2 = __webpack_require__(0);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _localtunnel = __webpack_require__(31);
+var _localtunnel = __webpack_require__(32);
 
 var _localtunnel2 = _interopRequireDefault(_localtunnel);
 
@@ -928,7 +928,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _values = __webpack_require__(34);
+var _values = __webpack_require__(35);
 
 var _values2 = _interopRequireDefault(_values);
 
@@ -939,7 +939,7 @@ var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _jsonfile = __webpack_require__(37);
+var _jsonfile = __webpack_require__(38);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -993,7 +993,7 @@ var _promise = __webpack_require__(3);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _keys = __webpack_require__(33);
+var _keys = __webpack_require__(34);
 
 var _keys2 = _interopRequireDefault(_keys);
 
@@ -1009,7 +1009,7 @@ var _createClass2 = __webpack_require__(10);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _jsdom = __webpack_require__(36);
+var _jsdom = __webpack_require__(37);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1323,13 +1323,13 @@ var _debug = __webpack_require__(2);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _nodeLogglyBulk = __webpack_require__(38);
+var _nodeLogglyBulk = __webpack_require__(39);
 
 var _nodeLogglyBulk2 = _interopRequireDefault(_nodeLogglyBulk);
 
-var _util = __webpack_require__(40);
+var _util = __webpack_require__(41);
 
-var _stripColor = __webpack_require__(39);
+var _stripColor = __webpack_require__(40);
 
 var _stripColor2 = _interopRequireDefault(_stripColor);
 
@@ -1705,7 +1705,7 @@ var _debug = __webpack_require__(2);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _fs = __webpack_require__(35);
+var _fs = __webpack_require__(36);
 
 var _isomorphicFetch = __webpack_require__(13);
 
@@ -1831,7 +1831,7 @@ exports.default = function () {
 /* 23 */
 /***/ (function(module, exports) {
 
-module.exports = {"name":"storybook-chromatic","version":"1.2.3-dev","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"@chromaui/localtunnel":"1.9.1-chromatic.3","apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","denodeify":"^1.2.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","node-ask":"^1.0.1","node-loggly-bulk":"^2.2.4","strip-color":"^0.1.0","tree-kill":"^1.1.0","uuid":"^3.3.2"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-cli":"^3.1.1","webpack-node-externals":"^1.6.0"}}
+module.exports = {"name":"storybook-chromatic","version":"1.2.3-dev","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"@chromaui/localtunnel":"1.9.1-chromatic.3","apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","denodeify":"^1.2.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","minimatch":"^3.0.4","node-ask":"^1.0.1","node-loggly-bulk":"^2.2.4","strip-color":"^0.1.0","tree-kill":"^1.1.0","uuid":"^3.3.2"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-cli":"^3.1.1","webpack-node-externals":"^1.6.0"}}
 
 /***/ }),
 /* 24 */
@@ -1849,28 +1849,34 @@ module.exports = require("env-ci");
 /* 26 */
 /***/ (function(module, exports) {
 
-module.exports = require("node-ask");
+module.exports = require("minimatch");
 
 /***/ }),
 /* 27 */
 /***/ (function(module, exports) {
 
-module.exports = require("tree-kill");
+module.exports = require("node-ask");
 
 /***/ }),
 /* 28 */
 /***/ (function(module, exports) {
 
-module.exports = require("url");
+module.exports = require("tree-kill");
 
 /***/ }),
 /* 29 */
 /***/ (function(module, exports) {
 
-module.exports = require("uuid");
+module.exports = require("url");
 
 /***/ }),
 /* 30 */
+/***/ (function(module, exports) {
+
+module.exports = require("uuid");
+
+/***/ }),
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1956,13 +1962,13 @@ var _denodeify = __webpack_require__(8);
 
 var _denodeify2 = _interopRequireDefault(_denodeify);
 
-var _nodeAsk = __webpack_require__(26);
+var _nodeAsk = __webpack_require__(27);
 
 var _debug = __webpack_require__(2);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _treeKill = __webpack_require__(27);
+var _treeKill = __webpack_require__(28);
 
 var _treeKill2 = _interopRequireDefault(_treeKill);
 
@@ -1970,9 +1976,13 @@ var _envCi = __webpack_require__(25);
 
 var _envCi2 = _interopRequireDefault(_envCi);
 
-var _uuid = __webpack_require__(29);
+var _uuid = __webpack_require__(30);
 
-var _url = __webpack_require__(28);
+var _url = __webpack_require__(29);
+
+var _minimatch = __webpack_require__(26);
+
+var _minimatch2 = _interopRequireDefault(_minimatch);
 
 var _runtimes = __webpack_require__(18);
 
@@ -2349,7 +2359,7 @@ exports.default = function () {
               break;
             }
 
-            throw new Error('--only argument must provided in the from "componentName:storyName"');
+            throw new Error('--only argument must provided in the form "componentName:storyName"');
 
           case 99:
             log('Running only story \'' + match[2] + '\' of component \'' + match[1] + '\'');
@@ -2358,7 +2368,7 @@ exports.default = function () {
               var name = _ref8.name,
                   componentName = _ref8.componentName,
                   otherComponentName = _ref8.component.name;
-              return name === match[2] && (componentName || otherComponentName) === match[1];
+              return (0, _minimatch2.default)(name, match[2]) && (0, _minimatch2.default)(componentName || otherComponentName, match[1]);
             };
 
           case 101:
@@ -2541,61 +2551,61 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = require("@chromaui/localtunnel");
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("apollo-fetch");
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/object/keys");
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/object/values");
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsdom");
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsonfile");
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports) {
 
 module.exports = require("node-loggly-bulk");
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 module.exports = require("strip-color");
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports) {
 
 module.exports = require("util");
