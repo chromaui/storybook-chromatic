@@ -169,7 +169,8 @@ function parseArgv(argv) {
       if (!port) {
         throw new Error('You must pass a port with the --storybook-port option when using --exec.');
       }
-    } else {
+      // If you don't provide a port or we need to start the command, let's look it up
+    } else if (!noStart || !port) {
       scriptName = scriptName || 'storybook';
       var storybookScript = packageJson.scripts && packageJson.scripts[scriptName];
 
