@@ -25,6 +25,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jsdom": "^11.5.1",
     "jsonfile": "^4.0.0",
+    "minimatch": "^3.0.4",
     "node-ask": "^1.0.1",
     "node-loggly-bulk": "^2.2.4",
     "strip-color": "^0.1.0",
