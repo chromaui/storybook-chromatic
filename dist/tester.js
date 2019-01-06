@@ -1188,6 +1188,9 @@ function addShimsToJSDOM(dom) {
     writable: true
   });
 
+  Object.defineProperty(dom.window.URL, 'createObjectURL', { value: function value() {} });
+  Object.defineProperty(dom.window.URL, 'revokeObjectURL', { value: function value() {} });
+
   mockCanvas(dom.window);
 }
 
