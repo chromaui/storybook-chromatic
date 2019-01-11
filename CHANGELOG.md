@@ -1,7 +1,3 @@
-# 1.2.3 - 2018-12-28
-
-* Allow overwriting the polyfills we create in JSDOM mode. (This is a bugfix for some libraries that bundle their own polyfills).
-
 # 1.2.2 - 2018-12-10
 
 * Allow controlling package initialization timing via `import configure from 'storybook-chromatic/configure'; configure()`
