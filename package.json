@@ -33,8 +33,7 @@
     "uuid": "^3.3.2"
   },
   "peerDependencies": {
-    "@storybook/addons": "3.* || 4.*",
-    "@storybook/core": "3.* || 4.*"
+    "@storybook/core": "3.* || 4.* || 5.*"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
