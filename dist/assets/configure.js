@@ -98,9 +98,10 @@ exports.default = function () {
             if (chromatic) {
               var viewports = chromatic.viewports,
                   delay = chromatic.delay,
-                  disable = chromatic.disable;
+                  disable = chromatic.disable,
+                  noScroll = chromatic.noScroll;
 
-              parameters = (0, _extends3.default)({}, viewports && { viewports: viewports }, delay && { delay: delay }, disable && { disable: disable });
+              parameters = (0, _extends3.default)({}, viewports && { viewports: viewports }, delay && { delay: delay }, disable && { disable: disable }, noScroll && { noScroll: noScroll });
             }
           }
 
