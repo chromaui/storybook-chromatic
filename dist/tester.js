@@ -1197,6 +1197,30 @@ function addShimsToJSDOM(dom) {
   Object.defineProperty(dom.window.URL, 'createObjectURL', { value: function value() {} });
   Object.defineProperty(dom.window.URL, 'revokeObjectURL', { value: function value() {} });
 
+  var MutationObserverMock = function () {
+    function MutationObserverMock() {
+      (0, _classCallCheck3.default)(this, MutationObserverMock);
+    }
+
+    (0, _createClass3.default)(MutationObserverMock, [{
+      key: 'observe',
+      value: function observe() {
+        return [];
+      }
+    }, {
+      key: 'takeRecords',
+      value: function takeRecords() {
+        return [];
+      }
+    }]);
+    return MutationObserverMock;
+  }();
+
+  Object.defineProperty(dom.window, 'MutationObserver', {
+    value: MutationObserverMock,
+    writable: true
+  });
+
   mockCanvas(dom.window);
 }
 
