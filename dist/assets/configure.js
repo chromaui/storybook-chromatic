@@ -12,22 +12,26 @@ var _extends2 = require('babel-runtime/helpers/extends');
 
 var _extends3 = _interopRequireDefault(_extends2);
 
-var _client = require('../client');
+var _client = require('@storybook/core/client');
 
-var _client2 = _interopRequireDefault(_client);
+var _client2 = require('../client');
+
+var _client3 = _interopRequireDefault(_client2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint-env browser */
+/* eslint-disable import/no-extraneous-dependencies, global-require */
+
 if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
   console.error('storybook-chromatic should be installed in your `.storybook/config.js`');
-} /* eslint-env browser */
-/* eslint-disable import/no-extraneous-dependencies, global-require */
+}
 
 var runtime = 'storybook';
 
 exports.default = function () {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  return (0, _client2.default)((0, _extends3.default)({
+  return (0, _client3.default)((0, _extends3.default)({
     runtime: runtime,
     renderSpec: function renderSpec(_ref) {
       var specRuntime = _ref.runtime,
@@ -46,17 +50,22 @@ exports.default = function () {
         throw new Error('Storybook plugin cannot handle ' + specRuntime + ' specs');
       }
 
-      // We need to emulate the event sent by the manager to the preview.
-      // In SB@4+ if we emit a message on the channel it will get picked up by the preview
-      // (note that we are on the preview side). However, in SB@3.4, perhaps more correctly,
-      // if we emit a message, it won't be picked up by the preview. So we need to reach
-      // in and simulate receiving an event
-      // eslint-disable-next-line no-underscore-dangle
-      __STORYBOOK_ADDONS_CHANNEL__._handleEvent({
-        type: 'setCurrentStory',
-        args: [{ kind: kind, story: story }],
-        from: 'chromatic'
-      });
+      // In storybook 5+ we can be sure of the emitting, and we need to use a storyId API
+      if (_client.toId) {
+        __STORYBOOK_ADDONS_CHANNEL__.emit('setCurrentStory', { storyId: (0, _client.toId)(kind, story) });
+      } else {
+        // We need to emulate the event sent by the manager to the preview.
+        // In SB@4+ if we emit a message on the channel it will get picked up by the preview
+        // (note that we are on the preview side). However, in SB@3.4, perhaps more correctly,
+        // if we emit a message, it won't be picked up by the preview. So we need to reach
+        // in and simulate receiving an event
+        // eslint-disable-next-line no-underscore-dangle
+        __STORYBOOK_ADDONS_CHANNEL__._handleEvent({
+          type: 'setCurrentStory',
+          args: [{ kind: kind, story: story }],
+          from: 'chromatic'
+        });
+      }
 
       // If the story has rendered with an error, SB does not return any kind of error
       // (we will fix this...) However, in the meantime, you can pick this up via a class on the body
@@ -97,9 +106,11 @@ exports.default = function () {
 
             if (chromatic) {
               var viewports = chromatic.viewports,
-                  delay = chromatic.delay;
+                  delay = chromatic.delay,
+                  disable = chromatic.disable,
+                  noScroll = chromatic.noScroll;
 
-              parameters = (0, _extends3.default)({}, viewports && { viewports: viewports }, delay && { delay: delay });
+              parameters = (0, _extends3.default)({}, viewports && { viewports: viewports }, delay && { delay: delay }, disable && { disable: disable }, noScroll && { noScroll: noScroll });
             }
           }
 
