@@ -1212,6 +1212,9 @@ function addShimsToJSDOM(dom) {
       value: function takeRecords() {
         return [];
       }
+    }, {
+      key: 'disconnect',
+      value: function disconnect() {}
     }]);
     return MutationObserverMock;
   }();
