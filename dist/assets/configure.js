@@ -88,6 +88,9 @@ exports.default = function () {
                   channel.on('storyRendered', function () {
                     return resolve(document.getElementById('root'));
                   });
+                  channel.on('storyUnchanged', function () {
+                    return resolve(document.getElementById('root'));
+                  });
                   channel.on('storyErrored', function (error) {
                     return reject(error);
                   });
