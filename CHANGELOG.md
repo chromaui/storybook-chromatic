@@ -1,3 +1,13 @@
+# 1.2.4 - 2019-01-18
+
+* Added an export `isChromatic()` to determine if code is running under test.
+
+* Added JSDOM mocks for `CreateObjectUrl` and `MutationObserver`
+
+* Added a parameter `{ chromatic: { disable: true } }` to skip a story in chromatic
+
+* Added a parameter `{ chromatic: { noScroll: true } }` to avoid scrolling screenshots in (non-chrome) browsers.
+
 # 1.2.3 - 2018-12-28
 
 * Allow overwriting the polyfills we create in JSDOM mode. (This is a bugfix for some libraries that bundle their own polyfills).
