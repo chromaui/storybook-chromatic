@@ -1,3 +1,28 @@
+# 1.2.4 - 2019-01-18
+
+* Added an export `isChromatic()` to determine if code is running under test.
+
+* Added JSDOM mocks for `CreateObjectUrl` and `MutationObserver`
+
+* Added a parameter `{ chromatic: { disable: true } }` to skip a story in chromatic
+
+* Added a parameter `{ chromatic: { noScroll: true } }` to avoid scrolling screenshots in (non-chrome) browsers.
+
+# 1.2.3 - 2018-12-28
+
+* Allow overwriting the polyfills we create in JSDOM mode. (This is a bugfix for some libraries that bundle their own polyfills).
+
+# 1.2.2 - 2018-12-10
+
+* Allow controlling package initialization timing via `import configure from 'storybook-chromatic/configure'; configure()`
+
+* Add a flag `--ignore-last-build-on-branch=X` to not use the last build on a branch no matter what (which helps with rebasing, see: http://docs.chromaticqa.com/branching-and-baselines#rebasing).
+
+# 1.2.1 - 2018-12-04
+
+* Update logging dependency from `loggly` to `node-loggly-bulk` due to security vulnerabilities.
+  NOTE: this package was only used by our CLI tool and so there is no need for concern, but this new version should avoid tripping security tools.
+
 # 1.2.0 - 2018-10-29
 
 * Pass `chromatic` parameters from Storybook@4, supporting:
