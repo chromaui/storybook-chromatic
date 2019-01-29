@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 32);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,58 +83,106 @@ module.exports = require("babel-runtime/regenerator");
 /* 2 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/core-js/promise");
+module.exports = require("debug");
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports) {
 
-module.exports = require("debug");
+module.exports = require("babel-runtime/core-js/promise");
 
 /***/ }),
 /* 4 */
 /***/ (function(module, exports) {
 
-module.exports = require("util");
+module.exports = require("babel-runtime/helpers/extends");
 
 /***/ }),
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/classCallCheck");
+module.exports = require("babel-runtime/helpers/toConsumableArray");
 
 /***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/createClass");
+module.exports = require("path");
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("babel-runtime/helpers/extends");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// Note this file differs from our usual convention because it is packaged
+var _process$env = process.env,
+    _process$env$CHROMATI = _process$env.CHROMATIC_SERVER_PORT,
+    CHROMATIC_SERVER_PORT = _process$env$CHROMATI === undefined ? 3004 : _process$env$CHROMATI,
+    _process$env$CHROMATI2 = _process$env.CHROMATIC_INDEX_URL,
+    CHROMATIC_INDEX_URL = _process$env$CHROMATI2 === undefined ? 'https://index.chromaticqa.com' : _process$env$CHROMATI2,
+    _process$env$CHROMATI3 = _process$env.CHROMATIC_TUNNEL_URL,
+    CHROMATIC_TUNNEL_URL = _process$env$CHROMATI3 === undefined ? 'https://tunnel.chromaticqa.com' : _process$env$CHROMATI3,
+    _process$env$CHROMATI4 = _process$env.CHROMATIC_CREATE_TUNNEL,
+    CHROMATIC_CREATE_TUNNEL = _process$env$CHROMATI4 === undefined ? 'true' : _process$env$CHROMATI4,
+    CHROMATIC_APP_CODE = _process$env.CHROMATIC_APP_CODE,
+    _process$env$LOGGLY_C = _process$env.LOGGLY_CUSTOMER_TOKEN,
+    LOGGLY_CUSTOMER_TOKEN = _process$env$LOGGLY_C === undefined ? 'b5e26204-cdc5-4c78-a9cc-c69eb7fabad3' : _process$env$LOGGLY_C;
+exports.CHROMATIC_SERVER_PORT = CHROMATIC_SERVER_PORT;
+exports.CHROMATIC_INDEX_URL = CHROMATIC_INDEX_URL;
+exports.CHROMATIC_TUNNEL_URL = CHROMATIC_TUNNEL_URL;
+exports.CHROMATIC_CREATE_TUNNEL = CHROMATIC_CREATE_TUNNEL;
+exports.CHROMATIC_APP_CODE = CHROMATIC_APP_CODE;
+exports.LOGGLY_CUSTOMER_TOKEN = LOGGLY_CUSTOMER_TOKEN;
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/toConsumableArray");
+module.exports = require("babel-runtime/core-js/object/keys");
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("child_process");
+module.exports = require("denodeify");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("path");
+module.exports = require("babel-runtime/helpers/classCallCheck");
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/helpers/createClass");
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/helpers/slicedToArray");
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = require("child_process");
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = require("isomorphic-fetch");
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -152,19 +200,19 @@ var _asyncToGenerator2 = __webpack_require__(0);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _extends2 = __webpack_require__(7);
+var _extends2 = __webpack_require__(4);
 
 var _extends3 = _interopRequireDefault(_extends2);
 
-var _classCallCheck2 = __webpack_require__(5);
+var _classCallCheck2 = __webpack_require__(10);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _createClass2 = __webpack_require__(6);
+var _createClass2 = __webpack_require__(11);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _apolloFetch = __webpack_require__(25);
+var _apolloFetch = __webpack_require__(34);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -277,34 +325,7 @@ var GraphQLClient = function () {
 exports.default = GraphQLClient;
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-// Note this file differs from our usual convention because it is packaged
-var _process$env = process.env,
-    _process$env$CHROMATI = _process$env.CHROMATIC_SERVER_PORT,
-    CHROMATIC_SERVER_PORT = _process$env$CHROMATI === undefined ? 3004 : _process$env$CHROMATI,
-    _process$env$CHROMATI2 = _process$env.CHROMATIC_INDEX_URL,
-    CHROMATIC_INDEX_URL = _process$env$CHROMATI2 === undefined ? 'https://index.chromaticqa.com' : _process$env$CHROMATI2,
-    _process$env$CHROMATI3 = _process$env.CHROMATIC_TUNNEL_URL,
-    CHROMATIC_TUNNEL_URL = _process$env$CHROMATI3 === undefined ? 'https://tunnel.chromaticqa.com' : _process$env$CHROMATI3,
-    _process$env$CHROMATI4 = _process$env.CHROMATIC_CREATE_TUNNEL,
-    CHROMATIC_CREATE_TUNNEL = _process$env$CHROMATI4 === undefined ? 'true' : _process$env$CHROMATI4,
-    CHROMATIC_APP_CODE = _process$env.CHROMATIC_APP_CODE;
-exports.CHROMATIC_SERVER_PORT = CHROMATIC_SERVER_PORT;
-exports.CHROMATIC_INDEX_URL = CHROMATIC_INDEX_URL;
-exports.CHROMATIC_TUNNEL_URL = CHROMATIC_TUNNEL_URL;
-exports.CHROMATIC_CREATE_TUNNEL = CHROMATIC_CREATE_TUNNEL;
-exports.CHROMATIC_APP_CODE = CHROMATIC_APP_CODE;
-
-/***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -322,18 +343,27 @@ var _asyncToGenerator2 = __webpack_require__(0);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _localtunnel = __webpack_require__(32);
+var _localtunnel = __webpack_require__(33);
 
 var _localtunnel2 = _interopRequireDefault(_localtunnel);
 
-var _util = __webpack_require__(4);
+var _debug = __webpack_require__(2);
+
+var _debug2 = _interopRequireDefault(_debug);
+
+var _denodeify = __webpack_require__(9);
+
+var _denodeify2 = _interopRequireDefault(_denodeify);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var debug = (0, _debug2.default)('storybook-chromatic:tester:tunnel');
 
 exports.default = function () {
   var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(_ref) {
     var tunnelUrl = _ref.tunnelUrl,
         port = _ref.port;
+    var tunnel;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -346,12 +376,34 @@ exports.default = function () {
             throw new Error('Need to pass a port into `openTunnel`');
 
           case 2:
-            return _context.abrupt('return', (0, _util.promisify)(_localtunnel2.default)(port, {
+            _context.next = 4;
+            return (0, _denodeify2.default)(_localtunnel2.default)(port, {
               local_host: 'localhost',
               host: tunnelUrl
-            }));
+            });
 
-          case 3:
+          case 4:
+            tunnel = _context.sent;
+
+
+            // The ones that are commented out are debugged already by our localtunnel fork
+            tunnel.on('url', function (url) {
+              return debug('Got tunnel url: %s', url);
+            });
+            // tunnel.on('error', error => debug(`Got tunnel error: %O`, error));
+            tunnel.on('request', function (request) {
+              return debug('Got request: %O', request);
+            });
+            // tunnel.tunnel_cluster.on('open', socket => debug(`Got tunnel cluster open`));
+            // tunnel.tunnel_cluster.on('request', request => debug(`Got tunnel cluster request: %O`, request));
+            tunnel.tunnel_cluster.on('error', function (error) {
+              return debug('Got tunnel cluster error: %O', error);
+            });
+            // tunnel.tunnel_cluster.on('dead', () => debug(`Got tunnel cluster dead`));
+
+            return _context.abrupt('return', tunnel);
+
+          case 9:
           case 'end':
             return _context.stop();
         }
@@ -367,7 +419,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 14 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -378,11 +430,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getBaselineCommits = exports.getBranch = exports.getCommit = exports.FETCH_N_INITIAL_BUILD_COMMITS = undefined;
 
-var _toConsumableArray2 = __webpack_require__(8);
+var _toConsumableArray2 = __webpack_require__(5);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _slicedToArray2 = __webpack_require__(28);
+var _slicedToArray2 = __webpack_require__(12);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -396,26 +448,39 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var execGitCommand = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(command) {
+    var _error$message, message;
+
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            return _context.abrupt('return', (0, _child_process.execSync)(command).toString().trim());
+            return _context.abrupt('return', (0, _child_process.execSync)(command + ' 2>&1').toString().trim());
 
           case 4:
             _context.prev = 4;
             _context.t0 = _context['catch'](0);
+            _error$message = _context.t0.message, message = _error$message === undefined ? '' : _error$message;
 
-            if (_context.t0.message && _context.t0.message.match('Not a git repository')) {
-              // eslint-disable-next-line no-console
-              console.error('Unable to execute git command \'' + command + '\'.\n');
-              // eslint-disable-next-line no-console
-              console.error('Chromatic only works in git projects.\n' + 'Contact us at support@hichroma.com if you need to use Chromatic outside of one.\n\n');
+            if (!message.match('Not a git repository')) {
+              _context.next = 9;
+              break;
             }
+
+            throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic only works in git projects.\nContact us at support@hichroma.com if you need to use Chromatic outside of one.\n');
+
+          case 9:
+            if (!message.match('does not have any commits yet')) {
+              _context.next = 11;
+              break;
+            }
+
+            throw new Error('Unable to execute git command \'' + command + '\'.\n\nChromatic requires that you have created a commit before it can be run.\n');
+
+          case 11:
             throw _context.t0;
 
-          case 8:
+          case 12:
           case 'end':
             return _context.stop();
         }
@@ -498,7 +563,7 @@ var commitExists = function () {
           case 0:
             _context4.prev = 0;
             _context4.next = 3;
-            return execGitCommand('git cat-file -e ' + commit + '^{commit}');
+            return execGitCommand('git cat-file -e "' + commit + '^{commit}"');
 
           case 3:
             return _context4.abrupt('return', true);
@@ -608,7 +673,7 @@ var maximallyDescendentCommits = function () {
 
             // <commit>^@ expands to all parents of commit
             parentCommits = commits.map(function (c) {
-              return c + '^@';
+              return '"' + c + '^@"';
             });
             // List the tree from <commits> not including the tree from <parentCommits>
             // This just filters any commits that are ancestors of other commits
@@ -726,7 +791,11 @@ var step = function () {
 
 var getBaselineCommits = exports.getBaselineCommits = function () {
   var _ref11 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee8(client) {
-    var branch, _ref12, committedAt, _ref13, _ref13$app, firstBuild, lastBuild, initialCommitsWithBuilds, extraBaselineCommits, commitsWithBuilds;
+    var _ref12 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref12$ignoreLastBuil = _ref12.ignoreLastBuildOnBranch,
+        ignoreLastBuildOnBranch = _ref12$ignoreLastBuil === undefined ? false : _ref12$ignoreLastBuil;
+
+    var branch, _ref13, committedAt, _ref14, _ref14$app, firstBuild, lastBuild, initialCommitsWithBuilds, extraBaselineCommits, commitsWithBuilds;
 
     return _regenerator2.default.wrap(function _callee8$(_context8) {
       while (1) {
@@ -741,18 +810,18 @@ var getBaselineCommits = exports.getBaselineCommits = function () {
             return getCommit();
 
           case 5:
-            _ref12 = _context8.sent;
-            committedAt = _ref12.committedAt;
+            _ref13 = _context8.sent;
+            committedAt = _ref13.committedAt;
             _context8.next = 9;
             return client.runQuery(TesterFirstCommittedAtQuery, {
               branch: branch
             });
 
           case 9:
-            _ref13 = _context8.sent;
-            _ref13$app = _ref13.app;
-            firstBuild = _ref13$app.firstBuild;
-            lastBuild = _ref13$app.lastBuild;
+            _ref14 = _context8.sent;
+            _ref14$app = _ref14.app;
+            firstBuild = _ref14$app.firstBuild;
+            lastBuild = _ref14$app.lastBuild;
 
             debug('App firstBuild: ' + firstBuild + ', lastBuild: ' + lastBuild);
 
@@ -771,7 +840,7 @@ var getBaselineCommits = exports.getBaselineCommits = function () {
             // Don't do any special branching logic for builds on `HEAD`, this is fairly meaningless
             // (CI systems that have been pushed tags can not set a branch)
 
-            if (!(branch !== 'HEAD' && lastBuild && lastBuild.committedAt <= committedAt)) {
+            if (!(branch !== 'HEAD' && !ignoreLastBuildOnBranch && lastBuild && lastBuild.committedAt <= committedAt)) {
               _context8.next = 28;
               break;
             }
@@ -827,14 +896,14 @@ var getBaselineCommits = exports.getBaselineCommits = function () {
     }, _callee8, this);
   }));
 
-  return function getBaselineCommits(_x9) {
+  return function getBaselineCommits(_x10) {
     return _ref11.apply(this, arguments);
   };
 }();
 
-var _child_process = __webpack_require__(9);
+var _child_process = __webpack_require__(13);
 
-var _debug = __webpack_require__(3);
+var _debug = __webpack_require__(2);
 
 var _debug2 = _interopRequireDefault(_debug);
 
@@ -855,7 +924,7 @@ function commitsForCLI(commits) {
 }
 
 /***/ }),
-/* 15 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -865,18 +934,18 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _values = __webpack_require__(27);
+var _values = __webpack_require__(35);
 
 var _values2 = _interopRequireDefault(_values);
 
 exports.checkPackageJson = checkPackageJson;
 exports.addScriptToPackageJson = addScriptToPackageJson;
 
-var _path = __webpack_require__(10);
+var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
-var _jsonfile = __webpack_require__(31);
+var _jsonfile = __webpack_require__(38);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -912,7 +981,7 @@ function addScriptToPackageJson(scriptName, scriptCommand) {
 }
 
 /***/ }),
-/* 16 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -926,11 +995,11 @@ var _regenerator = __webpack_require__(1);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(2);
+var _promise = __webpack_require__(3);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _keys = __webpack_require__(26);
+var _keys = __webpack_require__(8);
 
 var _keys2 = _interopRequireDefault(_keys);
 
@@ -938,17 +1007,102 @@ var _asyncToGenerator2 = __webpack_require__(0);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _classCallCheck2 = __webpack_require__(5);
+var _classCallCheck2 = __webpack_require__(10);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _createClass2 = __webpack_require__(6);
+var _createClass2 = __webpack_require__(11);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _jsdom = __webpack_require__(30);
+var _jsdom = __webpack_require__(37);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Add canvas mock based on this comment: https://github.com/jsdom/jsdom/issues/1782#issuecomment-337656878
+function mockCanvas(window) {
+  window.HTMLCanvasElement.prototype.getContext = function () {
+    return {
+      fillRect: function fillRect() {
+        return {};
+      },
+      clearRect: function clearRect() {
+        return {};
+      },
+      getImageData: function getImageData(x, y, w, h) {
+        return { data: new Array(w * h * 4) };
+      },
+      putImageData: function putImageData() {
+        return {};
+      },
+      createImageData: function createImageData() {
+        return [];
+      },
+      setTransform: function setTransform() {
+        return {};
+      },
+      drawImage: function drawImage() {
+        return {};
+      },
+      save: function save() {
+        return {};
+      },
+      fillText: function fillText() {
+        return {};
+      },
+      restore: function restore() {
+        return {};
+      },
+      beginPath: function beginPath() {
+        return {};
+      },
+      moveTo: function moveTo() {
+        return {};
+      },
+      lineTo: function lineTo() {
+        return {};
+      },
+      closePath: function closePath() {
+        return {};
+      },
+      stroke: function stroke() {
+        return {};
+      },
+      translate: function translate() {
+        return {};
+      },
+      scale: function scale() {
+        return {};
+      },
+      rotate: function rotate() {
+        return {};
+      },
+      arc: function arc() {
+        return {};
+      },
+      fill: function fill() {
+        return {};
+      },
+      measureText: function measureText() {
+        return { width: 0 };
+      },
+      transform: function transform() {
+        return {};
+      },
+      rect: function rect() {
+        return {};
+      },
+      clip: function clip() {
+        return {};
+      }
+    };
+  };
+
+  window.HTMLCanvasElement.prototype.toDataURL = function () {
+    return '';
+  };
+} /* eslint-disable no-console, class-methods-use-this, no-param-reassign */
+
 
 function addShimsToJSDOM(dom) {
   Object.defineProperty(dom.window, 'matchMedia', {
@@ -958,7 +1112,8 @@ function addShimsToJSDOM(dom) {
         addListener: function addListener() {},
         removeListener: function removeListener() {}
       };
-    }
+    },
+    writable: true
   });
 
   var LocalStorageMock = function () {
@@ -993,7 +1148,8 @@ function addShimsToJSDOM(dom) {
   }();
 
   Object.defineProperty(dom.window, 'localStorage', {
-    value: new LocalStorageMock()
+    value: new LocalStorageMock(),
+    writable: true
   });
 
   var WorkerMock = function () {
@@ -1017,22 +1173,59 @@ function addShimsToJSDOM(dom) {
     return WorkerMock;
   }();
 
-  Object.defineProperty(dom.window, 'Worker', WorkerMock);
+  Object.defineProperty(dom.window, 'Worker', {
+    value: WorkerMock,
+    writable: true
+  });
 
   Object.defineProperty(dom.window, 'crypto', {
     value: {
       getRandomValues: function getRandomValues() {
         return 0;
       }
-    }
+    },
+    writable: true
   });
 
   Object.defineProperty(dom.window.navigator, 'mimeTypes', {
     value: function value() {
       return [];
-    }
+    },
+    writable: true
   });
-} /* eslint-disable no-console, class-methods-use-this */
+
+  Object.defineProperty(dom.window.URL, 'createObjectURL', { value: function value() {} });
+  Object.defineProperty(dom.window.URL, 'revokeObjectURL', { value: function value() {} });
+
+  var MutationObserverMock = function () {
+    function MutationObserverMock() {
+      (0, _classCallCheck3.default)(this, MutationObserverMock);
+    }
+
+    (0, _createClass3.default)(MutationObserverMock, [{
+      key: 'observe',
+      value: function observe() {
+        return [];
+      }
+    }, {
+      key: 'takeRecords',
+      value: function takeRecords() {
+        return [];
+      }
+    }, {
+      key: 'disconnect',
+      value: function disconnect() {}
+    }]);
+    return MutationObserverMock;
+  }();
+
+  Object.defineProperty(dom.window, 'MutationObserver', {
+    value: MutationObserverMock,
+    writable: true
+  });
+
+  mockCanvas(dom.window);
+}
 
 exports.default = function () {
   var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(url) {
@@ -1087,47 +1280,51 @@ exports.default = function () {
 
             return _context.abrupt('return', new _promise2.default(function (resolve, reject) {
               return dom.window.document.addEventListener('DOMContentLoaded', function () {
-                var separator = '=========================';
+                try {
+                  var separator = '=========================';
 
-                if (!dom.window.__chromaticRuntimeSpecs__ && !dom.window.__STORYBOOK_CLIENT_API__) {
-                  console.error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.\n' + 'Have you installed the Chromatic widget or addon correctly?\n');
+                  if (!dom.window.__chromaticRuntimeSpecs__ && !dom.window.__STORYBOOK_CLIENT_API__) {
+                    console.error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.\n' + 'Have you installed the Chromatic widget or addon correctly?\n');
 
-                  if (!verbose && logs.length) {
-                    console.error('Your app\'s output:\n' + separator + '\n');
-                    logs.forEach(function (_ref3) {
-                      var logType = _ref3.logType,
-                          log = _ref3.log;
+                    if (!verbose && logs.length) {
+                      console.error('Your app\'s output:\n' + separator + '\n');
+                      logs.forEach(function (_ref3) {
+                        var logType = _ref3.logType,
+                            log = _ref3.log;
+                        return console[logType](log);
+                      });
+                      console.error('\n' + separator + '\n');
+                    }
+                    throw new Error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.');
+                  }
+
+                  // If their app logged something to console.error, it's probably, but
+                  // not definitely an issue. See https://github.com/hichroma/chromatic/issues/757
+                  if (logs.find(function (log) {
+                    return log.logType === 'error';
+                  })) {
+                    console.error('\nYour app logged the following to the error console:\n' + separator);
+                    logs.filter(function (log) {
+                      return log.logType === 'error';
+                    }).forEach(function (_ref4) {
+                      var logType = _ref4.logType,
+                          log = _ref4.log;
                       return console[logType](log);
                     });
-                    console.error('\n' + separator + '\n');
+                    console.error('\n' + separator + '\nThis may lead to some stories not working right or getting detected by Chromatic' + '\nWe suggest you fix the errors, but we will continue anyway..\n');
                   }
-                  reject(new Error('Didn\'t find \'window.__chromaticRuntimeSpecs__\' at ' + url + '.'));
+
+                  if (!dom.window.__chromaticRuntimeSpecs__) {
+                    throw new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com');
+                  }
+
+                  var specs = dom.window.__chromaticRuntimeSpecs__();
+                  dom.window.close();
+                  resolve(specs);
+                } catch (err) {
+                  dom.window.close();
+                  reject(err);
                 }
-
-                // If their app logged something to console.error, it's probably, but
-                // not definitely an issue. See https://github.com/hichroma/chromatic/issues/757
-                if (logs.find(function (log) {
-                  return log.logType === 'error';
-                })) {
-                  console.error('\nYour app logged the following to the error console:\n' + separator);
-                  logs.filter(function (log) {
-                    return log.logType === 'error';
-                  }).forEach(function (_ref4) {
-                    var logType = _ref4.logType,
-                        log = _ref4.log;
-                    return console[logType](log);
-                  });
-                  console.error('\n' + separator + '\nThis may lead to some stories not working right or getting detected by Chromatic' + '\nWe suggest you fix the errors, but we will continue anyway..\n');
-                }
-
-                if (!dom.window.__chromaticRuntimeSpecs__) {
-                  throw new Error('Didn\'t find Chromatic addon in your storybook.\n        \nDid you add it with `import \'storybook-chromatic\'` in your `.storybook/config.js`?\n\nRead more: http://docs.chromaticqa.com');
-                }
-
-                var specs = dom.window.__chromaticRuntimeSpecs__();
-
-                dom.window.close();
-                resolve(specs);
               });
             }));
 
@@ -1147,7 +1344,66 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 17 */
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = sendDebugToLoggly;
+
+var _debug = __webpack_require__(2);
+
+var _debug2 = _interopRequireDefault(_debug);
+
+var _nodeLogglyBulk = __webpack_require__(39);
+
+var _nodeLogglyBulk2 = _interopRequireDefault(_nodeLogglyBulk);
+
+var _util = __webpack_require__(41);
+
+var _stripColor = __webpack_require__(40);
+
+var _stripColor2 = _interopRequireDefault(_stripColor);
+
+var _environment = __webpack_require__(7);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function sendDebugToLoggly(_ref) {
+  var sessionId = _ref.sessionId;
+
+  if (process.env.DISABLE_LOGGING) {
+    return;
+  }
+
+  var client = _nodeLogglyBulk2.default.createClient({
+    token: _environment.LOGGLY_CUSTOMER_TOKEN,
+    subdomain: 'hichroma',
+    tags: ['storybook-chromatic'],
+    json: true
+  });
+
+  // Is the user debugging already? If so they will get what we want to debug :shrug:
+  var isDebugging = !!process.env.DEBUG;
+
+  _debug2.default.enable('*,-babel');
+
+  _debug2.default.log = function () {
+    var msg = _util.format.apply(undefined, arguments);
+    client.log({ sessionId: sessionId, msg: (0, _stripColor2.default)(msg) });
+
+    if (isDebugging) {
+      process.stderr.write(msg + '\n');
+    }
+  };
+}
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1158,15 +1414,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.checkResponse = undefined;
 
-var _toConsumableArray2 = __webpack_require__(8);
+var _toConsumableArray2 = __webpack_require__(5);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _extends2 = __webpack_require__(7);
+var _extends2 = __webpack_require__(4);
 
 var _extends3 = _interopRequireDefault(_extends2);
 
-var _promise = __webpack_require__(2);
+var _promise = __webpack_require__(3);
 
 var _promise2 = _interopRequireDefault(_promise);
 
@@ -1297,13 +1553,13 @@ var waitForResponse = function () {
   };
 }();
 
-var _child_process = __webpack_require__(9);
+var _child_process = __webpack_require__(13);
 
-var _isomorphicFetch = __webpack_require__(29);
+var _isomorphicFetch = __webpack_require__(14);
 
 var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
-var _path = __webpack_require__(10);
+var _path = __webpack_require__(6);
 
 var _path2 = _interopRequireDefault(_path);
 
@@ -1395,43 +1651,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = {"name":"storybook-chromatic","version":"0.10.0-beta.5-dev","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","localtunnel":"^1.8.3","node-ask":"^1.0.1","tree-kill":"^1.1.0"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-node-externals":"^1.6.0"}}
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-module.exports = require("babel-runtime/core-js/json/stringify");
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-module.exports = require("env-ci");
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
-module.exports = require("node-ask");
-
-/***/ }),
 /* 22 */
-/***/ (function(module, exports) {
-
-module.exports = require("tree-kill");
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports) {
-
-module.exports = require("url");
-
-/***/ }),
-/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1441,15 +1661,284 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray2 = __webpack_require__(12);
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
+exports.default = getStorybookInfo;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Figure out the storybook version and view layer
+
+var viewLayers = ['react', 'angular', 'vue', 'polymer', 'mithril', 'marko', 'html', 'svelte', 'riot', 'ember'];
+
+// This hack is simply to stop webpack from trying to do something with this require
+// This code is bundled by webpack but runs in node
+// eslint-disable-next-line no-eval
+var require2 = eval('require');
+
+function getStorybookInfo() {
+  // Allow setting storybook version via CHROMATIC_STORYBOOK_VERSION='react@4.0-alpha.8' for unusual
+  // cases (such as our permacache examples)
+  var CHROMATIC_STORYBOOK_VERSION = process.env.CHROMATIC_STORYBOOK_VERSION;
+
+  if (CHROMATIC_STORYBOOK_VERSION) {
+    var _CHROMATIC_STORYBOOK_ = CHROMATIC_STORYBOOK_VERSION.split('@'),
+        _CHROMATIC_STORYBOOK_2 = (0, _slicedToArray3.default)(_CHROMATIC_STORYBOOK_, 2),
+        viewLayer = _CHROMATIC_STORYBOOK_2[0],
+        storybookVersion = _CHROMATIC_STORYBOOK_2[1];
+
+    if (!viewLayer || !storybookVersion) {
+      throw new Error('CHROMATIC_STORYBOOK_VERSION misspecified -- use "viewLayer@version"');
+    }
+    return { viewLayer: viewLayer, storybookVersion: storybookVersion };
+  }
+
+  while (viewLayers.length > 0) {
+    var _viewLayer = viewLayers.shift();
+    try {
+      var _require = require2('@storybook/' + _viewLayer + '/package.json'),
+          _storybookVersion = _require.version;
+
+      return { viewLayer: _viewLayer, storybookVersion: _storybookVersion };
+    } catch (err) {
+      // This is OK
+    }
+  }
+
+  throw new Error('Couldn\'t discover storybook version. Try upgrading the storybook-chromatic package?');
+}
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _promise = __webpack_require__(3);
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _regenerator = __webpack_require__(1);
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _promise = __webpack_require__(2);
+var _asyncToGenerator2 = __webpack_require__(0);
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _toConsumableArray2 = __webpack_require__(5);
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _debug = __webpack_require__(2);
+
+var _debug2 = _interopRequireDefault(_debug);
+
+var _fs = __webpack_require__(36);
+
+var _isomorphicFetch = __webpack_require__(14);
+
+var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
+var _path = __webpack_require__(6);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var debug = (0, _debug2.default)('storybook-chromatic:tester:upload');
+
+var TesterGetUploadUrlsMutation = '\n  mutation TesterGetUploadUrlsMutation($paths: [String!]!) {\n    getUploadUrls(paths: $paths) {\n      domain\n      urls {\n        path\n        url\n        contentType\n      }\n    }\n  }\n';
+
+// Get all paths in rootDir, starting at dirname.
+// We don't want the paths to include rootDir -- so if rootDir = storybook-static,
+// paths will be like iframe.html rather than storybook-static/iframe.html
+function getPathsInDir(rootDir) {
+  var dirname = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '.';
+
+  return (0, _fs.readdirSync)((0, _path.join)(rootDir, dirname)).map(function (p) {
+    return (0, _path.join)(dirname, p);
+  }).map(function (pathname) {
+    return (0, _fs.statSync)((0, _path.join)(rootDir, pathname)).isDirectory() ? getPathsInDir(rootDir, pathname) : [pathname];
+  }).reduce(function (a, b) {
+    return [].concat((0, _toConsumableArray3.default)(a), (0, _toConsumableArray3.default)(b));
+  }, []); // flatten
+}
+
+exports.default = function () {
+  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(_ref) {
+    var _this = this;
+
+    var client = _ref.client,
+        dirname = _ref.dirname;
+
+    var paths, _ref3, _ref3$getUploadUrls, domain, urls, uploads;
+
+    return _regenerator2.default.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            debug('uploading \'' + dirname + '\' to s3');
+
+            paths = getPathsInDir(dirname);
+            _context2.next = 4;
+            return client.runQuery(TesterGetUploadUrlsMutation, {
+              paths: paths
+            });
+
+          case 4:
+            _ref3 = _context2.sent;
+            _ref3$getUploadUrls = _ref3.getUploadUrls;
+            domain = _ref3$getUploadUrls.domain;
+            urls = _ref3$getUploadUrls.urls;
+            uploads = [];
+
+            urls.forEach(function (_ref4) {
+              var path = _ref4.path,
+                  url = _ref4.url,
+                  contentType = _ref4.contentType;
+
+              var pathWithDirname = (0, _path.join)(dirname, path);
+              debug('uploading \'' + pathWithDirname + '\' to \'' + url + '\' with content type \'' + contentType + '\'');
+
+              uploads.push((0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+                var res;
+                return _regenerator2.default.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        _context.next = 2;
+                        return (0, _isomorphicFetch2.default)(url, {
+                          method: 'PUT',
+                          body: (0, _fs.createReadStream)(pathWithDirname),
+                          headers: {
+                            'content-type': contentType,
+                            'content-length': (0, _fs.statSync)(pathWithDirname).size
+                          }
+                        });
+
+                      case 2:
+                        res = _context.sent;
+
+                        if (res.ok) {
+                          _context.next = 6;
+                          break;
+                        }
+
+                        debug('Uploading \'' + path + '\' failed: %O', res);
+                        throw new Error('Failed to upload ' + path);
+
+                      case 6:
+                      case 'end':
+                        return _context.stop();
+                    }
+                  }
+                }, _callee, _this);
+              }))());
+            });
+
+            _context2.next = 12;
+            return _promise2.default.all(uploads);
+
+          case 12:
+            return _context2.abrupt('return', domain + '/iframe.html');
+
+          case 13:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  function uploadToS3(_x2) {
+    return _ref2.apply(this, arguments);
+  }
+
+  return uploadToS3;
+}();
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+module.exports = {"name":"storybook-chromatic","version":"1.2.5-dev","description":"Visual Testing for Storybook","main":"./dist/assets/storybook-addon.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"@chromaui/localtunnel":"1.9.1-chromatic.3","apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","denodeify":"^1.2.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","minimatch":"^3.0.4","node-ask":"^1.0.1","node-loggly-bulk":"^2.2.4","strip-color":"^0.1.0","tree-kill":"^1.1.0","uuid":"^3.3.2"},"peerDependencies":{"@storybook/core":"3.* || 4.* || 5.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-cli":"^3.1.1","webpack-node-externals":"^1.6.0"}}
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+module.exports = require("babel-runtime/core-js/json/stringify");
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = require("env-ci");
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = require("minimatch");
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = require("node-ask");
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+module.exports = require("tree-kill");
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+module.exports = require("url");
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
+
+module.exports = require("uuid");
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _keys = __webpack_require__(8);
+
+var _keys2 = _interopRequireDefault(_keys);
+
+var _extends2 = __webpack_require__(4);
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _regenerator = __webpack_require__(1);
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _promise = __webpack_require__(3);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _stringify = __webpack_require__(19);
+var _stringify = __webpack_require__(25);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -1459,7 +1948,7 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var waitForBuild = function () {
   var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(client, variables) {
-    var _ref3, build, status, inProgressCount, specCount, changeCount, errorCount;
+    var _ref3, build, status, inProgressCount, snapshotCount, changeCount, errorCount;
 
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -1473,7 +1962,7 @@ var waitForBuild = function () {
             build = _ref3.app.build;
 
             debug('build:' + (0, _stringify2.default)(build));
-            status = build.status, inProgressCount = build.inProgressCount, specCount = build.specCount, changeCount = build.changeCount, errorCount = build.errorCount;
+            status = build.status, inProgressCount = build.inProgressCount, snapshotCount = build.snapshotCount, changeCount = build.changeCount, errorCount = build.errorCount;
 
             if (!(status === 'BUILD_IN_PROGRESS')) {
               _context.next = 11;
@@ -1482,7 +1971,7 @@ var waitForBuild = function () {
 
             if (inProgressCount !== lastInProgressCount) {
               lastInProgressCount = inProgressCount;
-              log(inProgressCount + '/' + pluralize(specCount, 'story') + ' remain to test. ' + ('(' + pluralize(changeCount, 'change') + ', ' + pluralize(errorCount, 'error') + ')'));
+              log(inProgressCount + '/' + pluralize(snapshotCount, 'snapshot') + ' remain to test. ' + ('(' + pluralize(changeCount, 'change') + ', ' + pluralize(errorCount, 'error') + ')'));
             }
 
             _context.next = 10;
@@ -1509,57 +1998,81 @@ var waitForBuild = function () {
   };
 }();
 
-var _util = __webpack_require__(4);
+var _denodeify = __webpack_require__(9);
 
-var _nodeAsk = __webpack_require__(21);
+var _denodeify2 = _interopRequireDefault(_denodeify);
 
-var _debug = __webpack_require__(3);
+var _nodeAsk = __webpack_require__(28);
+
+var _debug = __webpack_require__(2);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _treeKill = __webpack_require__(22);
+var _treeKill = __webpack_require__(29);
 
 var _treeKill2 = _interopRequireDefault(_treeKill);
 
-var _envCi = __webpack_require__(20);
+var _envCi = __webpack_require__(26);
 
 var _envCi2 = _interopRequireDefault(_envCi);
 
-var _url = __webpack_require__(23);
+var _uuid = __webpack_require__(31);
 
-var _runtimes = __webpack_require__(16);
+var _url = __webpack_require__(30);
+
+var _minimatch = __webpack_require__(27);
+
+var _minimatch2 = _interopRequireDefault(_minimatch);
+
+var _runtimes = __webpack_require__(19);
 
 var _runtimes2 = _interopRequireDefault(_runtimes);
 
-var _startApp = __webpack_require__(17);
+var _storybook = __webpack_require__(22);
+
+var _storybook2 = _interopRequireDefault(_storybook);
+
+var _startApp = __webpack_require__(21);
 
 var _startApp2 = _interopRequireDefault(_startApp);
 
-var _tunnel = __webpack_require__(13);
+var _tunnel = __webpack_require__(16);
 
 var _tunnel2 = _interopRequireDefault(_tunnel);
 
-var _packageJson = __webpack_require__(15);
+var _packageJson = __webpack_require__(18);
 
-var _GraphQLClient = __webpack_require__(11);
+var _GraphQLClient = __webpack_require__(15);
 
 var _GraphQLClient2 = _interopRequireDefault(_GraphQLClient);
 
-var _git = __webpack_require__(14);
+var _git = __webpack_require__(17);
 
-var _package = __webpack_require__(18);
+var _package = __webpack_require__(24);
 
-var _environment = __webpack_require__(12);
+var _environment = __webpack_require__(7);
+
+var _sendDebugToLoggly = __webpack_require__(20);
+
+var _sendDebugToLoggly2 = _interopRequireDefault(_sendDebugToLoggly);
+
+var _uploadToS = __webpack_require__(23);
+
+var _uploadToS2 = _interopRequireDefault(_uploadToS);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var BUILD_POLL_INTERVAL = 1000;
+// We send up all environment variables provided by these complicated systems.
+// We don't want to send up *all* environment vars as they could include sensitive information
+// about the user's build environment
+var ENVIRONMENT_WHITELIST = [/^GERRIT/, /^TRAVIS/];
 
 var TesterCreateAppTokenMutation = '\n  mutation TesterCreateAppTokenMutation($appCode: String!) {\n    createAppToken(code: $appCode)\n  }\n';
 
-var TesterCreateBuildMutation = '\n  mutation TesterCreateBuildMutation($input: CreateBuildInput!, $isolatorUrl: String!) {\n    createBuild(input: $input, isolatorUrl: $isolatorUrl) {\n      id\n      number\n      specCount\n      componentCount\n      webUrl\n    }\n  }\n';
+var TesterCreateBuildMutation = '\n  mutation TesterCreateBuildMutation($input: CreateBuildInput!, $isolatorUrl: String!) {\n    createBuild(input: $input, isolatorUrl: $isolatorUrl) {\n      id\n      number\n      specCount\n      snapshotCount\n      componentCount\n      webUrl\n    }\n  }\n';
 
-var TesterBuildQuery = '\n  query TesterBuildQuery($buildNumber: Int!) {\n    app {\n      build(number: $buildNumber) {\n        id\n        status\n        autoAcceptChanges\n        inProgressCount: snapshotCount(statuses: [SNAPSHOT_IN_PROGRESS])\n        specCount\n        changeCount\n        errorCount: snapshotCount(statuses: [SNAPSHOT_CAPTURE_ERROR])\n      }\n    }\n  }\n';
+var TesterBuildQuery = '\n  query TesterBuildQuery($buildNumber: Int!) {\n    app {\n      build(number: $buildNumber) {\n        id\n        status\n        autoAcceptChanges\n        inProgressCount: snapshotCount(statuses: [SNAPSHOT_IN_PROGRESS])\n        snapshotCount\n        changeCount\n        errorCount: snapshotCount(statuses: [SNAPSHOT_CAPTURE_ERROR])\n      }\n    }\n  }\n';
 
 var debug = (0, _debug2.default)('storybook-chromatic:tester');
 
@@ -1601,6 +2114,7 @@ exports.default = function () {
         _ref4$noStart = _ref4.noStart,
         noStart = _ref4$noStart === undefined ? false : _ref4$noStart,
         url = _ref4.url,
+        dirname = _ref4.dirname,
         only = _ref4.only,
         _ref4$fromCI = _ref4.fromCI,
         inputFromCI = _ref4$fromCI === undefined ? false : _ref4$fromCI,
@@ -1608,6 +2122,8 @@ exports.default = function () {
         autoAcceptChanges = _ref4$autoAcceptChang === undefined ? false : _ref4$autoAcceptChang,
         _ref4$exitZeroOnChang = _ref4.exitZeroOnChanges,
         exitZeroOnChanges = _ref4$exitZeroOnChang === undefined ? false : _ref4$exitZeroOnChang,
+        _ref4$ignoreLastBuild = _ref4.ignoreLastBuildOnBranch,
+        ignoreLastBuildOnBranch = _ref4$ignoreLastBuild === undefined ? false : _ref4$ignoreLastBuild,
         _ref4$verbose = _ref4.verbose,
         verbose = _ref4$verbose === undefined ? false : _ref4$verbose,
         _ref4$interactive = _ref4.interactive,
@@ -1619,15 +2135,25 @@ exports.default = function () {
         _ref4$createTunnel = _ref4.createTunnel,
         createTunnel = _ref4$createTunnel === undefined ? true : _ref4$createTunnel,
         _ref4$originalArgv = _ref4.originalArgv,
-        originalArgv = _ref4$originalArgv === undefined ? false : _ref4$originalArgv;
+        originalArgv = _ref4$originalArgv === undefined ? false : _ref4$originalArgv,
+        _ref4$sessionId = _ref4.sessionId,
+        sessionId = _ref4$sessionId === undefined ? (0, _uuid.v4)() : _ref4$sessionId;
 
-    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, baselineCommits, child, _ref8, port, pathname, query, hash, isolatorUrl, tunnel, isolatorUrlObject, predicate, match, runtimeSpecs, fromCI, exitCode, _ref10, _ref10$createBuild, number, specCount, componentCount, webUrl, onlineHint, _ref11, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
+    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, doAutoAcceptChanges, doExitZeroOnChanges, doIgnoreLastBuildOnBranch, baselineCommits, child, tunnel, fromCI, exitCode, isolatorUrl, cachedUrl, _parse, port, pathname, query, hash, cachedUrlObject, isolatorUrlObject, predicate, match, runtimeSpecs, _getStorybookInfo, storybookVersion, viewLayer, filteredEnvironment, environment, _ref9, _ref9$createBuild, number, snapshotCount, specCount, componentCount, webUrl, onlineHint, _ref10, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
 
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            client = new _GraphQLClient2.default({ uri: indexUrl + '/graphql' });
+            (0, _sendDebugToLoggly2.default)({ sessionId: sessionId });
+
+            debug('Creating build with session id: ' + sessionId);
+            debug('Connecting to index:' + indexUrl + ' and ' + (createTunnel ? 'using tunnel:' + tunnelUrl : 'not creating a tunnel'));
+
+            client = new _GraphQLClient2.default({
+              uri: indexUrl + '/graphql',
+              headers: { 'x-chromatic-session-id': sessionId }
+            });
             _process$env = process.env, TRAVIS_EVENT_TYPE = _process$env.TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG = _process$env.TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG = _process$env.TRAVIS_REPO_SLUG;
 
             if (TRAVIS_EVENT_TYPE === 'pull_request' && TRAVIS_PULL_REQUEST_SLUG === TRAVIS_REPO_SLUG) {
@@ -1635,63 +2161,63 @@ exports.default = function () {
             }
 
             if (appCode) {
-              _context2.next = 5;
+              _context2.next = 8;
               break;
             }
 
             throw new Error('You must provide an app code  -- visit https://www.chromaticqa.com to get your code.' + '\nPass your app code with the `CHROMATIC_APP_CODE` environment variable or the `--app-code` flag.');
 
-          case 5:
+          case 8:
             if (scriptName || commandName || noStart) {
-              _context2.next = 7;
+              _context2.next = 10;
               break;
             }
 
             throw new Error('Either scriptName, commandName or noStart is required');
 
-          case 7:
-            _context2.prev = 7;
-            _context2.next = 10;
+          case 10:
+            _context2.prev = 10;
+            _context2.next = 13;
             return client.runQuery(TesterCreateAppTokenMutation, {
               appCode: appCode
             });
 
-          case 10:
+          case 13:
             _ref6 = _context2.sent;
             jwtToken = _ref6.createAppToken;
 
             client.setJwtToken(jwtToken);
-            _context2.next = 20;
+            _context2.next = 23;
             break;
 
-          case 15:
-            _context2.prev = 15;
-            _context2.t0 = _context2['catch'](7);
+          case 18:
+            _context2.prev = 18;
+            _context2.t0 = _context2['catch'](10);
 
             if (!(_context2.t0[0] && _context2.t0[0].message && _context2.t0[0].message.match('No app with code'))) {
-              _context2.next = 19;
+              _context2.next = 22;
               break;
             }
 
             throw new Error('Incorrect app code \'' + appCode + '\' -- visit https://www.chromaticqa.com to get your code');
 
-          case 19:
+          case 22:
             throw _context2.t0;
 
-          case 20:
-            _context2.next = 22;
+          case 23:
+            _context2.next = 25;
             return (0, _git.getCommit)();
 
-          case 22:
+          case 25:
             _ref7 = _context2.sent;
             commit = _ref7.commit;
             committedAt = _ref7.committedAt;
             committerEmail = _ref7.committerEmail;
             committerName = _ref7.committerName;
-            _context2.next = 29;
+            _context2.next = 32;
             return (0, _git.getBranch)();
 
-          case 29:
+          case 32:
             branch = _context2.sent;
             isTravisPrBuild = process.env.TRAVIS_EVENT_TYPE === 'pull_request';
 
@@ -1700,7 +2226,7 @@ exports.default = function () {
             // history of the project (so approvals will get lost). We also have to ensure we use the right branch.
 
             if (!isTravisPrBuild) {
-              _context2.next = 36;
+              _context2.next = 39;
               break;
             }
 
@@ -1708,157 +2234,232 @@ exports.default = function () {
             branch = process.env.TRAVIS_PULL_REQUEST_BRANCH;
 
             if (!(!commit || !branch)) {
-              _context2.next = 36;
+              _context2.next = 39;
               break;
             }
 
             throw new Error('`TRAVIS_EVENT_TYPE` environment variable set to \'pull_request\', \nbut `TRAVIS_PULL_REQUEST_SHA` and `TRAVIS_PULL_REQUEST_BRANCH` are not both set.\n\nRead more here: https://docs.chromaticqa.com/setup_ci#travis');
 
-          case 36:
+          case 39:
 
             // On certain CI systems, a branch is not checked out
             // (instead a detached head is used for the commit).
             if (branch === 'HEAD' || !branch) {
               branch = (0, _envCi2.default)().branch;
 
-              // $HEAD is for netlify: https://www.netlify.com/docs/continuous-deployment/
               if (branch === 'HEAD' || !branch) {
-                branch = process.env.HEAD || branch || 'HEAD';
+                // $HEAD is for netlify: https://www.netlify.com/docs/continuous-deployment/
+                // $GERRIT_BRANCH is for Gerrit/Jenkins: https://wiki.jenkins.io/display/JENKINS/Gerrit+Trigger
+                // $CI_BRANCH is a general setting that lots of systems use
+                branch = process.env.HEAD || process.env.GERRIT_BRANCH || process.env.CI_BRANCH || branch || 'HEAD';
               }
             }
 
             debug('git info: ' + (0, _stringify2.default)({ commit: commit, committedAt: committedAt, branch: branch }));
 
-            _context2.next = 40;
-            return (0, _git.getBaselineCommits)(client);
+            // These three options can be branch specific
+            doAutoAcceptChanges = typeof autoAcceptChanges === 'string' ? autoAcceptChanges === branch : autoAcceptChanges;
+            doExitZeroOnChanges = typeof exitZeroOnChanges === 'string' ? exitZeroOnChanges === branch : exitZeroOnChanges;
+            doIgnoreLastBuildOnBranch = typeof ignoreLastBuildOnBranch === 'string' ? ignoreLastBuildOnBranch === branch : ignoreLastBuildOnBranch;
+            _context2.next = 46;
+            return (0, _git.getBaselineCommits)(client, {
+              ignoreLastBuildOnBranch: doIgnoreLastBuildOnBranch
+            });
 
-          case 40:
+          case 46:
             baselineCommits = _context2.sent;
 
             debug('Found baselineCommits: ' + baselineCommits);
 
             child = void 0;
+            tunnel = void 0;
+            fromCI = void 0;
+            exitCode = 5;
+            _context2.prev = 52;
+            isolatorUrl = void 0;
+            cachedUrl = void 0;
 
+            if (!dirname) {
+              _context2.next = 64;
+              break;
+            }
+
+            log('Uploading your built storybook...');
+            _context2.next = 59;
+            return (0, _uploadToS2.default)({ client: client, dirname: dirname });
+
+          case 59:
+            isolatorUrl = _context2.sent;
+
+            debug('uploading to s3, got ' + isolatorUrl);
+            log('Uploaded your build, verifying');
+            _context2.next = 94;
+            break;
+
+          case 64:
             if (noStart) {
-              _context2.next = 51;
+              _context2.next = 72;
               break;
             }
 
             log('Starting storybook');
-            _context2.next = 47;
+            _context2.next = 68;
             return (0, _startApp2.default)({ scriptName: scriptName, commandName: commandName, url: url });
 
-          case 47:
+          case 68:
             child = _context2.sent;
 
             log('Started storybook at ' + url);
-            _context2.next = 56;
+            _context2.next = 78;
             break;
 
-          case 51:
-            _context2.next = 53;
+          case 72:
+            if (!url) {
+              _context2.next = 78;
+              break;
+            }
+
+            _context2.next = 75;
             return (0, _startApp.checkResponse)(url);
 
-          case 53:
+          case 75:
             if (_context2.sent) {
-              _context2.next = 55;
+              _context2.next = 77;
               break;
             }
 
             throw new Error('No server responding at ' + url + ' -- make sure you\'ve started it.');
 
-          case 55:
+          case 77:
             log('Detected storybook at ' + url);
 
-          case 56:
-            _ref8 = new _url.URL(url), port = _ref8.port, pathname = _ref8.pathname, query = _ref8.query, hash = _ref8.hash;
+          case 78:
+            _parse = (0, _url.parse)(url, true), port = _parse.port, pathname = _parse.pathname, query = _parse.query, hash = _parse.hash;
+
             isolatorUrl = url;
-            tunnel = void 0;
 
             if (!createTunnel) {
-              _context2.next = 70;
+              _context2.next = 92;
               break;
             }
 
             log('Opening tunnel to Chromatic capture servers');
-            _context2.next = 63;
+            _context2.next = 84;
             return (0, _tunnel2.default)({ tunnelUrl: tunnelUrl, port: port });
 
-          case 63:
+          case 84:
             tunnel = _context2.sent;
 
             debug('Opened tunnel to ' + tunnel.url);
-            isolatorUrlObject = new _url.URL(tunnel.url);
 
-            isolatorUrlObject.pathname = pathname;
-            isolatorUrlObject.query = query;
-            isolatorUrlObject.hash = hash;
-            isolatorUrl = isolatorUrlObject.toString();
+            // ** Are we using a v1 or v2 tunnel? **
+            // If the tunnel returns a cachedUrl, we are using a v2 tunnel and need to use
+            // the slightly esoteric URL format for the isolatorUrl.
+            // If not, they are the same:
+            cachedUrlObject = (0, _url.parse)(tunnel.cachedUrl || tunnel.url);
 
-          case 70:
+            cachedUrlObject.pathname = pathname;
+            cachedUrlObject.query = query;
+            cachedUrlObject.hash = hash;
+            cachedUrl = cachedUrlObject.format();
 
-            debug('Connecting to ' + isolatorUrl);
+            if (tunnel.cachedUrl) {
+              isolatorUrlObject = (0, _url.parse)(tunnel.url, true);
+
+              isolatorUrlObject.query = (0, _extends3.default)({}, isolatorUrlObject.query, {
+                // This will encode the pathname and query into a single query parameter
+                path: (0, _url.format)({ pathname: pathname, query: query })
+              });
+              isolatorUrlObject.hash = hash;
+
+              // For some reason we need to unset this to change the params
+              isolatorUrlObject.search = null;
+
+              isolatorUrl = isolatorUrlObject.format();
+            } else {
+              // See comment about v1/v2 tunnel above
+              isolatorUrl = cachedUrl;
+            }
+
+          case 92:
+
+            debug('Connecting to ' + isolatorUrl + ' (cachedUrl ' + cachedUrl + ')');
             log('Uploading and verifying build (this may take a few minutes depending on your connection)');
 
+          case 94:
             predicate = function predicate() {
               return true;
             };
 
             if (!only) {
-              _context2.next = 79;
+              _context2.next = 101;
               break;
             }
 
             match = only.match(/(.*):([^:]*)/);
 
             if (match) {
-              _context2.next = 77;
+              _context2.next = 99;
               break;
             }
 
-            throw new Error('--only argument must provided in the from "componentName:storyName"');
+            throw new Error('--only argument must provided in the form "componentName:storyName"');
 
-          case 77:
+          case 99:
             log('Running only story \'' + match[2] + '\' of component \'' + match[1] + '\'');
 
-            predicate = function predicate(_ref9) {
-              var name = _ref9.name,
-                  componentName = _ref9.componentName,
-                  otherComponentName = _ref9.component.name;
-              return name === match[2] && (componentName || otherComponentName) === match[1];
+            predicate = function predicate(_ref8) {
+              var name = _ref8.name,
+                  componentName = _ref8.componentName,
+                  otherComponentName = _ref8.component.name;
+              return (0, _minimatch2.default)(name, match[2]) && (0, _minimatch2.default)(componentName || otherComponentName, match[1]);
             };
 
-          case 79:
-            _context2.next = 81;
+          case 101:
+            _context2.next = 103;
             return (0, _runtimes2.default)(isolatorUrl, { verbose: verbose });
 
-          case 81:
+          case 103:
             _context2.t1 = predicate;
             runtimeSpecs = _context2.sent.filter(_context2.t1);
 
             if (!(runtimeSpecs.length === 0)) {
-              _context2.next = 85;
+              _context2.next = 107;
               break;
             }
 
             throw new Error('Cannot run a build with no stories. Please add some stories!');
 
-          case 85:
+          case 107:
 
             log('Found ' + pluralize(runtimeSpecs.length, 'story'));
 
             // REPOSITORY_URL is for netlify: https://www.netlify.com/docs/continuous-deployment/
             fromCI = inputFromCI || !!process.env.CI || !!process.env.REPOSITORY_URL;
+            _getStorybookInfo = (0, _storybook2.default)(), storybookVersion = _getStorybookInfo.storybookVersion, viewLayer = _getStorybookInfo.viewLayer;
+
 
             debug('Detected build fromCI:' + fromCI);
-            debug('Detected package version:' + _package.version);
+            debug('Detected package version:' + _package.version + ', storybook version:' + storybookVersion + ', view layer: ' + viewLayer);
 
-            exitCode = 5;
-            _context2.prev = 90;
-            _context2.next = 93;
+            filteredEnvironment = {};
+
+            (0, _keys2.default)(process.env).forEach(function (key) {
+              if (ENVIRONMENT_WHITELIST.find(function (regex) {
+                return key.match(regex);
+              })) {
+                filteredEnvironment[key] = process.env[key];
+              }
+            });
+            environment = (0, _stringify2.default)(filteredEnvironment);
+
+            debug('Got environment %s', environment);
+
+            _context2.next = 118;
             return client.runQuery(TesterCreateBuildMutation, {
               input: {
-                autoAcceptChanges: autoAcceptChanges,
+                cachedUrl: cachedUrl,
+                autoAcceptChanges: doAutoAcceptChanges,
                 branch: branch,
                 commit: commit,
                 committedAt: committedAt,
@@ -1867,139 +2468,137 @@ exports.default = function () {
                 fromCI: fromCI,
                 isTravisPrBuild: isTravisPrBuild,
                 packageVersion: _package.version,
+                storybookVersion: storybookVersion,
+                viewLayer: viewLayer,
                 committerEmail: committerEmail,
-                committerName: committerName
+                committerName: committerName,
+                environment: environment
               },
               isolatorUrl: isolatorUrl
             });
 
-          case 93:
-            _ref10 = _context2.sent;
-            _ref10$createBuild = _ref10.createBuild;
-            number = _ref10$createBuild.number;
-            specCount = _ref10$createBuild.specCount;
-            componentCount = _ref10$createBuild.componentCount;
-            webUrl = _ref10$createBuild.webUrl;
+          case 118:
+            _ref9 = _context2.sent;
+            _ref9$createBuild = _ref9.createBuild;
+            number = _ref9$createBuild.number;
+            snapshotCount = _ref9$createBuild.snapshotCount;
+            specCount = _ref9$createBuild.specCount;
+            componentCount = _ref9$createBuild.componentCount;
+            webUrl = _ref9$createBuild.webUrl;
             onlineHint = 'View it online at ' + webUrl;
 
-            log('Started Build ' + number + ' ' + ('(' + pluralize(componentCount, 'component') + ', ' + pluralize(specCount, 'story') + ').\n\n' + onlineHint + '.'));
+            log('Started Build ' + number + ' ' + ('(' + pluralize(componentCount, 'component') + ', ' + pluralize(specCount, 'story') + ', ' + pluralize(snapshotCount, 'snapshot') + ').\n\n' + onlineHint + '.'));
 
-            _context2.next = 103;
+            _context2.next = 129;
             return waitForBuild(client, {
               buildNumber: number
             });
 
-          case 103:
-            _ref11 = _context2.sent;
-            status = _ref11.status;
-            buildAutoAcceptChanges = _ref11.autoAcceptChanges;
-            changeCount = _ref11.changeCount;
-            errorCount = _ref11.errorCount;
+          case 129:
+            _ref10 = _context2.sent;
+            status = _ref10.status;
+            buildAutoAcceptChanges = _ref10.autoAcceptChanges;
+            changeCount = _ref10.changeCount;
+            errorCount = _ref10.errorCount;
             _context2.t2 = status;
-            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 111 : _context2.t2 === 'BUILD_ACCEPTED' ? 114 : _context2.t2 === 'BUILD_PENDING' ? 114 : _context2.t2 === 'BUILD_DENIED' ? 114 : _context2.t2 === 'BUILD_FAILED' ? 118 : _context2.t2 === 'BUILD_TIMED_OUT' ? 121 : _context2.t2 === 'BUILD_ERROR' ? 124 : 127;
+            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 137 : _context2.t2 === 'BUILD_ACCEPTED' ? 140 : _context2.t2 === 'BUILD_PENDING' ? 140 : _context2.t2 === 'BUILD_DENIED' ? 140 : _context2.t2 === 'BUILD_FAILED' ? 144 : _context2.t2 === 'BUILD_TIMED_OUT' ? 147 : _context2.t2 === 'BUILD_ERROR' ? 147 : 150;
             break;
 
-          case 111:
+          case 137:
             log('Build ' + number + ' passed! ' + onlineHint + '.');
             exitCode = 0;
-            return _context2.abrupt('break', 128);
+            return _context2.abrupt('break', 151);
 
-          case 114:
+          case 140:
             log('Build ' + number + ' has ' + pluralize(changeCount, 'change') + '. ' + onlineHint + '.');
-            exitCode = exitZeroOnChanges || buildAutoAcceptChanges ? 0 : 1;
+            exitCode = doExitZeroOnChanges || buildAutoAcceptChanges ? 0 : 1;
             if (exitCode !== 0) {
               log('Pass --exit-zero-on-changes if you want this command to exit successfully in this case.\n  Alternatively, pass --auto-accept-changes if you want changed builds to pass on this branch.\n  Read more: http://docs.chromaticqa.com/test');
             }
-            return _context2.abrupt('break', 128);
+            return _context2.abrupt('break', 151);
 
-          case 118:
+          case 144:
             log('Build ' + number + ' has ' + pluralize(errorCount, 'error') + '. ' + onlineHint + '.');
             exitCode = 2;
-            return _context2.abrupt('break', 128);
+            return _context2.abrupt('break', 151);
 
-          case 121:
-            log('Build ' + number + ' has timed out. Ensure your machine is connected to the internet and please try again.');
-            exitCode = 3;
-            return _context2.abrupt('break', 128);
-
-          case 124:
+          case 147:
             log('Build ' + number + ' has failed to run. Our apologies. Please try again.');
-            exitCode = 4;
-            return _context2.abrupt('break', 128);
+            exitCode = 3;
+            return _context2.abrupt('break', 151);
 
-          case 127:
+          case 150:
             throw new Error('Unexpected build status: ' + status);
 
-          case 128:
-            _context2.next = 138;
+          case 151:
+            _context2.next = 162;
             break;
 
-          case 130:
-            _context2.prev = 130;
-            _context2.t3 = _context2['catch'](90);
+          case 153:
+            _context2.prev = 153;
+            _context2.t3 = _context2['catch'](52);
 
-            if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
-              _context2.next = 137;
+            if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
+              _context2.next = 160;
               break;
             }
 
             log(_context2.t3[0].message);
             exitCode = 255;
-            _context2.next = 138;
+            _context2.next = 162;
             break;
 
-          case 137:
+          case 160:
+            debug('Got error %O', _context2.t3);
             throw _context2.t3;
 
-          case 138:
-            _context2.prev = 138;
+          case 162:
+            _context2.prev = 162;
 
             if (tunnel) {
               tunnel.close();
             }
 
             if (!child) {
-              _context2.next = 143;
+              _context2.next = 167;
               break;
             }
 
-            _context2.next = 143;
-            return (0, _util.promisify)(_treeKill2.default)(child.pid, 'SIGHUP');
+            _context2.next = 167;
+            return (0, _denodeify2.default)(_treeKill2.default)(child.pid, 'SIGHUP');
 
-          case 143:
-            return _context2.finish(138);
+          case 167:
+            return _context2.finish(162);
 
-          case 144:
+          case 168:
             if (!(!(0, _packageJson.checkPackageJson)() && originalArgv && !fromCI && interactive)) {
-              _context2.next = 151;
+              _context2.next = 174;
               break;
             }
 
-            scriptCommand = ('chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '');
-            _context2.next = 148;
+            scriptCommand = ('CHROMATIC_APP_CODE=' + appCode + ' chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '').trim();
+            _context2.next = 172;
             return (0, _nodeAsk.confirm)("\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?");
 
-          case 148:
+          case 172:
             confirmed = _context2.sent;
 
             if (confirmed) {
               (0, _packageJson.addScriptToPackageJson)('chromatic', scriptCommand);
-              log('\nAdded script `chromatic`. You can now run it here or in CI with `npm run chromatic` (or `yarn chromatic`)', { noPrefix: true });
+              log('\nAdded script `chromatic`. You can now run it here or in CI with `npm run chromatic` (or `yarn chromatic`)\n\nNOTE: I wrote your app code to the `CHROMATIC_APP_CODE` environment variable. The app code cannot be used to read snapshot data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from `package.json` and set it via an environment variable instead.', { noPrefix: true });
             } else {
               log('\nNo problem. You can add it later with:\n{\n  "scripts": {\n    "chromatic": "' + scriptCommand + '"\n  }\n}', { noPrefix: true });
             }
 
-            log('\nMake sure you set the `CHROMATIC_APP_CODE` environment variable when running builds (in particular on your CI server).', { noPrefix: true });
-
-          case 151:
+          case 174:
             return _context2.abrupt('return', exitCode);
 
-          case 152:
+          case 175:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, this, [[7, 15], [90, 130, 138, 144]]);
+    }, _callee2, this, [[10, 18], [52, 153, 162, 168]]);
   }));
 
   function runTest(_x4) {
@@ -2010,52 +2609,58 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 25 */
+/* 33 */
+/***/ (function(module, exports) {
+
+module.exports = require("@chromaui/localtunnel");
+
+/***/ }),
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("apollo-fetch");
 
 /***/ }),
-/* 26 */
-/***/ (function(module, exports) {
-
-module.exports = require("babel-runtime/core-js/object/keys");
-
-/***/ }),
-/* 27 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/object/values");
 
 /***/ }),
-/* 28 */
+/* 36 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/slicedToArray");
+module.exports = require("fs");
 
 /***/ }),
-/* 29 */
-/***/ (function(module, exports) {
-
-module.exports = require("isomorphic-fetch");
-
-/***/ }),
-/* 30 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsdom");
 
 /***/ }),
-/* 31 */
+/* 38 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsonfile");
 
 /***/ }),
-/* 32 */
+/* 39 */
 /***/ (function(module, exports) {
 
-module.exports = require("localtunnel");
+module.exports = require("node-loggly-bulk");
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports) {
+
+module.exports = require("strip-color");
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports) {
+
+module.exports = require("util");
 
 /***/ })
 /******/ ]);
