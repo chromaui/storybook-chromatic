@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ 	return __webpack_require__(__webpack_require__.s = 32);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -143,40 +143,46 @@ exports.LOGGLY_CUSTOMER_TOKEN = LOGGLY_CUSTOMER_TOKEN;
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("denodeify");
+module.exports = require("babel-runtime/core-js/object/keys");
 
 /***/ }),
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/classCallCheck");
+module.exports = require("denodeify");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/createClass");
+module.exports = require("babel-runtime/helpers/classCallCheck");
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/helpers/slicedToArray");
+module.exports = require("babel-runtime/helpers/createClass");
 
 /***/ }),
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = require("child_process");
+module.exports = require("babel-runtime/helpers/slicedToArray");
 
 /***/ }),
 /* 13 */
 /***/ (function(module, exports) {
 
-module.exports = require("isomorphic-fetch");
+module.exports = require("child_process");
 
 /***/ }),
 /* 14 */
+/***/ (function(module, exports) {
+
+module.exports = require("isomorphic-fetch");
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -198,15 +204,15 @@ var _extends2 = __webpack_require__(4);
 
 var _extends3 = _interopRequireDefault(_extends2);
 
-var _classCallCheck2 = __webpack_require__(9);
+var _classCallCheck2 = __webpack_require__(10);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _createClass2 = __webpack_require__(10);
+var _createClass2 = __webpack_require__(11);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _apolloFetch = __webpack_require__(33);
+var _apolloFetch = __webpack_require__(34);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -319,7 +325,7 @@ var GraphQLClient = function () {
 exports.default = GraphQLClient;
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -337,7 +343,7 @@ var _asyncToGenerator2 = __webpack_require__(0);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _localtunnel = __webpack_require__(32);
+var _localtunnel = __webpack_require__(33);
 
 var _localtunnel2 = _interopRequireDefault(_localtunnel);
 
@@ -345,7 +351,7 @@ var _debug = __webpack_require__(2);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _denodeify = __webpack_require__(8);
+var _denodeify = __webpack_require__(9);
 
 var _denodeify2 = _interopRequireDefault(_denodeify);
 
@@ -413,7 +419,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -428,7 +434,7 @@ var _toConsumableArray2 = __webpack_require__(5);
 
 var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _slicedToArray2 = __webpack_require__(11);
+var _slicedToArray2 = __webpack_require__(12);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -895,7 +901,7 @@ var getBaselineCommits = exports.getBaselineCommits = function () {
   };
 }();
 
-var _child_process = __webpack_require__(12);
+var _child_process = __webpack_require__(13);
 
 var _debug = __webpack_require__(2);
 
@@ -918,7 +924,7 @@ function commitsForCLI(commits) {
 }
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -975,7 +981,7 @@ function addScriptToPackageJson(scriptName, scriptCommand) {
 }
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -993,7 +999,7 @@ var _promise = __webpack_require__(3);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _keys = __webpack_require__(34);
+var _keys = __webpack_require__(8);
 
 var _keys2 = _interopRequireDefault(_keys);
 
@@ -1001,11 +1007,11 @@ var _asyncToGenerator2 = __webpack_require__(0);
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _classCallCheck2 = __webpack_require__(9);
+var _classCallCheck2 = __webpack_require__(10);
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _createClass2 = __webpack_require__(10);
+var _createClass2 = __webpack_require__(11);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -1188,6 +1194,36 @@ function addShimsToJSDOM(dom) {
     writable: true
   });
 
+  Object.defineProperty(dom.window.URL, 'createObjectURL', { value: function value() {} });
+  Object.defineProperty(dom.window.URL, 'revokeObjectURL', { value: function value() {} });
+
+  var MutationObserverMock = function () {
+    function MutationObserverMock() {
+      (0, _classCallCheck3.default)(this, MutationObserverMock);
+    }
+
+    (0, _createClass3.default)(MutationObserverMock, [{
+      key: 'observe',
+      value: function observe() {
+        return [];
+      }
+    }, {
+      key: 'takeRecords',
+      value: function takeRecords() {
+        return [];
+      }
+    }, {
+      key: 'disconnect',
+      value: function disconnect() {}
+    }]);
+    return MutationObserverMock;
+  }();
+
+  Object.defineProperty(dom.window, 'MutationObserver', {
+    value: MutationObserverMock,
+    writable: true
+  });
+
   mockCanvas(dom.window);
 }
 
@@ -1308,7 +1344,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1367,7 +1403,7 @@ function sendDebugToLoggly(_ref) {
 }
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1517,9 +1553,9 @@ var waitForResponse = function () {
   };
 }();
 
-var _child_process = __webpack_require__(12);
+var _child_process = __webpack_require__(13);
 
-var _isomorphicFetch = __webpack_require__(13);
+var _isomorphicFetch = __webpack_require__(14);
 
 var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
@@ -1615,7 +1651,7 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1625,7 +1661,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _slicedToArray2 = __webpack_require__(11);
+var _slicedToArray2 = __webpack_require__(12);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -1675,7 +1711,7 @@ function getStorybookInfo() {
 }
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1707,7 +1743,7 @@ var _debug2 = _interopRequireDefault(_debug);
 
 var _fs = __webpack_require__(36);
 
-var _isomorphicFetch = __webpack_require__(13);
+var _isomorphicFetch = __webpack_require__(14);
 
 var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
 
@@ -1828,55 +1864,55 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 23 */
-/***/ (function(module, exports) {
-
-module.exports = {"name":"storybook-chromatic","version":"1.2.3-dev","description":"Visual Testing for Storybook","browser":"./dist/assets/storybook-addon.js","main":"./dist/assets/null-server.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"@chromaui/localtunnel":"1.9.1-chromatic.3","apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","denodeify":"^1.2.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","minimatch":"^3.0.4","node-ask":"^1.0.1","node-loggly-bulk":"^2.2.4","strip-color":"^0.1.0","tree-kill":"^1.1.0","uuid":"^3.3.2"},"peerDependencies":{"@storybook/addons":"3.* || 4.*","@storybook/core":"3.* || 4.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-cli":"^3.1.1","webpack-node-externals":"^1.6.0"}}
-
-/***/ }),
 /* 24 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/core-js/json/stringify");
+module.exports = {"name":"storybook-chromatic","version":"1.2.5-dev","description":"Visual Testing for Storybook","main":"./dist/assets/storybook-addon.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"@chromaui/localtunnel":"1.9.1-chromatic.3","apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","denodeify":"^1.2.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","minimatch":"^3.0.4","node-ask":"^1.0.1","node-loggly-bulk":"^2.2.4","strip-color":"^0.1.0","tree-kill":"^1.1.0","uuid":"^3.3.2"},"peerDependencies":{"@storybook/core":"3.* || 4.* || 5.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-cli":"^3.1.1","webpack-node-externals":"^1.6.0"}}
 
 /***/ }),
 /* 25 */
 /***/ (function(module, exports) {
 
-module.exports = require("env-ci");
+module.exports = require("babel-runtime/core-js/json/stringify");
 
 /***/ }),
 /* 26 */
 /***/ (function(module, exports) {
 
-module.exports = require("minimatch");
+module.exports = require("env-ci");
 
 /***/ }),
 /* 27 */
 /***/ (function(module, exports) {
 
-module.exports = require("node-ask");
+module.exports = require("minimatch");
 
 /***/ }),
 /* 28 */
 /***/ (function(module, exports) {
 
-module.exports = require("tree-kill");
+module.exports = require("node-ask");
 
 /***/ }),
 /* 29 */
 /***/ (function(module, exports) {
 
-module.exports = require("url");
+module.exports = require("tree-kill");
 
 /***/ }),
 /* 30 */
 /***/ (function(module, exports) {
 
-module.exports = require("uuid");
+module.exports = require("url");
 
 /***/ }),
 /* 31 */
+/***/ (function(module, exports) {
+
+module.exports = require("uuid");
+
+/***/ }),
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1885,6 +1921,10 @@ module.exports = require("uuid");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _keys = __webpack_require__(8);
+
+var _keys2 = _interopRequireDefault(_keys);
 
 var _extends2 = __webpack_require__(4);
 
@@ -1898,7 +1938,7 @@ var _promise = __webpack_require__(3);
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _stringify = __webpack_require__(24);
+var _stringify = __webpack_require__(25);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -1958,71 +1998,75 @@ var waitForBuild = function () {
   };
 }();
 
-var _denodeify = __webpack_require__(8);
+var _denodeify = __webpack_require__(9);
 
 var _denodeify2 = _interopRequireDefault(_denodeify);
 
-var _nodeAsk = __webpack_require__(27);
+var _nodeAsk = __webpack_require__(28);
 
 var _debug = __webpack_require__(2);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _treeKill = __webpack_require__(28);
+var _treeKill = __webpack_require__(29);
 
 var _treeKill2 = _interopRequireDefault(_treeKill);
 
-var _envCi = __webpack_require__(25);
+var _envCi = __webpack_require__(26);
 
 var _envCi2 = _interopRequireDefault(_envCi);
 
-var _uuid = __webpack_require__(30);
+var _uuid = __webpack_require__(31);
 
-var _url = __webpack_require__(29);
+var _url = __webpack_require__(30);
 
-var _minimatch = __webpack_require__(26);
+var _minimatch = __webpack_require__(27);
 
 var _minimatch2 = _interopRequireDefault(_minimatch);
 
-var _runtimes = __webpack_require__(18);
+var _runtimes = __webpack_require__(19);
 
 var _runtimes2 = _interopRequireDefault(_runtimes);
 
-var _storybook = __webpack_require__(21);
+var _storybook = __webpack_require__(22);
 
 var _storybook2 = _interopRequireDefault(_storybook);
 
-var _startApp = __webpack_require__(20);
+var _startApp = __webpack_require__(21);
 
 var _startApp2 = _interopRequireDefault(_startApp);
 
-var _tunnel = __webpack_require__(15);
+var _tunnel = __webpack_require__(16);
 
 var _tunnel2 = _interopRequireDefault(_tunnel);
 
-var _packageJson = __webpack_require__(17);
+var _packageJson = __webpack_require__(18);
 
-var _GraphQLClient = __webpack_require__(14);
+var _GraphQLClient = __webpack_require__(15);
 
 var _GraphQLClient2 = _interopRequireDefault(_GraphQLClient);
 
-var _git = __webpack_require__(16);
+var _git = __webpack_require__(17);
 
-var _package = __webpack_require__(23);
+var _package = __webpack_require__(24);
 
 var _environment = __webpack_require__(7);
 
-var _sendDebugToLoggly = __webpack_require__(19);
+var _sendDebugToLoggly = __webpack_require__(20);
 
 var _sendDebugToLoggly2 = _interopRequireDefault(_sendDebugToLoggly);
 
-var _uploadToS = __webpack_require__(22);
+var _uploadToS = __webpack_require__(23);
 
 var _uploadToS2 = _interopRequireDefault(_uploadToS);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var BUILD_POLL_INTERVAL = 1000;
+// We send up all environment variables provided by these complicated systems.
+// We don't want to send up *all* environment vars as they could include sensitive information
+// about the user's build environment
+var ENVIRONMENT_WHITELIST = [/^GERRIT/, /^TRAVIS/];
 
 var TesterCreateAppTokenMutation = '\n  mutation TesterCreateAppTokenMutation($appCode: String!) {\n    createAppToken(code: $appCode)\n  }\n';
 
@@ -2095,7 +2139,7 @@ exports.default = function () {
         _ref4$sessionId = _ref4.sessionId,
         sessionId = _ref4$sessionId === undefined ? (0, _uuid.v4)() : _ref4$sessionId;
 
-    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, doAutoAcceptChanges, doExitZeroOnChanges, doIgnoreLastBuildOnBranch, baselineCommits, child, tunnel, fromCI, exitCode, isolatorUrl, cachedUrl, _parse, port, pathname, query, hash, cachedUrlObject, isolatorUrlObject, predicate, match, runtimeSpecs, _getStorybookInfo, storybookVersion, viewLayer, _ref9, _ref9$createBuild, number, snapshotCount, specCount, componentCount, webUrl, onlineHint, _ref10, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
+    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, doAutoAcceptChanges, doExitZeroOnChanges, doIgnoreLastBuildOnBranch, baselineCommits, child, tunnel, fromCI, exitCode, isolatorUrl, cachedUrl, _parse, port, pathname, query, hash, cachedUrlObject, isolatorUrlObject, predicate, match, runtimeSpecs, _getStorybookInfo, storybookVersion, viewLayer, filteredEnvironment, environment, _ref9, _ref9$createBuild, number, snapshotCount, specCount, componentCount, webUrl, onlineHint, _ref10, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
 
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
@@ -2398,7 +2442,20 @@ exports.default = function () {
             debug('Detected build fromCI:' + fromCI);
             debug('Detected package version:' + _package.version + ', storybook version:' + storybookVersion + ', view layer: ' + viewLayer);
 
-            _context2.next = 114;
+            filteredEnvironment = {};
+
+            (0, _keys2.default)(process.env).forEach(function (key) {
+              if (ENVIRONMENT_WHITELIST.find(function (regex) {
+                return key.match(regex);
+              })) {
+                filteredEnvironment[key] = process.env[key];
+              }
+            });
+            environment = (0, _stringify2.default)(filteredEnvironment);
+
+            debug('Got environment %s', environment);
+
+            _context2.next = 118;
             return client.runQuery(TesterCreateBuildMutation, {
               input: {
                 cachedUrl: cachedUrl,
@@ -2414,12 +2471,13 @@ exports.default = function () {
                 storybookVersion: storybookVersion,
                 viewLayer: viewLayer,
                 committerEmail: committerEmail,
-                committerName: committerName
+                committerName: committerName,
+                environment: environment
               },
               isolatorUrl: isolatorUrl
             });
 
-          case 114:
+          case 118:
             _ref9 = _context2.sent;
             _ref9$createBuild = _ref9.createBuild;
             number = _ref9$createBuild.number;
@@ -2431,98 +2489,98 @@ exports.default = function () {
 
             log('Started Build ' + number + ' ' + ('(' + pluralize(componentCount, 'component') + ', ' + pluralize(specCount, 'story') + ', ' + pluralize(snapshotCount, 'snapshot') + ').\n\n' + onlineHint + '.'));
 
-            _context2.next = 125;
+            _context2.next = 129;
             return waitForBuild(client, {
               buildNumber: number
             });
 
-          case 125:
+          case 129:
             _ref10 = _context2.sent;
             status = _ref10.status;
             buildAutoAcceptChanges = _ref10.autoAcceptChanges;
             changeCount = _ref10.changeCount;
             errorCount = _ref10.errorCount;
             _context2.t2 = status;
-            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 133 : _context2.t2 === 'BUILD_ACCEPTED' ? 136 : _context2.t2 === 'BUILD_PENDING' ? 136 : _context2.t2 === 'BUILD_DENIED' ? 136 : _context2.t2 === 'BUILD_FAILED' ? 140 : _context2.t2 === 'BUILD_TIMED_OUT' ? 143 : _context2.t2 === 'BUILD_ERROR' ? 143 : 146;
+            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 137 : _context2.t2 === 'BUILD_ACCEPTED' ? 140 : _context2.t2 === 'BUILD_PENDING' ? 140 : _context2.t2 === 'BUILD_DENIED' ? 140 : _context2.t2 === 'BUILD_FAILED' ? 144 : _context2.t2 === 'BUILD_TIMED_OUT' ? 147 : _context2.t2 === 'BUILD_ERROR' ? 147 : 150;
             break;
 
-          case 133:
+          case 137:
             log('Build ' + number + ' passed! ' + onlineHint + '.');
             exitCode = 0;
-            return _context2.abrupt('break', 147);
+            return _context2.abrupt('break', 151);
 
-          case 136:
+          case 140:
             log('Build ' + number + ' has ' + pluralize(changeCount, 'change') + '. ' + onlineHint + '.');
             exitCode = doExitZeroOnChanges || buildAutoAcceptChanges ? 0 : 1;
             if (exitCode !== 0) {
               log('Pass --exit-zero-on-changes if you want this command to exit successfully in this case.\n  Alternatively, pass --auto-accept-changes if you want changed builds to pass on this branch.\n  Read more: http://docs.chromaticqa.com/test');
             }
-            return _context2.abrupt('break', 147);
+            return _context2.abrupt('break', 151);
 
-          case 140:
+          case 144:
             log('Build ' + number + ' has ' + pluralize(errorCount, 'error') + '. ' + onlineHint + '.');
             exitCode = 2;
-            return _context2.abrupt('break', 147);
-
-          case 143:
-            log('Build ' + number + ' has failed to run. Our apologies. Please try again.');
-            exitCode = 3;
-            return _context2.abrupt('break', 147);
-
-          case 146:
-            throw new Error('Unexpected build status: ' + status);
+            return _context2.abrupt('break', 151);
 
           case 147:
-            _context2.next = 158;
+            log('Build ' + number + ' has failed to run. Our apologies. Please try again.');
+            exitCode = 3;
+            return _context2.abrupt('break', 151);
+
+          case 150:
+            throw new Error('Unexpected build status: ' + status);
+
+          case 151:
+            _context2.next = 162;
             break;
 
-          case 149:
-            _context2.prev = 149;
+          case 153:
+            _context2.prev = 153;
             _context2.t3 = _context2['catch'](52);
 
             if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
-              _context2.next = 156;
+              _context2.next = 160;
               break;
             }
 
             log(_context2.t3[0].message);
             exitCode = 255;
-            _context2.next = 158;
+            _context2.next = 162;
             break;
 
-          case 156:
+          case 160:
             debug('Got error %O', _context2.t3);
             throw _context2.t3;
 
-          case 158:
-            _context2.prev = 158;
+          case 162:
+            _context2.prev = 162;
 
             if (tunnel) {
               tunnel.close();
             }
 
             if (!child) {
-              _context2.next = 163;
+              _context2.next = 167;
               break;
             }
 
-            _context2.next = 163;
+            _context2.next = 167;
             return (0, _denodeify2.default)(_treeKill2.default)(child.pid, 'SIGHUP');
 
-          case 163:
-            return _context2.finish(158);
+          case 167:
+            return _context2.finish(162);
 
-          case 164:
+          case 168:
             if (!(!(0, _packageJson.checkPackageJson)() && originalArgv && !fromCI && interactive)) {
-              _context2.next = 170;
+              _context2.next = 174;
               break;
             }
 
             scriptCommand = ('CHROMATIC_APP_CODE=' + appCode + ' chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '').trim();
-            _context2.next = 168;
+            _context2.next = 172;
             return (0, _nodeAsk.confirm)("\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?");
 
-          case 168:
+          case 172:
             confirmed = _context2.sent;
 
             if (confirmed) {
@@ -2532,15 +2590,15 @@ exports.default = function () {
               log('\nNo problem. You can add it later with:\n{\n  "scripts": {\n    "chromatic": "' + scriptCommand + '"\n  }\n}', { noPrefix: true });
             }
 
-          case 170:
+          case 174:
             return _context2.abrupt('return', exitCode);
 
-          case 171:
+          case 175:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, this, [[10, 18], [52, 149, 158, 164]]);
+    }, _callee2, this, [[10, 18], [52, 153, 162, 168]]);
   }));
 
   function runTest(_x4) {
@@ -2551,22 +2609,16 @@ exports.default = function () {
 }();
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = require("@chromaui/localtunnel");
 
 /***/ }),
-/* 33 */
-/***/ (function(module, exports) {
-
-module.exports = require("apollo-fetch");
-
-/***/ }),
 /* 34 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-runtime/core-js/object/keys");
+module.exports = require("apollo-fetch");
 
 /***/ }),
 /* 35 */
