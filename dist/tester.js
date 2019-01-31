@@ -2411,9 +2411,8 @@ exports.default = function () {
 
             predicate = function predicate(_ref8) {
               var name = _ref8.name,
-                  componentName = _ref8.componentName,
-                  otherComponentName = _ref8.component.name;
-              return (0, _minimatch2.default)(name, match[2]) && (0, _minimatch2.default)(componentName || otherComponentName, match[1]);
+                  componentName = _ref8.component.name;
+              return (0, _minimatch2.default)(name, match[2]) && (0, _minimatch2.default)(componentName, match[1]);
             };
 
           case 101:
@@ -2425,10 +2424,9 @@ exports.default = function () {
               log('Listing available stories:');
               listStory = function listStory(story) {
                 var name = story.name,
-                    componentName = story.componentName,
-                    otherComponentName = story.component.name;
+                    componentName = story.component.name;
 
-                log((componentName || otherComponentName) + ':' + name);
+                log(componentName + ':' + name);
                 return story;
               };
             }
