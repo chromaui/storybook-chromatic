@@ -2116,6 +2116,7 @@ exports.default = function () {
         url = _ref4.url,
         dirname = _ref4.dirname,
         only = _ref4.only,
+        list = _ref4.list,
         _ref4$fromCI = _ref4.fromCI,
         inputFromCI = _ref4$fromCI === undefined ? false : _ref4$fromCI,
         _ref4$autoAcceptChang = _ref4.autoAcceptChanges,
@@ -2139,7 +2140,7 @@ exports.default = function () {
         _ref4$sessionId = _ref4.sessionId,
         sessionId = _ref4$sessionId === undefined ? (0, _uuid.v4)() : _ref4$sessionId;
 
-    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, doAutoAcceptChanges, doExitZeroOnChanges, doIgnoreLastBuildOnBranch, baselineCommits, child, tunnel, fromCI, exitCode, isolatorUrl, cachedUrl, _parse, port, pathname, query, hash, cachedUrlObject, isolatorUrlObject, predicate, match, runtimeSpecs, _getStorybookInfo, storybookVersion, viewLayer, filteredEnvironment, environment, _ref9, _ref9$createBuild, number, snapshotCount, specCount, componentCount, webUrl, onlineHint, _ref10, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
+    var client, _process$env, TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG, _ref6, jwtToken, _ref7, commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, doAutoAcceptChanges, doExitZeroOnChanges, doIgnoreLastBuildOnBranch, baselineCommits, child, tunnel, fromCI, exitCode, isolatorUrl, cachedUrl, _parse, port, pathname, query, hash, cachedUrlObject, isolatorUrlObject, predicate, match, listStory, runtimeSpecs, _getStorybookInfo, storybookVersion, viewLayer, filteredEnvironment, environment, _ref9, _ref9$createBuild, number, snapshotCount, specCount, componentCount, webUrl, onlineHint, _ref10, status, buildAutoAcceptChanges, changeCount, errorCount, scriptCommand, confirmed;
 
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
@@ -2410,27 +2411,41 @@ exports.default = function () {
 
             predicate = function predicate(_ref8) {
               var name = _ref8.name,
-                  componentName = _ref8.componentName,
-                  otherComponentName = _ref8.component.name;
-              return (0, _minimatch2.default)(name, match[2]) && (0, _minimatch2.default)(componentName || otherComponentName, match[1]);
+                  componentName = _ref8.component.name;
+              return (0, _minimatch2.default)(name, match[2]) && (0, _minimatch2.default)(componentName, match[1]);
             };
 
           case 101:
-            _context2.next = 103;
+            listStory = function listStory(story) {
+              return story;
+            };
+
+            if (list) {
+              log('Listing available stories:');
+              listStory = function listStory(story) {
+                var name = story.name,
+                    componentName = story.component.name;
+
+                log(componentName + ':' + name);
+                return story;
+              };
+            }
+            _context2.next = 105;
             return (0, _runtimes2.default)(isolatorUrl, { verbose: verbose });
 
-          case 103:
-            _context2.t1 = predicate;
-            runtimeSpecs = _context2.sent.filter(_context2.t1);
+          case 105:
+            _context2.t1 = listStory;
+            _context2.t2 = predicate;
+            runtimeSpecs = _context2.sent.map(_context2.t1).filter(_context2.t2);
 
             if (!(runtimeSpecs.length === 0)) {
-              _context2.next = 107;
+              _context2.next = 110;
               break;
             }
 
             throw new Error('Cannot run a build with no stories. Please add some stories!');
 
-          case 107:
+          case 110:
 
             log('Found ' + pluralize(runtimeSpecs.length, 'story'));
 
@@ -2455,7 +2470,7 @@ exports.default = function () {
 
             debug('Got environment %s', environment);
 
-            _context2.next = 118;
+            _context2.next = 121;
             return client.runQuery(TesterCreateBuildMutation, {
               input: {
                 cachedUrl: cachedUrl,
@@ -2477,7 +2492,7 @@ exports.default = function () {
               isolatorUrl: isolatorUrl
             });
 
-          case 118:
+          case 121:
             _ref9 = _context2.sent;
             _ref9$createBuild = _ref9.createBuild;
             number = _ref9$createBuild.number;
@@ -2489,98 +2504,98 @@ exports.default = function () {
 
             log('Started Build ' + number + ' ' + ('(' + pluralize(componentCount, 'component') + ', ' + pluralize(specCount, 'story') + ', ' + pluralize(snapshotCount, 'snapshot') + ').\n\n' + onlineHint + '.'));
 
-            _context2.next = 129;
+            _context2.next = 132;
             return waitForBuild(client, {
               buildNumber: number
             });
 
-          case 129:
+          case 132:
             _ref10 = _context2.sent;
             status = _ref10.status;
             buildAutoAcceptChanges = _ref10.autoAcceptChanges;
             changeCount = _ref10.changeCount;
             errorCount = _ref10.errorCount;
-            _context2.t2 = status;
-            _context2.next = _context2.t2 === 'BUILD_PASSED' ? 137 : _context2.t2 === 'BUILD_ACCEPTED' ? 140 : _context2.t2 === 'BUILD_PENDING' ? 140 : _context2.t2 === 'BUILD_DENIED' ? 140 : _context2.t2 === 'BUILD_FAILED' ? 144 : _context2.t2 === 'BUILD_TIMED_OUT' ? 147 : _context2.t2 === 'BUILD_ERROR' ? 147 : 150;
+            _context2.t3 = status;
+            _context2.next = _context2.t3 === 'BUILD_PASSED' ? 140 : _context2.t3 === 'BUILD_ACCEPTED' ? 143 : _context2.t3 === 'BUILD_PENDING' ? 143 : _context2.t3 === 'BUILD_DENIED' ? 143 : _context2.t3 === 'BUILD_FAILED' ? 147 : _context2.t3 === 'BUILD_TIMED_OUT' ? 150 : _context2.t3 === 'BUILD_ERROR' ? 150 : 153;
             break;
 
-          case 137:
+          case 140:
             log('Build ' + number + ' passed! ' + onlineHint + '.');
             exitCode = 0;
-            return _context2.abrupt('break', 151);
+            return _context2.abrupt('break', 154);
 
-          case 140:
+          case 143:
             log('Build ' + number + ' has ' + pluralize(changeCount, 'change') + '. ' + onlineHint + '.');
             exitCode = doExitZeroOnChanges || buildAutoAcceptChanges ? 0 : 1;
             if (exitCode !== 0) {
               log('Pass --exit-zero-on-changes if you want this command to exit successfully in this case.\n  Alternatively, pass --auto-accept-changes if you want changed builds to pass on this branch.\n  Read more: http://docs.chromaticqa.com/test');
             }
-            return _context2.abrupt('break', 151);
-
-          case 144:
-            log('Build ' + number + ' has ' + pluralize(errorCount, 'error') + '. ' + onlineHint + '.');
-            exitCode = 2;
-            return _context2.abrupt('break', 151);
+            return _context2.abrupt('break', 154);
 
           case 147:
-            log('Build ' + number + ' has failed to run. Our apologies. Please try again.');
-            exitCode = 3;
-            return _context2.abrupt('break', 151);
+            log('Build ' + number + ' has ' + pluralize(errorCount, 'error') + '. ' + onlineHint + '.');
+            exitCode = 2;
+            return _context2.abrupt('break', 154);
 
           case 150:
-            throw new Error('Unexpected build status: ' + status);
-
-          case 151:
-            _context2.next = 162;
-            break;
+            log('Build ' + number + ' has failed to run. Our apologies. Please try again.');
+            exitCode = 3;
+            return _context2.abrupt('break', 154);
 
           case 153:
-            _context2.prev = 153;
-            _context2.t3 = _context2['catch'](52);
+            throw new Error('Unexpected build status: ' + status);
 
-            if (!(_context2.t3.length && _context2.t3[0] && _context2.t3[0].message && _context2.t3[0].message.match(/Cannot run a build with no specs./))) {
-              _context2.next = 160;
+          case 154:
+            _context2.next = 165;
+            break;
+
+          case 156:
+            _context2.prev = 156;
+            _context2.t4 = _context2['catch'](52);
+
+            if (!(_context2.t4.length && _context2.t4[0] && _context2.t4[0].message && _context2.t4[0].message.match(/Cannot run a build with no specs./))) {
+              _context2.next = 163;
               break;
             }
 
-            log(_context2.t3[0].message);
+            log(_context2.t4[0].message);
             exitCode = 255;
-            _context2.next = 162;
+            _context2.next = 165;
             break;
 
-          case 160:
-            debug('Got error %O', _context2.t3);
-            throw _context2.t3;
+          case 163:
+            debug('Got error %O', _context2.t4);
+            throw _context2.t4;
 
-          case 162:
-            _context2.prev = 162;
+          case 165:
+            _context2.prev = 165;
 
             if (tunnel) {
               tunnel.close();
             }
 
             if (!child) {
-              _context2.next = 167;
+              _context2.next = 170;
               break;
             }
 
-            _context2.next = 167;
+            _context2.next = 170;
             return (0, _denodeify2.default)(_treeKill2.default)(child.pid, 'SIGHUP');
 
-          case 167:
-            return _context2.finish(162);
+          case 170:
+            return _context2.finish(165);
 
-          case 168:
+          case 171:
             if (!(!(0, _packageJson.checkPackageJson)() && originalArgv && !fromCI && interactive)) {
-              _context2.next = 174;
+              _context2.next = 177;
               break;
             }
 
             scriptCommand = ('CHROMATIC_APP_CODE=' + appCode + ' chromatic test ' + originalArgv.slice(2).join(' ')).replace(/--app-code[= ]\S+/, '').trim();
-            _context2.next = 172;
+            _context2.next = 175;
             return (0, _nodeAsk.confirm)("\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?");
 
-          case 172:
+          case 175:
             confirmed = _context2.sent;
 
             if (confirmed) {
@@ -2590,15 +2605,15 @@ exports.default = function () {
               log('\nNo problem. You can add it later with:\n{\n  "scripts": {\n    "chromatic": "' + scriptCommand + '"\n  }\n}', { noPrefix: true });
             }
 
-          case 174:
+          case 177:
             return _context2.abrupt('return', exitCode);
 
-          case 175:
+          case 178:
           case 'end':
             return _context2.stop();
         }
       }
-    }, _callee2, this, [[10, 18], [52, 153, 162, 168]]);
+    }, _callee2, this, [[10, 18], [52, 156, 165, 171]]);
   }));
 
   function runTest(_x4) {
