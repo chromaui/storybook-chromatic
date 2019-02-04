@@ -2,8 +2,7 @@
   "name": "storybook-chromatic",
   "version": "1.2.5-dev",
   "description": "Visual Testing for Storybook",
-  "browser": "./dist/assets/storybook-addon.js",
-  "main": "./dist/assets/null-server.js",
+  "main": "./dist/assets/storybook-addon.js",
   "scripts": {
     "prebuild": "rm -rf ./dist",
     "build:bin": "../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'",
