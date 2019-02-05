@@ -1197,28 +1197,18 @@ function addShimsToJSDOM(dom) {
   Object.defineProperty(dom.window.URL, 'createObjectURL', { value: function value() {} });
   Object.defineProperty(dom.window.URL, 'revokeObjectURL', { value: function value() {} });
 
-  var MutationObserverMock = function () {
-    function MutationObserverMock() {
-      (0, _classCallCheck3.default)(this, MutationObserverMock);
-    }
-
-    (0, _createClass3.default)(MutationObserverMock, [{
-      key: 'observe',
-      value: function observe() {
-        return [];
-      }
-    }, {
-      key: 'takeRecords',
-      value: function takeRecords() {
-        return [];
-      }
-    }, {
-      key: 'disconnect',
-      value: function disconnect() {}
-    }]);
-    return MutationObserverMock;
-  }();
-
+  // We have to do this in this screwy way because Angular does some monkey patching
+  // expects an non-es2015 class here.
+  function MutationObserverMock() {}
+  MutationObserverMock.prototype = {
+    observe: function observe() {
+      return [];
+    },
+    takeRecords: function takeRecords() {
+      return [];
+    },
+    disconnect: function disconnect() {}
+  };
   Object.defineProperty(dom.window, 'MutationObserver', {
     value: MutationObserverMock,
     writable: true
