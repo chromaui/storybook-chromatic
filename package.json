@@ -1,6 +1,6 @@
 {
   "name": "storybook-chromatic",
-  "version": "1.2.5-dev",
+  "version": "1.2.6-dev",
   "description": "Visual Testing for Storybook",
   "main": "./dist/assets/storybook-addon.js",
   "scripts": {
