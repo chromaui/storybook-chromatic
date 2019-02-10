@@ -44,7 +44,7 @@ const clientConfig = {
   ...commonConfig,
   entry: './src/client/index.js',
   output: {
-    filename: 'dist/client.js',
+    filename: 'client.js',
     libraryTarget: 'commonjs2',
   },
   target: 'web',
@@ -60,7 +60,7 @@ const testerConfig = {
   entry: './src/tester/index.js',
   output: {
     publicPath: 'dist',
-    filename: 'dist/tester.js',
+    filename: 'tester.js',
     libraryTarget: 'commonjs2',
   },
   target: 'node',
