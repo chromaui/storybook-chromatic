@@ -52,7 +52,7 @@ async function waitForResponse(child, url) {
   });
 }
 
-export default async function startApp({ scriptName, commandName, url, allowExisting = true }) {
+export default async function startApp({ scriptName, commandName, url }) {
   const env = {
     ...process.env,
     NODE_ENV: 'development',
@@ -62,13 +62,6 @@ export default async function startApp({ scriptName, commandName, url, allowExis
   let child;
   if (scriptName) {
     if (await checkResponse(url)) {
-      if (!allowExisting) {
-        throw new Error(
-          `Detected process already running at ${url}` +
-            `\nIf you are sure this is your server, pass \`--do-not-start\` to skip this step.`
-        );
-      }
-
       // We assume the process that is already running on the url is indeed our storybook
       return null;
     }
