@@ -1,3 +1,7 @@
+# 1.2.6 - 2019-02-05
+
+* Fix an issue with Angular/zone.js failing to patch our `MutationObserver` mock
+
 # 1.2.5 - 2019-01-30
 
 * Fix an issue with using `isChromatic()` inside Jest (storyshots).
