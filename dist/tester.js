@@ -1197,28 +1197,18 @@ function addShimsToJSDOM(dom) {
   Object.defineProperty(dom.window.URL, 'createObjectURL', { value: function value() {} });
   Object.defineProperty(dom.window.URL, 'revokeObjectURL', { value: function value() {} });
 
-  var MutationObserverMock = function () {
-    function MutationObserverMock() {
-      (0, _classCallCheck3.default)(this, MutationObserverMock);
-    }
-
-    (0, _createClass3.default)(MutationObserverMock, [{
-      key: 'observe',
-      value: function observe() {
-        return [];
-      }
-    }, {
-      key: 'takeRecords',
-      value: function takeRecords() {
-        return [];
-      }
-    }, {
-      key: 'disconnect',
-      value: function disconnect() {}
-    }]);
-    return MutationObserverMock;
-  }();
-
+  // We have to do this in this screwy way because Angular does some monkey patching
+  // expects an non-es2015 class here.
+  function MutationObserverMock() {}
+  MutationObserverMock.prototype = {
+    observe: function observe() {
+      return [];
+    },
+    takeRecords: function takeRecords() {
+      return [];
+    },
+    disconnect: function disconnect() {}
+  };
   Object.defineProperty(dom.window, 'MutationObserver', {
     value: MutationObserverMock,
     writable: true
@@ -1867,7 +1857,7 @@ exports.default = function () {
 /* 24 */
 /***/ (function(module, exports) {
 
-module.exports = {"name":"storybook-chromatic","version":"1.2.6-dev","description":"Visual Testing for Storybook","main":"./dist/assets/storybook-addon.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"@chromaui/localtunnel":"1.9.1-chromatic.3","apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","denodeify":"^1.2.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","minimatch":"^3.0.4","node-ask":"^1.0.1","node-loggly-bulk":"^2.2.4","strip-color":"^0.1.0","tree-kill":"^1.1.0","uuid":"^3.3.2"},"peerDependencies":{"@storybook/core":"3.* || 4.* || 5.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-cli":"^3.1.1","webpack-node-externals":"^1.6.0"}}
+module.exports = {"name":"storybook-chromatic","version":"1.2.7-dev","description":"Visual Testing for Storybook","main":"./dist/assets/storybook-addon.js","scripts":{"prebuild":"rm -rf ./dist","build:bin":"../../node_modules/.bin/babel -s -d ./dist ./src -D --only 'assets,bin'","build:webpack":"../../node_modules/.bin/webpack","build":"../../node_modules/.bin/npm-run-all --serial -l build:**","prepare":"npm run build","dev":"../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"},"bin":{"chromatic":"./dist/bin/chromatic.js"},"dependencies":{"@chromaui/localtunnel":"1.9.1-chromatic.3","apollo-fetch":"^0.6.0","babel-runtime":"^6.26.0","commander":"^2.9.0","debug":"^3.0.1","denodeify":"^1.2.1","env-ci":"^2.1.0","isomorphic-fetch":"^2.2.1","jsdom":"^11.5.1","jsonfile":"^4.0.0","minimatch":"^3.0.4","node-ask":"^1.0.1","node-loggly-bulk":"^2.2.4","strip-color":"^0.1.0","tree-kill":"^1.1.0","uuid":"^3.3.2"},"peerDependencies":{"@storybook/core":"3.* || 4.* || 5.*"},"devDependencies":{"babel-cli":"^6.26.0","npm-run-all":"^4.0.2","prettier-eslint":"^7.1.0","tmp":"^0.0.33","webpack":"^3.10.0","webpack-cli":"^3.1.1","webpack-node-externals":"^1.6.0"}}
 
 /***/ }),
 /* 25 */
