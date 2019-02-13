@@ -1,3 +1,9 @@
+# 1.2.5 - 2019-01-30
+
+* Fix an issue with using `isChromatic()` inside Jest (storyshots).
+
+* Some rendering timing fixes to better support Storybook version 5
+
 # 1.2.4 - 2019-01-18
 
 * Added an export `isChromatic()` to determine if code is running under test.
