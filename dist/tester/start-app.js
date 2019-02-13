@@ -62,10 +62,8 @@ export default async function startApp({ scriptName, commandName, url }) {
   let child;
   if (scriptName) {
     if (await checkResponse(url)) {
-      throw new Error(
-        `Detected process already running at ${url}` +
-          `\nIf you are sure this is your server, pass \`--do-not-start\` to skip this step.`
-      );
+      // We assume the process that is already running on the url is indeed our storybook
+      return null;
     }
 
     // This technique lifted from https://github.com/mysticatea/npm-run-all/blob/52eaf86242ba408dedd015f53ca7ca368f25a026/lib/run-task.js#L156-L174
