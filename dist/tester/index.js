@@ -63,7 +63,7 @@ const TesterBuildQuery = `
 const debug = setupDebug('storybook-chromatic:tester');
 
 function log(msg, { noPrefix = false, level = 'log' } = {}) {
-  if (!process.env.DISABLE_LOGGING) {
+  if (process.env.DISABLE_LOGGING !== 'true') {
     if (noPrefix) {
       // eslint-disable-next-line no-console
       console[level](msg);

@@ -154,10 +154,13 @@ export default async function getRuntimeSpecs(url, { verbose = false } = {}) {
       try {
         const separator = '=========================';
 
-        if (!dom.window.__chromaticRuntimeSpecs__ && !dom.window.__STORYBOOK_CLIENT_API__) {
+        if (!dom.window.__chromaticRuntimeSpecs__) {
           console.error(
-            `Didn't find 'window.__chromaticRuntimeSpecs__' at ${url}.\n` +
-              `Have you installed the Chromatic widget or addon correctly?\n`
+            `Didn't find Chromatic addon in your storybook.
+        
+Did you add it with \`import 'storybook-chromatic'\` in your \`.storybook/config.js\`?
+
+Read more: http://docs.chromaticqa.com`
           );
 
           if (!verbose && logs.length) {
@@ -179,14 +182,6 @@ export default async function getRuntimeSpecs(url, { verbose = false } = {}) {
             `\n${separator}\nThis may lead to some stories not working right or getting detected by Chromatic` +
               `\nWe suggest you fix the errors, but we will continue anyway..\n`
           );
-        }
-
-        if (!dom.window.__chromaticRuntimeSpecs__) {
-          throw new Error(`Didn't find Chromatic addon in your storybook.
-        
-Did you add it with \`import 'storybook-chromatic'\` in your \`.storybook/config.js\`?
-
-Read more: http://docs.chromaticqa.com`);
         }
 
         const specs = dom.window.__chromaticRuntimeSpecs__();
