@@ -63,7 +63,7 @@ const TesterBuildQuery = `
 const debug = setupDebug('storybook-chromatic:tester');
 
 function log(msg, { noPrefix = false, level = 'log' } = {}) {
-  if (!process.env.DISABLE_LOGGING) {
+  if (process.env.DISABLE_LOGGING !== 'true') {
     if (noPrefix) {
       // eslint-disable-next-line no-console
       console[level](msg);
@@ -119,6 +119,7 @@ export default async function runTest({
   autoAcceptChanges = false,
   exitZeroOnChanges = false,
   ignoreLastBuildOnBranch = false,
+  preserveMissingSpecs = false,
   verbose = false,
   interactive = true,
   indexUrl = CHROMATIC_INDEX_URL,
@@ -354,6 +355,7 @@ Read more here: https://docs.chromaticqa.com/setup_ci#travis`);
       input: {
         cachedUrl,
         autoAcceptChanges: doAutoAcceptChanges,
+        preserveMissingSpecs,
         branch,
         commit,
         committedAt,
