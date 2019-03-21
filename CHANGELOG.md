@@ -1,3 +1,61 @@
+# 1.2.6 - 2019-02-05
+
+* Fix an issue with Angular/zone.js failing to patch our `MutationObserver` mock
+
+# 1.2.5 - 2019-01-30
+
+* Fix an issue with using `isChromatic()` inside Jest (storyshots).
+
+* Some rendering timing fixes to better support Storybook version 5
+
+# 1.2.4 - 2019-01-18
+
+* Added an export `isChromatic()` to determine if code is running under test.
+
+* Added JSDOM mocks for `CreateObjectUrl` and `MutationObserver`
+
+* Added a parameter `{ chromatic: { disable: true } }` to skip a story in chromatic
+
+* Added a parameter `{ chromatic: { noScroll: true } }` to avoid scrolling screenshots in (non-chrome) browsers.
+
+# 1.2.3 - 2018-12-28
+
+* Allow overwriting the polyfills we create in JSDOM mode. (This is a bugfix for some libraries that bundle their own polyfills).
+
+# 1.2.2 - 2018-12-10
+
+* Allow controlling package initialization timing via `import configure from 'storybook-chromatic/configure'; configure()`
+
+* Add a flag `--ignore-last-build-on-branch=X` to not use the last build on a branch no matter what (which helps with rebasing, see: http://docs.chromaticqa.com/branching-and-baselines#rebasing).
+
+# 1.2.1 - 2018-12-04
+
+* Update logging dependency from `loggly` to `node-loggly-bulk` due to security vulnerabilities.
+  NOTE: this package was only used by our CLI tool and so there is no need for concern, but this new version should avoid tripping security tools.
+
+# 1.2.0 - 2018-10-29
+
+* Pass `chromatic` parameters from Storybook@4, supporting:
+
+  * Viewports: http://docs.chromaticqa.com/viewports
+  * Delay: http://docs.chromaticqa.com/delay
+
+* Better logging from the package to allow us to debug build problems.
+
+* Fix regression for node v6
+
+* Fix for supporting stories that use Canvas APIs in JSDOM
+
+# 1.1.0 - 2018-10-15
+
+* Fix to work on Windows CI
+
+* Added a `--storybook-build-dir` parameter that allows you to upload a pre-built storybook.
+
+# 1.0.2 - 2018-08-23
+
+* Fix a bug with Live View and Storybook@3.4
+
 # 1.0.1 - 2018-07-26
 
 * We now set the `CHROMATIC_APP_CODE` variable for you, with explicit instructions to remove it (and set via CI) in less secure applications.
