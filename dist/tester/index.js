@@ -227,6 +227,7 @@ Read more here: https://docs.chromaticqa.com/setup_ci#travis`);
       : ignoreLastBuildOnBranch;
 
   const baselineCommits = await getBaselineCommits(client, {
+    branch,
     ignoreLastBuildOnBranch: doIgnoreLastBuildOnBranch,
   });
   debug(`Found baselineCommits: ${baselineCommits}`);
