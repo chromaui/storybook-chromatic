@@ -160,7 +160,8 @@ var _default = function _default() {
               var viewports = chromatic.viewports,
                   delay = chromatic.delay,
                   disable = chromatic.disable,
-                  noScroll = chromatic.noScroll;
+                  noScroll = chromatic.noScroll,
+                  diffThreshold = chromatic.diffThreshold;
               parameters = (0, _objectSpread2.default)({}, viewports && {
                 viewports: viewports
               }, delay && {
@@ -169,6 +170,8 @@ var _default = function _default() {
                 disable: disable
               }, noScroll && {
                 noScroll: noScroll
+              }, diffThreshold && {
+                diffThreshold: diffThreshold
               });
             }
           }

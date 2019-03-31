@@ -190,8 +190,7 @@ async function step(
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export async function getBaselineCommits(client, { ignoreLastBuildOnBranch = false } = {}) {
-  const branch = await getBranch();
+export async function getBaselineCommits(client, { branch, ignoreLastBuildOnBranch = false } = {}) {
   const { committedAt } = await getCommit();
 
   // Include the latest build from this branch as an ancestor of the current build
