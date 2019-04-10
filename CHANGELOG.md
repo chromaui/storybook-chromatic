@@ -1,3 +1,9 @@
+# 1.3.2 - 2019-04-02
+
+- Added a new `diffThreshold` storybook parameter you can use to control the anti-aliasing threshold we use for diffing if you find that certain images are tripping our diff.
+
+- Fix an issue with handling rebased branches in unusual CI systems.
+
 # 1.3.1 - 2019-03-21
 
 - Add a dedicated endpoint for `isChromatic` so you don't need to load our full package to use it (which is useful if you want to use it inside your app, which we generally don't advise).
