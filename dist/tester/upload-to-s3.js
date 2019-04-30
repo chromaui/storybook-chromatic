@@ -2,7 +2,6 @@ import setupDebug from 'debug';
 import { readdirSync, statSync, createReadStream } from 'fs';
 import fetch from 'isomorphic-fetch';
 import { join } from 'path';
-import { URL } from 'url';
 
 const debug = setupDebug('storybook-chromatic:tester:upload');
 
@@ -71,5 +70,5 @@ export default async function uploadToS3({ client, dirname }) {
   await Promise.all(uploads);
 
   // NOTE: storybook-specific
-  return new URL('/iframe.html', domain).toString();
+  return `${domain}/iframe.html`;
 }

@@ -149,7 +149,7 @@ export default async function runTest({
 
 It is recommended to run Chromatic on the push builds from Travis where possible.
 We advise turning on push builds and disabling Chromatic for internal PR builds.
-Read more: https://docs.chromaticqa.com/setup_ci#travis
+Read more: http://docs.chromaticqa.com/setup_ci#travis
 `,
       { noPrefix: true, level: 'warn' }
     );
@@ -408,7 +408,7 @@ ${onlineHint}.`
         if (exitCode !== 0) {
           log(`Pass --exit-zero-on-changes if you want this command to exit successfully in this case.
   Alternatively, pass --auto-accept-changes if you want changed builds to pass on this branch.
-  Read more: https://docs.chromaticqa.com/test`);
+  Read more: http://docs.chromaticqa.com/test`);
         }
         break;
       case 'BUILD_FAILED':
