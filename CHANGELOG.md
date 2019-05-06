@@ -1,3 +1,7 @@
+# 1.3.3 - 2019-04-19
+
+- Fixed issue with uploaded builds and storybook 5 URLs.
+
 # 1.3.2 - 2019-04-02
 
 - Added a new `diffThreshold` storybook parameter you can use to control the anti-aliasing threshold we use for diffing if you find that certain images are tripping our diff.
