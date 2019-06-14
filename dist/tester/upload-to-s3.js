@@ -3,6 +3,8 @@ import { readdirSync, statSync, createReadStream } from 'fs';
 import fetch from 'isomorphic-fetch';
 import { join } from 'path';
 import { URL } from 'url';
+import progress from 'progress-stream';
+import ProgressBar from 'progress';
 
 const debug = setupDebug('storybook-chromatic:tester:upload');
 
@@ -25,38 +27,46 @@ const TesterGetUploadUrlsMutation = `
 function getPathsInDir(rootDir, dirname = '.') {
   return readdirSync(join(rootDir, dirname))
     .map(p => join(dirname, p))
-    .map(pathname =>
-      statSync(join(rootDir, pathname)).isDirectory()
-        ? getPathsInDir(rootDir, pathname)
-        : [pathname]
-    )
+    .map(pathname => {
+      const stats = statSync(join(rootDir, pathname));
+      if (stats.isDirectory()) {
+        return getPathsInDir(rootDir, pathname);
+      }
+      return [{ pathname, contentLength: stats.size }];
+    })
     .reduce((a, b) => [...a, ...b], []); // flatten
 }
 
 export default async function uploadToS3({ client, dirname }) {
   debug(`uploading '${dirname}' to s3`);
 
-  const paths = getPathsInDir(dirname);
+  const pathAndLengths = getPathsInDir(dirname);
 
   const {
     getUploadUrls: { domain, urls },
   } = await client.runQuery(TesterGetUploadUrlsMutation, {
-    paths,
+    paths: pathAndLengths.map(({ pathname }) => pathname),
   });
+
+  const total = pathAndLengths.map(({ contentLength }) => contentLength).reduce((a, b) => a + b, 0);
+  const bar = new ProgressBar('uploading [:bar] :rate/bps :percent :etas', { width: 20, total });
 
   const uploads = [];
   urls.forEach(({ path, url, contentType }) => {
     const pathWithDirname = join(dirname, path);
     debug(`uploading '${pathWithDirname}' to '${url}' with content type '${contentType}'`);
 
+    const progressStream = progress();
+    progressStream.on('progress', ({ delta }) => bar.tick(delta));
+    const { contentLength } = pathAndLengths.find(({ pathname }) => pathname === path);
     uploads.push(
       (async () => {
         const res = await fetch(url, {
           method: 'PUT',
-          body: createReadStream(pathWithDirname),
+          body: createReadStream(pathWithDirname).pipe(progressStream),
           headers: {
             'content-type': contentType,
-            'content-length': statSync(pathWithDirname).size,
+            'content-length': contentLength,
           },
         });
 
