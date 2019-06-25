@@ -218,7 +218,7 @@ async function prepareAppOrBuild({
 
       const child = await startApp({
         scriptName: buildScriptName,
-        args: ['-o', buildDirName],
+        args: ['--', '-o', buildDirName],
         inheritStdio: true,
       });
 
