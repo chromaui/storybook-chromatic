@@ -36,43 +36,4 @@ export default function configure({ runtimes }) {
 
   // API to be used by capture worker to render a spec
   window.__renderChromaticSpec__ = renderSpecToDom;
-
-  function handleMessage({ data, source, origin }) {
-    // TODO -- is it unsafe to not check origin? I don't get the sense it matters
-
-    const { message, ...rest } = data;
-    if (message === 'requestCapabilities') {
-      source.postMessage(
-        {
-          message: 'capabilities',
-          service: 'chromatic-isolator',
-          version: 0,
-        },
-        origin
-      );
-    } else if (message === 'renderSpec') {
-      try {
-        renderSpecToDom(rest.spec);
-        source.postMessage(
-          {
-            message: 'renderedSpec',
-          },
-          origin
-        );
-      } catch (error) {
-        source.postMessage(
-          {
-            message: 'renderSpecError',
-            error: error.toString(),
-          },
-          origin
-        );
-
-        // For now, throw the error so we can see it in the iframe
-        throw error;
-      }
-    }
-  }
-
-  window.addEventListener('message', handleMessage, false);
 }

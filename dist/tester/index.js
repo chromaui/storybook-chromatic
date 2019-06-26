@@ -6,6 +6,7 @@ import envCi from 'env-ci';
 import { v4 as uuid } from 'uuid';
 import { parse, format } from 'url';
 import minimatch from 'minimatch';
+import { dirSync } from 'tmp';
 
 import getRuntimeSpecs from './runtimes';
 import getStorybookInfo from './storybook';
@@ -85,10 +86,28 @@ function pluralize(n, noun, noNumber) {
 }
 
 let lastInProgressCount;
+// If we have a network error, retry up to 3 times
+// This is a temporary fix -- longer term let's do this: https://github.com/chromaui/chromatic/issues/1932
+let numberConsecutiveFailures = 0;
 async function waitForBuild(client, variables) {
-  const {
-    app: { build },
-  } = await client.runQuery(TesterBuildQuery, variables);
+  let build;
+  try {
+    ({
+      app: { build },
+    } = await client.runQuery(TesterBuildQuery, variables));
+
+    // It worked, so reset the number of failures
+    numberConsecutiveFailures = 0;
+  } catch (err) {
+    numberConsecutiveFailures += 1;
+    debug(
+      `Error connecting to index, retrying for the ${numberConsecutiveFailures}th time: ${err.toString()}`
+    );
+    if (numberConsecutiveFailures >= 3) {
+      throw err;
+    }
+  }
+
   debug(`build:${JSON.stringify(build)}`);
   const { status, inProgressCount, snapshotCount, changeCount, errorCount } = build;
   if (status === 'BUILD_IN_PROGRESS') {
@@ -99,20 +118,271 @@ async function waitForBuild(client, variables) {
           `(${pluralize(changeCount, 'change')}, ${pluralize(errorCount, 'error')})`
       );
     }
-
     await new Promise(resolve => setTimeout(resolve, BUILD_POLL_INTERVAL));
     return waitForBuild(client, variables);
   }
+
   return build;
+}
+
+async function getCommitAndBranch({ inputFromCI }) {
+  // eslint-disable-next-line prefer-const
+  let { commit, committedAt, committerEmail, committerName } = await getCommit();
+  let branch = await getBranch();
+  const isTravisPrBuild = process.env.TRAVIS_EVENT_TYPE === 'pull_request';
+
+  const {
+    TRAVIS_EVENT_TYPE,
+    TRAVIS_PULL_REQUEST_SLUG,
+    TRAVIS_REPO_SLUG,
+    TRAVIS_PULL_REQUEST_SHA,
+    TRAVIS_PULL_REQUEST_BRANCH,
+  } = process.env;
+  if (TRAVIS_EVENT_TYPE === 'pull_request' && TRAVIS_PULL_REQUEST_SLUG === TRAVIS_REPO_SLUG) {
+    log(
+      `WARNING: Running Chromatic on a Travis PR build from an internal branch.
+
+It is recommended to run Chromatic on the push builds from Travis where possible.
+We advise turning on push builds and disabling Chromatic for internal PR builds.
+Read more: https://docs.chromaticqa.com/setup_ci#travis
+`,
+      { noPrefix: true, level: 'warn' }
+    );
+  }
+
+  // Travis PR builds are weird, we want to ensure we mark build against the commit that was
+  // merged from, rather than the resulting "psuedo" merge commit that doesn't stick around in the
+  // history of the project (so approvals will get lost). We also have to ensure we use the right branch.
+  if (isTravisPrBuild) {
+    commit = TRAVIS_PULL_REQUEST_SHA;
+    branch = TRAVIS_PULL_REQUEST_BRANCH;
+
+    if (!commit || !branch) {
+      throw new Error(`\`TRAVIS_EVENT_TYPE\` environment variable set to 'pull_request', 
+but \`TRAVIS_PULL_REQUEST_SHA\` and \`TRAVIS_PULL_REQUEST_BRANCH\` are not both set.
+
+Read more here: https://docs.chromaticqa.com/setup_ci#travis`);
+    }
+  }
+
+  // On certain CI systems, a branch is not checked out
+  // (instead a detached head is used for the commit).
+  if (branch === 'HEAD' || !branch) {
+    ({ branch } = envCi());
+
+    if (branch === 'HEAD' || !branch) {
+      // $HEAD is for netlify: https://www.netlify.com/docs/continuous-deployment/
+      // $GERRIT_BRANCH is for Gerrit/Jenkins: https://wiki.jenkins.io/display/JENKINS/Gerrit+Trigger
+      // $CI_BRANCH is a general setting that lots of systems use
+      branch =
+        process.env.HEAD || process.env.GERRIT_BRANCH || process.env.CI_BRANCH || branch || 'HEAD';
+    }
+  }
+
+  // REPOSITORY_URL is for netlify: https://www.netlify.com/docs/continuous-deployment/
+  const fromCI = inputFromCI || !!process.env.CI || !!process.env.REPOSITORY_URL;
+
+  debug(
+    `git info: ${JSON.stringify({
+      commit,
+      committedAt,
+      committerEmail,
+      committerName,
+      branch,
+      isTravisPrBuild,
+      fromCI,
+    })}`
+  );
+
+  return { commit, committedAt, committerEmail, committerName, branch, isTravisPrBuild, fromCI };
+}
+
+async function prepareAppOrBuild({
+  client,
+  dirname,
+  noStart,
+  buildScriptName,
+  scriptName,
+  commandName,
+  url,
+  createTunnel,
+  tunnelUrl,
+}) {
+  if (dirname || buildScriptName) {
+    let buildDirName = dirname;
+    let cleanup;
+    if (buildScriptName) {
+      log(`Building your storybook`);
+      ({ name: buildDirName, removeCallback: cleanup } = dirSync());
+      debug(`Building storybook to ${buildDirName}`);
+
+      const child = await startApp({
+        scriptName: buildScriptName,
+        args: ['--', '-o', buildDirName],
+        inheritStdio: true,
+      });
+
+      // Wait for the process to exit
+      await new Promise((res, rej) => {
+        child.on('error', rej);
+        child.on('close', code => {
+          if (code > 0) {
+            rej(new Error(`${buildScriptName} script exited with code ${code}`));
+          }
+          res();
+        });
+      });
+    }
+
+    log(`Uploading your built storybook...`);
+    const isolatorUrl = await uploadToS3({ client, dirname: buildDirName });
+    debug(`uploading to s3, got ${isolatorUrl}`);
+    log(`Uploaded your build, verifying`);
+
+    return { cleanup, isolatorUrl };
+  }
+
+  let cleanup;
+  if (!noStart) {
+    log(`Starting storybook`);
+    const child = await startApp({ scriptName, commandName, url });
+    cleanup = async () => denodeify(kill)(child.pid, 'SIGHUP');
+    log(`Started storybook at ${url}`);
+  } else if (url) {
+    if (!(await checkResponse(url))) {
+      throw new Error(`No server responding at ${url} -- make sure you've started it.`);
+    }
+    log(`Detected storybook at ${url}`);
+  }
+
+  const { port, pathname, query, hash } = parse(url, true);
+  if (!createTunnel) {
+    return {
+      cleanup,
+      isolatorUrl: url,
+    };
+  }
+
+  log(`Opening tunnel to Chromatic capture servers`);
+  let tunnel;
+  let cleanupTunnel;
+  try {
+    tunnel = await openTunnel({ tunnelUrl, port });
+    cleanupTunnel = async () => {
+      if (cleanup) {
+        await cleanup();
+      }
+      await tunnel.close();
+    };
+    debug(`Opened tunnel to ${tunnel.url}`);
+  } catch (err) {
+    debug('Got error %O', err);
+    if (cleanup) {
+      cleanup();
+    }
+    throw err;
+  }
+
+  // ** Are we using a v1 or v2 tunnel? **
+  // If the tunnel returns a cachedUrl, we are using a v2 tunnel and need to use
+  // the slightly esoteric URL format for the isolatorUrl.
+  // If not, they are the same:
+  const cachedUrlObject = parse(tunnel.cachedUrl || tunnel.url);
+  cachedUrlObject.pathname = pathname;
+  cachedUrlObject.query = query;
+  cachedUrlObject.hash = hash;
+  const cachedUrl = cachedUrlObject.format();
+
+  if (tunnel.cachedUrl) {
+    const isolatorUrlObject = parse(tunnel.url, true);
+    isolatorUrlObject.query = {
+      ...isolatorUrlObject.query,
+      // This will encode the pathname and query into a single query parameter
+      path: format({ pathname, query }),
+    };
+    isolatorUrlObject.hash = hash;
+
+    // For some reason we need to unset this to change the params
+    isolatorUrlObject.search = null;
+
+    return {
+      cleanup: cleanupTunnel,
+      isolatorUrl: isolatorUrlObject.format(),
+      cachedUrl,
+    };
+  }
+
+  // See comment about v1/v2 tunnel above
+  return {
+    cleanup: cleanupTunnel,
+    isolatorUrl: cachedUrl,
+  };
+}
+
+async function getStoriesAndInfo({ only, list, isolatorUrl, verbose }) {
+  let predicate = () => true;
+  if (only) {
+    const match = only.match(/(.*):([^:]*)/);
+    if (!match) {
+      throw new Error(`--only argument must provided in the form "componentName:storyName"`);
+    }
+    log(`Running only story '${match[2]}' of component '${match[1]}'`);
+
+    predicate = ({ name, component: { name: componentName } }) =>
+      minimatch(name, match[2]) && minimatch(componentName, match[1]);
+  }
+
+  let listStory = story => story;
+  if (list) {
+    log('Listing available stories:');
+    listStory = story => {
+      const {
+        name,
+        component: { name: componentName },
+      } = story;
+      log(`${componentName}:${name}`);
+      return story;
+    };
+  }
+  const runtimeSpecs = (await getRuntimeSpecs(isolatorUrl, { verbose }))
+    .map(listStory)
+    .filter(predicate);
+
+  if (runtimeSpecs.length === 0) {
+    throw new Error('Cannot run a build with no stories. Please add some stories!');
+  }
+
+  log(`Found ${pluralize(runtimeSpecs.length, 'story')}`);
+
+  const { storybookVersion, viewLayer } = getStorybookInfo();
+
+  debug(
+    `Detected package version:${packageVersion}, storybook version:${storybookVersion}, view layer: ${viewLayer}`
+  );
+
+  return { runtimeSpecs, storybookVersion, viewLayer };
+}
+
+async function getEnvironment() {
+  const filteredEnvironment = {};
+  Object.keys(process.env).forEach(key => {
+    if (ENVIRONMENT_WHITELIST.find(regex => key.match(regex))) {
+      filteredEnvironment[key] = process.env[key];
+    }
+  });
+  const environment = JSON.stringify(filteredEnvironment);
+  debug(`Got environment %s`, environment);
+  return environment;
 }
 
 export default async function runTest({
   appCode,
+  buildScriptName,
   scriptName,
-  commandName,
+  exec: commandName,
   noStart = false,
   url,
-  dirname,
+  storybookBuildDir: dirname,
   only,
   list,
   fromCI: inputFromCI = false,
@@ -142,19 +412,6 @@ export default async function runTest({
     headers: { 'x-chromatic-session-id': sessionId },
   });
 
-  const { TRAVIS_EVENT_TYPE, TRAVIS_PULL_REQUEST_SLUG, TRAVIS_REPO_SLUG } = process.env;
-  if (TRAVIS_EVENT_TYPE === 'pull_request' && TRAVIS_PULL_REQUEST_SLUG === TRAVIS_REPO_SLUG) {
-    log(
-      `WARNING: Running Chromatic on a Travis PR build from an internal branch.
-
-It is recommended to run Chromatic on the push builds from Travis where possible.
-We advise turning on push builds and disabling Chromatic for internal PR builds.
-Read more: https://docs.chromaticqa.com/setup_ci#travis
-`,
-      { noPrefix: true, level: 'warn' }
-    );
-  }
-
   if (!appCode) {
     throw new Error(
       'You must provide an app code  -- visit https://www.chromaticqa.com to get your code.' +
@@ -162,8 +419,8 @@ Read more: https://docs.chromaticqa.com/setup_ci#travis
     );
   }
 
-  if (!(scriptName || commandName || noStart)) {
-    throw new Error('Either scriptName, commandName or noStart is required');
+  if (!(buildScriptName || scriptName || commandName || noStart)) {
+    throw new Error('Either buildScriptName, scriptName, commandName or noStart is required');
   }
 
   try {
@@ -180,41 +437,15 @@ Read more: https://docs.chromaticqa.com/setup_ci#travis
     throw errors;
   }
 
-  // eslint-disable-next-line prefer-const
-  let { commit, committedAt, committerEmail, committerName } = await getCommit();
-  let branch = await getBranch();
-  const isTravisPrBuild = process.env.TRAVIS_EVENT_TYPE === 'pull_request';
-
-  // Travis PR builds are weird, we want to ensure we mark build against the commit that was
-  // merged from, rather than the resulting "psuedo" merge commit that doesn't stick around in the
-  // history of the project (so approvals will get lost). We also have to ensure we use the right branch.
-  if (isTravisPrBuild) {
-    commit = process.env.TRAVIS_PULL_REQUEST_SHA;
-    branch = process.env.TRAVIS_PULL_REQUEST_BRANCH;
-
-    if (!commit || !branch) {
-      throw new Error(`\`TRAVIS_EVENT_TYPE\` environment variable set to 'pull_request', 
-but \`TRAVIS_PULL_REQUEST_SHA\` and \`TRAVIS_PULL_REQUEST_BRANCH\` are not both set.
-
-Read more here: https://docs.chromaticqa.com/setup_ci#travis`);
-    }
-  }
-
-  // On certain CI systems, a branch is not checked out
-  // (instead a detached head is used for the commit).
-  if (branch === 'HEAD' || !branch) {
-    ({ branch } = envCi());
-
-    if (branch === 'HEAD' || !branch) {
-      // $HEAD is for netlify: https://www.netlify.com/docs/continuous-deployment/
-      // $GERRIT_BRANCH is for Gerrit/Jenkins: https://wiki.jenkins.io/display/JENKINS/Gerrit+Trigger
-      // $CI_BRANCH is a general setting that lots of systems use
-      branch =
-        process.env.HEAD || process.env.GERRIT_BRANCH || process.env.CI_BRANCH || branch || 'HEAD';
-    }
-  }
-
-  debug(`git info: ${JSON.stringify({ commit, committedAt, branch })}`);
+  const {
+    commit,
+    committedAt,
+    committerEmail,
+    committerName,
+    branch,
+    isTravisPrBuild,
+    fromCI,
+  } = await getCommitAndBranch({ inputFromCI });
 
   // These three options can be branch specific
   const doAutoAcceptChanges =
@@ -232,123 +463,29 @@ Read more here: https://docs.chromaticqa.com/setup_ci#travis`);
   });
   debug(`Found baselineCommits: ${baselineCommits}`);
 
-  let child;
-  let tunnel;
-  let fromCI;
   let exitCode = 5;
+  const { cleanup, isolatorUrl, cachedUrl } = await prepareAppOrBuild({
+    client,
+    dirname,
+    noStart,
+    buildScriptName,
+    scriptName,
+    commandName,
+    url,
+    createTunnel,
+    tunnelUrl,
+  });
+  debug(`Connecting to ${isolatorUrl} (cachedUrl ${cachedUrl})`);
+  log(`Uploading and verifying build (this may take a few minutes depending on your connection)`);
+
   try {
-    let isolatorUrl;
-    let cachedUrl;
-    if (dirname) {
-      log(`Uploading your built storybook...`);
-      isolatorUrl = await uploadToS3({ client, dirname });
-      debug(`uploading to s3, got ${isolatorUrl}`);
-      log(`Uploaded your build, verifying`);
-    } else {
-      if (!noStart) {
-        log(`Starting storybook`);
-        child = await startApp({ scriptName, commandName, url });
-        log(`Started storybook at ${url}`);
-      } else if (url) {
-        if (!(await checkResponse(url))) {
-          throw new Error(`No server responding at ${url} -- make sure you've started it.`);
-        }
-        log(`Detected storybook at ${url}`);
-      }
-
-      const { port, pathname, query, hash } = parse(url, true);
-      isolatorUrl = url;
-      if (createTunnel) {
-        log(`Opening tunnel to Chromatic capture servers`);
-        tunnel = await openTunnel({ tunnelUrl, port });
-        debug(`Opened tunnel to ${tunnel.url}`);
-
-        // ** Are we using a v1 or v2 tunnel? **
-        // If the tunnel returns a cachedUrl, we are using a v2 tunnel and need to use
-        // the slightly esoteric URL format for the isolatorUrl.
-        // If not, they are the same:
-        const cachedUrlObject = parse(tunnel.cachedUrl || tunnel.url);
-        cachedUrlObject.pathname = pathname;
-        cachedUrlObject.query = query;
-        cachedUrlObject.hash = hash;
-        cachedUrl = cachedUrlObject.format();
-
-        if (tunnel.cachedUrl) {
-          const isolatorUrlObject = parse(tunnel.url, true);
-          isolatorUrlObject.query = {
-            ...isolatorUrlObject.query,
-            // This will encode the pathname and query into a single query parameter
-            path: format({ pathname, query }),
-          };
-          isolatorUrlObject.hash = hash;
-
-          // For some reason we need to unset this to change the params
-          isolatorUrlObject.search = null;
-
-          isolatorUrl = isolatorUrlObject.format();
-        } else {
-          // See comment about v1/v2 tunnel above
-          isolatorUrl = cachedUrl;
-        }
-      }
-
-      debug(`Connecting to ${isolatorUrl} (cachedUrl ${cachedUrl})`);
-      log(
-        `Uploading and verifying build (this may take a few minutes depending on your connection)`
-      );
-    }
-
-    let predicate = () => true;
-    if (only) {
-      const match = only.match(/(.*):([^:]*)/);
-      if (!match) {
-        throw new Error(`--only argument must provided in the form "componentName:storyName"`);
-      }
-      log(`Running only story '${match[2]}' of component '${match[1]}'`);
-
-      predicate = ({ name, component: { name: componentName } }) =>
-        minimatch(name, match[2]) && minimatch(componentName, match[1]);
-    }
-
-    let listStory = story => story;
-    if (list) {
-      log('Listing available stories:');
-      listStory = story => {
-        const {
-          name,
-          component: { name: componentName },
-        } = story;
-        log(`${componentName}:${name}`);
-        return story;
-      };
-    }
-    const runtimeSpecs = (await getRuntimeSpecs(isolatorUrl, { verbose }))
-      .map(listStory)
-      .filter(predicate);
-
-    if (runtimeSpecs.length === 0) {
-      throw new Error('Cannot run a build with no stories. Please add some stories!');
-    }
-
-    log(`Found ${pluralize(runtimeSpecs.length, 'story')}`);
-
-    // REPOSITORY_URL is for netlify: https://www.netlify.com/docs/continuous-deployment/
-    fromCI = inputFromCI || !!process.env.CI || !!process.env.REPOSITORY_URL;
-    const { storybookVersion, viewLayer } = getStorybookInfo();
-
-    debug(`Detected build fromCI:${fromCI}`);
-    debug(
-      `Detected package version:${packageVersion}, storybook version:${storybookVersion}, view layer: ${viewLayer}`
-    );
-
-    const filteredEnvironment = {};
-    Object.keys(process.env).forEach(key => {
-      if (ENVIRONMENT_WHITELIST.find(regex => key.match(regex))) {
-        filteredEnvironment[key] = process.env[key];
-      }
+    const { runtimeSpecs, storybookVersion, viewLayer } = await getStoriesAndInfo({
+      only,
+      list,
+      isolatorUrl,
+      verbose,
     });
-    const environment = JSON.stringify(filteredEnvironment);
-    debug(`Got environment %s`, environment);
+    const environment = await getEnvironment();
 
     const {
       createBuild: { number, snapshotCount, specCount, componentCount, webUrl },
@@ -437,11 +574,8 @@ ${onlineHint}.`
       throw e;
     }
   } finally {
-    if (tunnel) {
-      tunnel.close();
-    }
-    if (child) {
-      await denodeify(kill)(child.pid, 'SIGHUP');
+    if (cleanup) {
+      await cleanup();
     }
   }
 
