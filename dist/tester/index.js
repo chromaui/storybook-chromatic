@@ -86,10 +86,28 @@ function pluralize(n, noun, noNumber) {
 }
 
 let lastInProgressCount;
+// If we have a network error, retry up to 3 times
+// This is a temporary fix -- longer term let's do this: https://github.com/chromaui/chromatic/issues/1932
+let numberConsecutiveFailures = 0;
 async function waitForBuild(client, variables) {
-  const {
-    app: { build },
-  } = await client.runQuery(TesterBuildQuery, variables);
+  let build;
+  try {
+    ({
+      app: { build },
+    } = await client.runQuery(TesterBuildQuery, variables));
+
+    // It worked, so reset the number of failures
+    numberConsecutiveFailures = 0;
+  } catch (err) {
+    numberConsecutiveFailures += 1;
+    debug(
+      `Error connecting to index, retrying for the ${numberConsecutiveFailures}th time: ${err.toString()}`
+    );
+    if (numberConsecutiveFailures >= 3) {
+      throw err;
+    }
+  }
+
   debug(`build:${JSON.stringify(build)}`);
   const { status, inProgressCount, snapshotCount, changeCount, errorCount } = build;
   if (status === 'BUILD_IN_PROGRESS') {
@@ -100,10 +118,10 @@ async function waitForBuild(client, variables) {
           `(${pluralize(changeCount, 'change')}, ${pluralize(errorCount, 'error')})`
       );
     }
-
     await new Promise(resolve => setTimeout(resolve, BUILD_POLL_INTERVAL));
     return waitForBuild(client, variables);
   }
+
   return build;
 }
 
@@ -200,7 +218,7 @@ async function prepareAppOrBuild({
 
       const child = await startApp({
         scriptName: buildScriptName,
-        args: ['-o', buildDirName],
+        args: ['--', '-o', buildDirName],
         inheritStdio: true,
       });
 

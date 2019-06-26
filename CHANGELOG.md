@@ -1,3 +1,7 @@
+# 1.4.0 - 2019-06-20
+
+- Retry requests to the API server if one fails rather than bailing out on builds.
+
 # 1.3.3 - 2019-04-19
 
 - Fixed issue with uploaded builds and storybook 5 URLs.
