@@ -2,16 +2,6 @@
 
 var _chromaticTest = require("./chromatic-test");
 
-var origConsole;
-beforeAll(function () {
-  origConsole = global.console;
-  global.console = {
-    log: jest.fn()
-  };
-});
-afterAll(function () {
-  global.console = origConsole;
-});
 jest.mock('../assets/environment', function () {
   return {
     CHROMATIC_CREATE_TUNNEL: true,

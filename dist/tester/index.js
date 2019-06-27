@@ -19,7 +19,6 @@ import { version as packageVersion } from '../../package.json';
 import { CHROMATIC_INDEX_URL, CHROMATIC_TUNNEL_URL } from '../assets/environment';
 import sendDebugToLoggly from './sendDebugToLoggly';
 import uploadToS3 from './upload-to-s3';
-import log from './log';
 
 const BUILD_POLL_INTERVAL = 1000;
 // We send up all environment variables provided by these complicated systems.
@@ -63,6 +62,18 @@ const TesterBuildQuery = `
 `;
 
 const debug = setupDebug('storybook-chromatic:tester');
+
+function log(msg, { noPrefix = false, level = 'log' } = {}) {
+  if (process.env.DISABLE_LOGGING !== 'true') {
+    if (noPrefix) {
+      // eslint-disable-next-line no-console
+      console[level](msg);
+    } else {
+      // eslint-disable-next-line no-console
+      console[level](`Chromatic Tester: ${msg}`);
+    }
+  }
+}
 
 function pluralize(n, noun, noNumber) {
   let pluralizedNoun = n === 1 ? noun : `${noun}s`;
