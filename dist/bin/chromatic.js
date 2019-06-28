@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-'use strict';
+"use strict";
 
-var _commander = require('commander');
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _commander2 = _interopRequireDefault(_commander);
+var _commander = _interopRequireDefault(require("commander"));
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_commander2.default.version(require('../../package.json').version).command('test', 'run a Chromatic test', { isDefault: true }).parse(process.argv);
+_commander.default.version(require('../../package.json').version).command('test', 'run a Chromatic test', {
+  isDefault: true
+}).parse(process.argv);
 //# sourceMappingURL=chromatic.js.map
