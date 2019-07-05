@@ -28,6 +28,11 @@ jest.mock('node-fetch', () => (url, { body }) => ({
             specCount: 1,
             componentCount: 1,
             webUrl: 'http://test.com',
+            app: {
+              account: {
+                features: { diffs: true },
+              },
+            },
           },
         },
       });

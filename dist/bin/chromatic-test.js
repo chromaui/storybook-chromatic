@@ -55,7 +55,7 @@ function parseArgv(argv) {
   .option('--storybook-addon', '(deprecated) use the storybook addon').parse(argv);
   var commanderOptions = {
     config: commander.config,
-    appCode: commander.appCode || _environment.CHROMATIC_APP_CODE,
+    appCode: commander.appCode || _environment.CHROMATIC_APP_CODE || _environment.CHROMA_APP_CODE,
     buildScriptName: commander.buildScriptName,
     scriptName: commander.scriptName,
     exec: commander.exec,
