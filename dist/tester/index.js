@@ -27,10 +27,22 @@ const BUILD_POLL_INTERVAL = 1000;
 // about the user's build environment
 const ENVIRONMENT_WHITELIST = [/^GERRIT/, /^TRAVIS/];
 
-const WEBAPP_URL =
+const names =
   packageName === 'storybook-chromatic'
-    ? 'https://www.chromaticqa.com'
-    : 'https://www.chromaui.com';
+    ? {
+        product: 'Chromatic',
+        script: 'chromatic',
+        command: 'chromatic test',
+        envVar: 'CHROMATIC_APP_CODE',
+        url: 'https://www.chromaticqa.com',
+      }
+    : {
+        product: 'Chroma',
+        script: 'chroma',
+        command: 'chroma publish',
+        envVar: 'CHROMA_APP_CODE',
+        url: 'https://www.chromaui.com',
+      };
 
 const TesterCreateAppTokenMutation = `
   mutation TesterCreateAppTokenMutation($appCode: String!) {
@@ -118,7 +130,7 @@ async function waitForBuild(client, variables, { diffs }) {
         diffs
           ? `${inProgressCount}/${pluralize(snapshotCount, 'snapshot')} remain to test. ` +
               `(${pluralize(changeCount, 'change')}, ${pluralize(errorCount, 'error')})`
-          : `${inProgressCount}/${pluralize(snapshotCount, 'snapshot')} remain to process. `
+          : `${inProgressCount}/${pluralize(snapshotCount, 'snapshot')} remain to publish. `
       );
     }
     await new Promise(resolve => setTimeout(resolve, BUILD_POLL_INTERVAL));
@@ -417,8 +429,12 @@ export default async function runTest({
 
   if (!appCode) {
     throw new Error(
-      `You must provide an app code -- visit ${WEBAPP_URL} to get your code.` +
-        `\nPass your app code with the \`CHROMATIC_APP_CODE\` environment variable or the \`--app-code\` flag.`
+      `You must provide an app code.
+
+If you don't have a project yet login to ${names.url} and create a new project.
+Or find your code on the manage page of an existing project.
+
+Pass your app code with the \`${names.envVar}\` environment variable or the \`--app-code\` flag.`
     );
   }
 
@@ -433,7 +449,10 @@ export default async function runTest({
     client.setJwtToken(jwtToken);
   } catch (errors) {
     if (errors[0] && errors[0].message && errors[0].message.match('No app with code')) {
-      throw new Error(`Incorrect app code '${appCode}' -- visit ${WEBAPP_URL} to get your code`);
+      throw new Error(`Incorrect app code '${appCode}'.
+      
+If you don't have a project yet login to ${names.url} and create a new project.
+Or find your code on the manage page of an existing project.`);
     }
     throw errors;
   }
@@ -546,7 +565,7 @@ ${onlineHint}.`
         log(
           diffs
             ? `Build ${number} passed! ${onlineHint}.`
-            : `Build ${number} deployed! ${onlineHint}.`
+            : `Build ${number} published! ${onlineHint}.`
         );
         exitCode = 0;
         break;
@@ -566,7 +585,7 @@ ${onlineHint}.`
         log(
           diffs
             ? `Build ${number} has ${pluralize(errorCount, 'error')}. ${onlineHint}.`
-            : `Build ${number} has deployed with errors. ${onlineHint}.`
+            : `Build ${number} has published but we found errors. ${onlineHint}.`
         );
         exitCode = 2;
         break;
@@ -598,21 +617,6 @@ ${onlineHint}.`
   }
 
   if (!checkPackageJson() && originalArgv && !fromCI && interactive) {
-    const names =
-      packageName === 'storybook-chromatic'
-        ? {
-            product: 'Chromatic',
-            script: 'chromatic',
-            command: 'chromatic test',
-            envVar: 'CHROMATIC_APP_CODE',
-          }
-        : {
-            product: 'Chroma',
-            script: 'chroma',
-            command: 'chroma deploy',
-            envVar: 'CHROMA_APP_CODE',
-          };
-
     const scriptCommand = `${names.envVar}=${appCode} ${names.command} ${originalArgv
       .slice(2)
       .join(' ')}`
@@ -620,17 +624,17 @@ ${onlineHint}.`
       .trim();
 
     const confirmed = await confirm(
-      `\nYou have not added ${
-        names.product
-      }'s script to your \`package.json\`. Would you like me to do it for you?`
+      `\nYou have not added the \`${
+        names.script
+      }\` script to your \`package.json\`. Would you like me to do it for you?`
     );
     if (confirmed) {
       addScriptToPackageJson(names.script, scriptCommand);
       log(
         `
-Added script \`${
+Added script \`${names.script}\`. You can now run it here or in CI with \`npm run ${
           names.script
-        }\`. You can now run it here or in CI with \`npm run chromatic\` (or \`yarn chromatic\`)
+        }\` (or \`yarn ${names.script}\`)
 
 NOTE: I wrote your app code to the \`${
           names.envVar
