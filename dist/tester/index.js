@@ -19,7 +19,7 @@ import { name as packageName, version as packageVersion } from '../../package.js
 import { CHROMATIC_INDEX_URL, CHROMATIC_TUNNEL_URL } from '../assets/environment';
 import sendDebugToLoggly from './sendDebugToLoggly';
 import uploadToS3 from './upload-to-s3';
-import log from './log';
+import makeLog from './log';
 
 const BUILD_POLL_INTERVAL = 1000;
 // We send up all environment variables provided by these complicated systems.
@@ -43,6 +43,8 @@ const names =
         envVar: 'CHROMA_APP_CODE',
         url: 'https://www.chromaui.com',
       };
+
+const log = makeLog(names.product);
 
 const TesterCreateAppTokenMutation = `
   mutation TesterCreateAppTokenMutation($appCode: String!) {
@@ -228,7 +230,7 @@ async function prepareAppOrBuild({
     let cleanup;
     if (buildScriptName) {
       log(`Building your storybook`);
-      ({ name: buildDirName, removeCallback: cleanup } = dirSync());
+      ({ name: buildDirName } = dirSync({ unsafeCleanup: true, prefix: `${names.script}-` }));
       debug(`Building storybook to ${buildDirName}`);
 
       const child = await startApp({

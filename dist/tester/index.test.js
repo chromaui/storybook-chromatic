@@ -72,7 +72,7 @@ jest.mock('./storybook', () => () => ({
   viewLayer: 'viewLayer',
 }));
 jest.mock('./upload-to-s3');
-jest.mock('./log');
+jest.mock('./log', () => () => jest.fn());
 
 let processEnv;
 beforeEach(() => {
