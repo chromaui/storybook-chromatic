@@ -24,6 +24,7 @@ var _client2 = _interopRequireDefault(require("../client"));
 /* eslint-disable import/no-extraneous-dependencies, global-require */
 // eslint-disable-next-line no-restricted-globals
 if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
+  // eslint-disable-next-line no-console
   console.error("storybook-chromatic should be installed in your `.storybook/config.js`");
 }
 
