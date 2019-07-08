@@ -75,27 +75,10 @@ function pluralize(n, noun, noNumber) {
 }
 
 let lastInProgressCount;
-// If we have a network error, retry up to 3 times
-// This is a temporary fix -- longer term let's do this: https://github.com/chromaui/chromatic/issues/1932
-let numberConsecutiveFailures = 0;
 async function waitForBuild(client, variables) {
-  let build;
-  try {
-    ({
-      app: { build },
-    } = await client.runQuery(TesterBuildQuery, variables));
-
-    // It worked, so reset the number of failures
-    numberConsecutiveFailures = 0;
-  } catch (err) {
-    numberConsecutiveFailures += 1;
-    debug(
-      `Error connecting to index, retrying for the ${numberConsecutiveFailures}th time: ${err.toString()}`
-    );
-    if (numberConsecutiveFailures >= 3) {
-      throw err;
-    }
-  }
+  const {
+    app: { build },
+  } = await client.runQuery(TesterBuildQuery, variables);
 
   debug(`build:${JSON.stringify(build)}`);
   const { status, inProgressCount, snapshotCount, changeCount, errorCount } = build;
@@ -193,6 +176,7 @@ async function prepareAppOrBuild({
   buildScriptName,
   scriptName,
   commandName,
+  https,
   url,
   createTunnel,
   tunnelUrl,
@@ -256,7 +240,7 @@ async function prepareAppOrBuild({
   let tunnel;
   let cleanupTunnel;
   try {
-    tunnel = await openTunnel({ tunnelUrl, port });
+    tunnel = await openTunnel({ tunnelUrl, port, https });
     cleanupTunnel = async () => {
       if (cleanup) {
         await cleanup();
@@ -370,6 +354,7 @@ export default async function runTest({
   scriptName,
   exec: commandName,
   noStart = false,
+  https,
   url,
   storybookBuildDir: dirname,
   only,
@@ -399,6 +384,7 @@ export default async function runTest({
   const client = new GraphQLClient({
     uri: `${indexUrl}/graphql`,
     headers: { 'x-chromatic-session-id': sessionId },
+    retries: 3,
   });
 
   if (!appCode) {
@@ -416,7 +402,7 @@ export default async function runTest({
     const { createAppToken: jwtToken } = await client.runQuery(TesterCreateAppTokenMutation, {
       appCode,
     });
-    client.setJwtToken(jwtToken);
+    client.headers = { ...client.headers, Authorization: `Bearer ${jwtToken}` };
   } catch (errors) {
     if (errors[0] && errors[0].message && errors[0].message.match('No app with code')) {
       throw new Error(
@@ -460,6 +446,7 @@ export default async function runTest({
     buildScriptName,
     scriptName,
     commandName,
+    https,
     url,
     createTunnel,
     tunnelUrl,
