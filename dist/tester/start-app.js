@@ -1,13 +1,15 @@
 import { spawn } from 'child_process';
-import fetch from 'isomorphic-fetch';
+import https from 'https';
+import fetch from 'node-fetch';
 import path from 'path';
 
 const CHECK_EVERY = 1000;
 const TIMEOUT = 5 * 60 * 1000;
+const agent = new https.Agent({ rejectUnauthorized: false });
 
 export async function checkResponse(url) {
   try {
-    await fetch(url);
+    await fetch(url, { agent });
     return true;
   } catch (e) {
     return false;

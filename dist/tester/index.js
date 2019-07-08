@@ -176,6 +176,7 @@ async function prepareAppOrBuild({
   buildScriptName,
   scriptName,
   commandName,
+  https,
   url,
   createTunnel,
   tunnelUrl,
@@ -239,7 +240,7 @@ async function prepareAppOrBuild({
   let tunnel;
   let cleanupTunnel;
   try {
-    tunnel = await openTunnel({ tunnelUrl, port });
+    tunnel = await openTunnel({ tunnelUrl, port, https });
     cleanupTunnel = async () => {
       if (cleanup) {
         await cleanup();
@@ -353,6 +354,7 @@ export default async function runTest({
   scriptName,
   exec: commandName,
   noStart = false,
+  https,
   url,
   storybookBuildDir: dirname,
   only,
@@ -444,6 +446,7 @@ export default async function runTest({
     buildScriptName,
     scriptName,
     commandName,
+    https,
     url,
     createTunnel,
     tunnelUrl,

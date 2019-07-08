@@ -1,6 +1,6 @@
 import setupDebug from 'debug';
 import { readdirSync, statSync, createReadStream } from 'fs';
-import fetch from 'isomorphic-fetch';
+import fetch from 'node-fetch';
 import { join } from 'path';
 import { URL } from 'url';
 import progress from 'progress-stream';
