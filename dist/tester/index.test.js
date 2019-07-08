@@ -12,16 +12,18 @@ let lastBuild;
 
 jest.mock('node-fetch', () => (url, { body }) => ({
   ok: true,
-  text: async () => {
+  json: async () => {
     const { query, variables } = JSON.parse(body);
+
     if (query.match('TesterCreateAppTokenMutation')) {
-      return JSON.stringify({
+      return {
         data: { createAppToken: 'token' },
-      });
+      };
     }
+
     if (query.match('TesterCreateBuildMutation')) {
       lastBuild = variables;
-      return JSON.stringify({
+      return {
         data: {
           createBuild: {
             number: 1,
@@ -35,14 +37,15 @@ jest.mock('node-fetch', () => (url, { body }) => ({
             },
           },
         },
-      });
+      };
     }
+
     if (query.match('TesterBuildQuery')) {
-      return JSON.stringify({
+      return {
         data: {
           app: { build: { status: 'BUILD_PENDING', changeCount: 1 } },
         },
-      });
+      };
     }
 
     throw new Error('Unknown Query');

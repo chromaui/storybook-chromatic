@@ -1,27 +1,17 @@
 /* eslint-env browser */
-import startIsolator from './isolator';
 
 let hasSetup = false;
-function configure(runtimes = []) {
+function configure({ renderSpec, specs }) {
   if (hasSetup) {
     throw new Error('Chromatic already configured.');
   }
   hasSetup = true;
 
-  if (runtimes === []) {
-    throw new Error(
-      'Chromatic must be configured with at least one runtime. http://docs.chromaticqa.com/runtime-api'
-    );
-  }
+  // API to be used by test script to gather runtime spec definitions
+  window.__chromaticRuntimeSpecs__ = specs;
 
-  // If we are rendered in an iframe, (by ourself), then we need to clear
-  // the screen right away, rather than waiting for a spec
-  const isIsolator = document.location.hash.match('__chromatic_isolator__');
-
-  startIsolator({
-    runtimes: [].concat(runtimes), // allow passing a single runtime
-    clearScreen: isIsolator,
-  });
+  // API to be used by capture worker to render a spec
+  window.__renderChromaticSpec__ = renderSpec;
 }
 
 export default configure;

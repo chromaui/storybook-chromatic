@@ -101,27 +101,10 @@ function pluralize(n, noun, noNumber) {
 }
 
 let lastInProgressCount;
-// If we have a network error, retry up to 3 times
-// This is a temporary fix -- longer term let's do this: https://github.com/chromaui/chromatic/issues/1932
-let numberConsecutiveFailures = 0;
 async function waitForBuild(client, variables, { diffs }) {
-  let build;
-  try {
-    ({
-      app: { build },
-    } = await client.runQuery(TesterBuildQuery, variables));
-
-    // It worked, so reset the number of failures
-    numberConsecutiveFailures = 0;
-  } catch (err) {
-    numberConsecutiveFailures += 1;
-    debug(
-      `Error connecting to index, retrying for the ${numberConsecutiveFailures}th time: ${err.toString()}`
-    );
-    if (numberConsecutiveFailures >= 3) {
-      throw err;
-    }
-  }
+  const {
+    app: { build },
+  } = await client.runQuery(TesterBuildQuery, variables);
 
   debug(`build:${JSON.stringify(build)}`);
   const { status, inProgressCount, snapshotCount, changeCount, errorCount } = build;
@@ -227,7 +210,6 @@ async function prepareAppOrBuild({
 }) {
   if (dirname || buildScriptName) {
     let buildDirName = dirname;
-    let cleanup;
     if (buildScriptName) {
       log(`Building your storybook`);
       ({ name: buildDirName } = dirSync({ unsafeCleanup: true, prefix: `${names.script}-` }));
@@ -256,7 +238,7 @@ async function prepareAppOrBuild({
     debug(`uploading to s3, got ${isolatorUrl}`);
     log(`Uploaded your build, verifying`);
 
-    return { cleanup, isolatorUrl };
+    return { isolatorUrl };
   }
 
   let cleanup;
@@ -427,6 +409,7 @@ export default async function runTest({
   const client = new GraphQLClient({
     uri: `${indexUrl}/graphql`,
     headers: { 'x-chromatic-session-id': sessionId },
+    retries: 3,
   });
 
   if (!appCode) {
@@ -448,7 +431,7 @@ Pass your app code with the \`${names.envVar}\` environment variable or the \`--
     const { createAppToken: jwtToken } = await client.runQuery(TesterCreateAppTokenMutation, {
       appCode,
     });
-    client.setJwtToken(jwtToken);
+    client.headers = { ...client.headers, Authorization: `Bearer ${jwtToken}` };
   } catch (errors) {
     if (errors[0] && errors[0].message && errors[0].message.match('No app with code')) {
       throw new Error(`Incorrect app code '${appCode}'.
