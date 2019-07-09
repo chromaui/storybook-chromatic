@@ -12,32 +12,40 @@ let lastBuild;
 
 jest.mock('node-fetch', () => (url, { body }) => ({
   ok: true,
-  text: async () => {
+  json: async () => {
     const { query, variables } = JSON.parse(body);
+
     if (query.match('TesterCreateAppTokenMutation')) {
-      return JSON.stringify({
+      return {
         data: { createAppToken: 'token' },
-      });
+      };
     }
+
     if (query.match('TesterCreateBuildMutation')) {
       lastBuild = variables;
-      return JSON.stringify({
+      return {
         data: {
           createBuild: {
             number: 1,
             specCount: 1,
             componentCount: 1,
             webUrl: 'http://test.com',
+            app: {
+              account: {
+                features: { diffs: true },
+              },
+            },
           },
         },
-      });
+      };
     }
+
     if (query.match('TesterBuildQuery')) {
-      return JSON.stringify({
+      return {
         data: {
           app: { build: { status: 'BUILD_PENDING', changeCount: 1 } },
         },
-      });
+      };
     }
 
     throw new Error('Unknown Query');
@@ -67,7 +75,7 @@ jest.mock('./storybook', () => () => ({
   viewLayer: 'viewLayer',
 }));
 jest.mock('./upload-to-s3');
-jest.mock('./log');
+jest.mock('./log', () => () => jest.fn());
 
 let processEnv;
 beforeEach(() => {

@@ -15,17 +15,36 @@ import openTunnel from '../lib/tunnel';
 import { checkPackageJson, addScriptToPackageJson } from './package-json';
 import GraphQLClient from '../../../../lib/util/GraphQLClient';
 import { getBaselineCommits, getCommit, getBranch } from './git';
-import { version as packageVersion } from '../../package.json';
+import { name as packageName, version as packageVersion } from '../../package.json';
 import { CHROMATIC_INDEX_URL, CHROMATIC_TUNNEL_URL } from '../assets/environment';
 import sendDebugToLoggly from './sendDebugToLoggly';
 import uploadToS3 from './upload-to-s3';
-import log from './log';
+import makeLog from './log';
 
 const BUILD_POLL_INTERVAL = 1000;
 // We send up all environment variables provided by these complicated systems.
 // We don't want to send up *all* environment vars as they could include sensitive information
 // about the user's build environment
 const ENVIRONMENT_WHITELIST = [/^GERRIT/, /^TRAVIS/];
+
+const names =
+  packageName === 'storybook-chromatic'
+    ? {
+        product: 'Chromatic',
+        script: 'chromatic',
+        command: 'chromatic test',
+        envVar: 'CHROMATIC_APP_CODE',
+        url: 'https://www.chromaticqa.com',
+      }
+    : {
+        product: 'Chroma',
+        script: 'chroma',
+        command: 'chroma publish',
+        envVar: 'CHROMA_APP_CODE',
+        url: 'https://www.chromaui.com',
+      };
+
+const log = makeLog(names.product);
 
 const TesterCreateAppTokenMutation = `
   mutation TesterCreateAppTokenMutation($appCode: String!) {
@@ -42,6 +61,13 @@ const TesterCreateBuildMutation = `
       snapshotCount
       componentCount
       webUrl
+      app {
+        account {
+          features { 
+            diffs
+          }
+        }
+      }
     }
   }
 `;
@@ -75,27 +101,10 @@ function pluralize(n, noun, noNumber) {
 }
 
 let lastInProgressCount;
-// If we have a network error, retry up to 3 times
-// This is a temporary fix -- longer term let's do this: https://github.com/chromaui/chromatic/issues/1932
-let numberConsecutiveFailures = 0;
-async function waitForBuild(client, variables) {
-  let build;
-  try {
-    ({
-      app: { build },
-    } = await client.runQuery(TesterBuildQuery, variables));
-
-    // It worked, so reset the number of failures
-    numberConsecutiveFailures = 0;
-  } catch (err) {
-    numberConsecutiveFailures += 1;
-    debug(
-      `Error connecting to index, retrying for the ${numberConsecutiveFailures}th time: ${err.toString()}`
-    );
-    if (numberConsecutiveFailures >= 3) {
-      throw err;
-    }
-  }
+async function waitForBuild(client, variables, { diffs }) {
+  const {
+    app: { build },
+  } = await client.runQuery(TesterBuildQuery, variables);
 
   debug(`build:${JSON.stringify(build)}`);
   const { status, inProgressCount, snapshotCount, changeCount, errorCount } = build;
@@ -103,12 +112,14 @@ async function waitForBuild(client, variables) {
     if (inProgressCount !== lastInProgressCount) {
       lastInProgressCount = inProgressCount;
       log(
-        `${inProgressCount}/${pluralize(snapshotCount, 'snapshot')} remain to test. ` +
-          `(${pluralize(changeCount, 'change')}, ${pluralize(errorCount, 'error')})`
+        diffs
+          ? `${inProgressCount}/${pluralize(snapshotCount, 'snapshot')} remain to test. ` +
+              `(${pluralize(changeCount, 'change')}, ${pluralize(errorCount, 'error')})`
+          : `${inProgressCount}/${pluralize(snapshotCount, 'story')} remain to publish. `
       );
     }
     await new Promise(resolve => setTimeout(resolve, BUILD_POLL_INTERVAL));
-    return waitForBuild(client, variables);
+    return waitForBuild(client, variables, { diffs });
   }
 
   return build;
@@ -193,16 +204,16 @@ async function prepareAppOrBuild({
   buildScriptName,
   scriptName,
   commandName,
+  https,
   url,
   createTunnel,
   tunnelUrl,
 }) {
   if (dirname || buildScriptName) {
     let buildDirName = dirname;
-    let cleanup;
     if (buildScriptName) {
       log(`Building your storybook`);
-      ({ name: buildDirName, removeCallback: cleanup } = dirSync());
+      ({ name: buildDirName } = dirSync({ unsafeCleanup: true, prefix: `${names.script}-` }));
       debug(`Building storybook to ${buildDirName}`);
 
       const child = await startApp({
@@ -228,7 +239,7 @@ async function prepareAppOrBuild({
     debug(`uploading to s3, got ${isolatorUrl}`);
     log(`Uploaded your build, verifying`);
 
-    return { cleanup, isolatorUrl };
+    return { isolatorUrl };
   }
 
   let cleanup;
@@ -256,7 +267,7 @@ async function prepareAppOrBuild({
   let tunnel;
   let cleanupTunnel;
   try {
-    tunnel = await openTunnel({ tunnelUrl, port });
+    tunnel = await openTunnel({ tunnelUrl, port, https });
     cleanupTunnel = async () => {
       if (cleanup) {
         await cleanup();
@@ -370,6 +381,7 @@ export default async function runTest({
   scriptName,
   exec: commandName,
   noStart = false,
+  https,
   url,
   storybookBuildDir: dirname,
   only,
@@ -399,12 +411,17 @@ export default async function runTest({
   const client = new GraphQLClient({
     uri: `${indexUrl}/graphql`,
     headers: { 'x-chromatic-session-id': sessionId },
+    retries: 3,
   });
 
   if (!appCode) {
     throw new Error(
-      'You must provide an app code  -- visit https://www.chromaticqa.com to get your code.' +
-        `\nPass your app code with the \`CHROMATIC_APP_CODE\` environment variable or the \`--app-code\` flag.`
+      `You must provide an app code.
+
+If you don't have a project yet login to ${names.url} and create a new project.
+Or find your code on the manage page of an existing project.
+
+Pass your app code with the \`${names.envVar}\` environment variable or the \`--app-code\` flag.`
     );
   }
 
@@ -416,12 +433,13 @@ export default async function runTest({
     const { createAppToken: jwtToken } = await client.runQuery(TesterCreateAppTokenMutation, {
       appCode,
     });
-    client.setJwtToken(jwtToken);
+    client.headers = { ...client.headers, Authorization: `Bearer ${jwtToken}` };
   } catch (errors) {
     if (errors[0] && errors[0].message && errors[0].message.match('No app with code')) {
-      throw new Error(
-        `Incorrect app code '${appCode}' -- visit https://www.chromaticqa.com to get your code`
-      );
+      throw new Error(`Incorrect app code '${appCode}'.
+      
+If you don't have a project yet login to ${names.url} and create a new project.
+Or find your code on the manage page of an existing project.`);
     }
     throw errors;
   }
@@ -460,6 +478,7 @@ export default async function runTest({
     buildScriptName,
     scriptName,
     commandName,
+    https,
     url,
     createTunnel,
     tunnelUrl,
@@ -477,7 +496,18 @@ export default async function runTest({
     const environment = await getEnvironment();
 
     const {
-      createBuild: { number, snapshotCount, specCount, componentCount, webUrl },
+      createBuild: {
+        number,
+        snapshotCount,
+        specCount,
+        componentCount,
+        webUrl,
+        app: {
+          account: {
+            features: { diffs },
+          },
+        },
+      },
     } = await client.runQuery(TesterCreateBuildMutation, {
       input: {
         cachedUrl,
@@ -516,13 +546,15 @@ ${onlineHint}.`
       autoAcceptChanges: buildAutoAcceptChanges, // if it is the first build, this may have been set
       changeCount,
       errorCount,
-    } = await waitForBuild(client, {
-      buildNumber: number,
-    });
+    } = await waitForBuild(client, { buildNumber: number }, { diffs });
 
     switch (status) {
       case 'BUILD_PASSED':
-        log(`Build ${number} passed! ${onlineHint}.`);
+        log(
+          diffs
+            ? `Build ${number} passed! ${onlineHint}.`
+            : `Build ${number} published! ${onlineHint}.`
+        );
         exitCode = 0;
         break;
       // They may have sneakily looked at the build while we were waiting
@@ -538,7 +570,11 @@ ${onlineHint}.`
         }
         break;
       case 'BUILD_FAILED':
-        log(`Build ${number} has ${pluralize(errorCount, 'error')}. ${onlineHint}.`);
+        log(
+          diffs
+            ? `Build ${number} has ${pluralize(errorCount, 'error')}. ${onlineHint}.`
+            : `Build ${number} was published but we found errors. ${onlineHint}.`
+        );
         exitCode = 2;
         break;
       case 'BUILD_TIMED_OUT':
@@ -569,22 +605,28 @@ ${onlineHint}.`
   }
 
   if (!checkPackageJson() && originalArgv && !fromCI && interactive) {
-    const scriptCommand = `CHROMATIC_APP_CODE=${appCode} chromatic test ${originalArgv
+    const scriptCommand = `${names.envVar}=${appCode} ${names.command} ${originalArgv
       .slice(2)
       .join(' ')}`
       .replace(/--app-code[= ]\S+/, '')
       .trim();
 
     const confirmed = await confirm(
-      "\nYou have not added Chromatic's test script to your `package.json`. Would you like me to do it for you?"
+      `\nYou have not added the \`${
+        names.script
+      }\` script to your \`package.json\`. Would you like me to do it for you?`
     );
     if (confirmed) {
-      addScriptToPackageJson('chromatic', scriptCommand);
+      addScriptToPackageJson(names.script, scriptCommand);
       log(
         `
-Added script \`chromatic\`. You can now run it here or in CI with \`npm run chromatic\` (or \`yarn chromatic\`)
+Added script \`${names.script}\`. You can now run it here or in CI with \`npm run ${
+          names.script
+        }\` (or \`yarn ${names.script}\`)
 
-NOTE: I wrote your app code to the \`CHROMATIC_APP_CODE\` environment variable. The app code cannot be used to read snapshot data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from \`package.json\` and set it via an environment variable instead.`,
+NOTE: I wrote your app code to the \`${
+          names.envVar
+        }\` environment variable. The app code cannot be used to read story data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from \`package.json\` and set it via an environment variable instead.`,
         { noPrefix: true }
       );
     } else {
@@ -593,7 +635,7 @@ NOTE: I wrote your app code to the \`CHROMATIC_APP_CODE\` environment variable. 
 No problem. You can add it later with:
 {
   "scripts": {
-    "chromatic": "${scriptCommand}"
+    "${names.scriptName}": "${scriptCommand}"
   }
 }`,
         { noPrefix: true }
