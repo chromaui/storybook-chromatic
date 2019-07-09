@@ -11,20 +11,21 @@
     "dev": "../../node_modules/.bin/npm-run-all --parallel -l 'build:** -- --watch'"
   },
   "bin": {
-    "chromatic": "./dist/bin/chromatic.js"
+    "chromatic": "./dist/bin/chromatic.js",
+    "chroma": "./dist/bin/chroma.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.3.1",
-    "@chromaui/localtunnel": "1.9.1-chromatic.3",
+    "@chromaui/localtunnel": "1.10.0",
     "commander": "^2.9.0",
     "debug": "^3.0.1",
     "denodeify": "^1.2.1",
     "env-ci": "^2.1.0",
-    "isomorphic-fetch": "^2.2.1",
     "jsdom": "^11.5.1",
     "jsonfile": "^4.0.0",
     "minimatch": "^3.0.4",
     "node-ask": "^1.0.1",
+    "node-fetch": "^2.6.0",
     "node-loggly-bulk": "^2.2.4",
     "param-case": "^2.1.1",
     "progress": "^2.0.3",
