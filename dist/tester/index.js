@@ -218,7 +218,8 @@ async function prepareAppOrBuild({
 
       const child = await startApp({
         scriptName: buildScriptName,
-        args: ['--', '-o', buildDirName],
+        // Make storybook build as quiet as possible
+        args: ['--', '-o', buildDirName, '--quiet', '--loglevel', 'error'],
         inheritStdio: true,
       });
 
