@@ -1,10 +1,10 @@
 import path from 'path';
 import { readFileSync, writeFileSync } from 'jsonfile';
 
-export function checkPackageJson({ appDir = process.cwd() } = {}) {
+export function checkPackageJson({ command, appDir = process.cwd() } = {}) {
   const packageJson = readFileSync(path.resolve(appDir, './package.json'));
 
-  return Object.values(packageJson.scripts || {}).find(script => script.match('chromatic test'));
+  return Object.values(packageJson.scripts || {}).find(script => script.match(command));
 }
 
 export function addScriptToPackageJson(scriptName, scriptCommand, { appDir = process.cwd() } = {}) {

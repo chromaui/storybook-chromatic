@@ -605,7 +605,7 @@ ${onlineHint}.`
     }
   }
 
-  if (!checkPackageJson() && originalArgv && !fromCI && interactive) {
+  if (!checkPackageJson({ command: names.command }) && originalArgv && !fromCI && interactive) {
     const scriptCommand = `${names.envVar}=${appCode} ${names.command} ${originalArgv
       .slice(2)
       .join(' ')}`
