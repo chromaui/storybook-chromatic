@@ -167,7 +167,7 @@ var _default = function _default() {
           name: name,
           component: {
             name: kind,
-            displayName: kind.split('/').slice(-1)[0]
+            displayName: kind.split(/\||\/|\./).slice(-1)[0]
           },
           parameters: parameters
         };
