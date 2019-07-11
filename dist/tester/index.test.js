@@ -30,6 +30,11 @@ jest.mock('node-fetch', () => (url, { body }) => ({
             specCount: 1,
             componentCount: 1,
             webUrl: 'http://test.com',
+            app: {
+              account: {
+                features: { diffs: true },
+              },
+            },
           },
         },
       };
@@ -70,7 +75,7 @@ jest.mock('./storybook', () => () => ({
   viewLayer: 'viewLayer',
 }));
 jest.mock('./upload-to-s3');
-jest.mock('./log');
+jest.mock('./log', () => () => jest.fn());
 
 let processEnv;
 beforeEach(() => {
