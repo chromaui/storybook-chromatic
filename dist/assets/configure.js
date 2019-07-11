@@ -9,11 +9,13 @@ exports.default = void 0;
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
-var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
+var _objectSpread3 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
 
 var _client = require("@storybook/core/client");
 
@@ -29,7 +31,7 @@ if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
 
 var _default = function _default() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  return (0, _client2.default)((0, _objectSpread2.default)({
+  return (0, _client2.default)((0, _objectSpread3.default)({
     renderSpec: function () {
       var _renderSpec = (0, _asyncToGenerator2.default)(
       /*#__PURE__*/
@@ -157,13 +159,9 @@ var _default = function _default() {
             name: kind,
             displayName: kind.split('/').slice(-1)[0]
           },
-          parameters: chromatic && {
-            viewports: param(chromatic.viewports),
-            delay: param(chromatic.delay),
-            disable: param(chromatic.disable),
-            noScroll: param(chromatic.noScroll),
-            diffThreshold: param(chromatic.diffThreshold)
-          }
+          parameters: chromatic && ['viewports', 'delay', 'disable', 'noScroll', 'diffThreshold'].reduce(function (acc, key) {
+            return chromatic[key] ? (0, _objectSpread3.default)({}, acc, (0, _defineProperty2.default)({}, key, param(chromatic[key]))) : acc;
+          }, {})
         };
       } // Storybook 5+ API
 
