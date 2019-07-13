@@ -162,7 +162,10 @@ function addShimsToJSDOM(dom) {
   mockCanvas(dom.window);
 }
 
-export default async function getRuntimeSpecs(url, { verbose = false } = {}) {
+export default async function getRuntimeSpecs(
+  url,
+  { verbose = false, names: { product, packageName } } = {}
+) {
   const logs = [];
   const virtualConsole = new VirtualConsole();
   Object.keys(console).forEach(logType => {
@@ -200,9 +203,9 @@ export default async function getRuntimeSpecs(url, { verbose = false } = {}) {
 
         if (!dom.window.__chromaticRuntimeSpecs__) {
           console.error(
-            `Didn't find Chromatic addon in your storybook.
+            `Didn't find ${product} addon in your storybook.
         
-Did you add it with \`import 'storybook-chromatic'\` in your \`.storybook/config.js\`?
+Did you add it with \`import '${packageName}'\` in your \`.storybook/config.js\`?
 
 Read more: http://docs.chromaticqa.com`
           );

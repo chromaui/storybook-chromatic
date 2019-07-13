@@ -31,6 +31,7 @@ const names =
   packageName === 'storybook-chromatic'
     ? {
         product: 'Chromatic',
+        packageName: 'storybook-chromatic',
         script: 'chromatic',
         command: 'chromatic test',
         envVar: 'CHROMATIC_APP_CODE',
@@ -38,6 +39,7 @@ const names =
       }
     : {
         product: 'Chroma',
+        packageName: 'storybook-chroma',
         script: 'chroma',
         command: 'chroma publish',
         envVar: 'CHROMA_APP_CODE',
@@ -219,7 +221,7 @@ async function prepareAppOrBuild({
       const child = await startApp({
         scriptName: buildScriptName,
         // Make storybook build as quiet as possible
-        args: ['--', '-o', buildDirName, '--quiet', '--loglevel', 'error'],
+        args: ['--', '-o', buildDirName, '--loglevel', 'error'],
         inheritStdio: true,
       });
 
@@ -345,7 +347,7 @@ async function getStoriesAndInfo({ only, list, isolatorUrl, verbose }) {
       return story;
     };
   }
-  const runtimeSpecs = (await getRuntimeSpecs(isolatorUrl, { verbose }))
+  const runtimeSpecs = (await getRuntimeSpecs(isolatorUrl, { verbose, names }))
     .map(listStory)
     .filter(predicate);
 
@@ -636,7 +638,7 @@ NOTE: I wrote your app code to the \`${
 No problem. You can add it later with:
 {
   "scripts": {
-    "${names.scriptName}": "${scriptCommand}"
+    "${names.script}": "${scriptCommand}"
   }
 }`,
         { noPrefix: true }
