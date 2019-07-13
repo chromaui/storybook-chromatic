@@ -219,7 +219,7 @@ async function prepareAppOrBuild({
       const child = await startApp({
         scriptName: buildScriptName,
         // Make storybook build as quiet as possible
-        args: ['--', '-o', buildDirName, '--quiet', '--loglevel', 'error'],
+        args: ['--', '-o', buildDirName, '--loglevel', 'error'],
         inheritStdio: true,
       });
 
@@ -636,7 +636,7 @@ NOTE: I wrote your app code to the \`${
 No problem. You can add it later with:
 {
   "scripts": {
-    "${names.scriptName}": "${scriptCommand}"
+    "${names.script}": "${scriptCommand}"
   }
 }`,
         { noPrefix: true }
