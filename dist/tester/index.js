@@ -31,6 +31,7 @@ const names =
   packageName === 'storybook-chromatic'
     ? {
         product: 'Chromatic',
+        packageName: 'storybook-chromatic',
         script: 'chromatic',
         command: 'chromatic test',
         envVar: 'CHROMATIC_APP_CODE',
@@ -38,6 +39,7 @@ const names =
       }
     : {
         product: 'Chroma',
+        packageName: 'storybook-chroma',
         script: 'chroma',
         command: 'chroma publish',
         envVar: 'CHROMA_APP_CODE',
@@ -345,7 +347,7 @@ async function getStoriesAndInfo({ only, list, isolatorUrl, verbose }) {
       return story;
     };
   }
-  const runtimeSpecs = (await getRuntimeSpecs(isolatorUrl, { verbose }))
+  const runtimeSpecs = (await getRuntimeSpecs(isolatorUrl, { verbose, names }))
     .map(listStory)
     .filter(predicate);
 
