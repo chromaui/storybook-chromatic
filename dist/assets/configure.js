@@ -158,7 +158,7 @@ var _default = function _default() {
           name: name,
           component: {
             name: kind,
-            displayName: kind.split('/').slice(-1)[0]
+            displayName: kind.split(/\||\/|\./).slice(-1)[0]
           },
           parameters: chromatic && ['viewports', 'delay', 'disable', 'noScroll', 'diffThreshold'].reduce(function (acc, key) {
             return chromatic[key] ? (0, _objectSpread3.default)({}, acc, (0, _defineProperty2.default)({}, key, param(chromatic[key]))) : acc;
