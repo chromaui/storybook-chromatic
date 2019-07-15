@@ -20,7 +20,7 @@ export default function sendDebugToLoggly({ sessionId }) {
   // Is the user debugging already? If so they will get what we want to debug :shrug:
   const isDebugging = !!process.env.DEBUG;
 
-  debug.enable('*,-babel');
+  debug.enable('storybook-chromatic:*,localtunnel:*');
 
   debug.log = (...args) => {
     const msg = format(...args);
