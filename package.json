@@ -25,6 +25,7 @@
     "debug": "^3.0.1",
     "denodeify": "^1.2.1",
     "env-ci": "^2.1.0",
+    "fake-tag": "^1.0.0",
     "jsdom": "^11.5.1",
     "jsonfile": "^4.0.0",
     "minimatch": "^3.0.4",
