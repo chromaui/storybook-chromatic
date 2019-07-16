@@ -249,7 +249,7 @@ async function prepareAppOrBuild({
   if (!noStart) {
     log(`Starting storybook`);
     const child = await startApp({ scriptName, commandName, url });
-    cleanup = async () => denodeify(kill)(child.pid, 'SIGHUP');
+    cleanup = child && (async () => denodeify(kill)(child.pid, 'SIGHUP'));
     log(`Started storybook at ${url}`);
   } else if (url) {
     if (!(await checkResponse(url))) {
