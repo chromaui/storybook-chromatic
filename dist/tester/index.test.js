@@ -6,38 +6,48 @@ import { version as packageVersion } from '../../package.json';
 import startApp, { checkResponse } from './start-app';
 import openTunnel from '../lib/tunnel';
 import getRuntimeSpecs from './runtimes';
+import uploadToS3 from './upload-to-s3';
 
 let lastBuild;
 
 jest.mock('node-fetch', () => (url, { body }) => ({
   ok: true,
-  text: async () => {
+  json: async () => {
     const { query, variables } = JSON.parse(body);
+
     if (query.match('TesterCreateAppTokenMutation')) {
-      return JSON.stringify({
+      return {
         data: { createAppToken: 'token' },
-      });
+      };
     }
+
     if (query.match('TesterCreateBuildMutation')) {
       lastBuild = variables;
-      return JSON.stringify({
+      return {
         data: {
           createBuild: {
             number: 1,
             specCount: 1,
             componentCount: 1,
             webUrl: 'http://test.com',
+            app: {
+              account: {
+                features: { diffs: true },
+              },
+            },
           },
         },
-      });
+      };
     }
+
     if (query.match('TesterBuildQuery')) {
-      return JSON.stringify({
+      return {
         data: {
           app: { build: { status: 'BUILD_PENDING', changeCount: 1 } },
         },
-      });
+      };
     }
+
     throw new Error('Unknown Query');
   },
 }));
@@ -61,16 +71,18 @@ jest.mock('../lib/tunnel');
 
 jest.mock('./package-json');
 jest.mock('./storybook', () => () => ({
-  storybookVersion: 'storybookVersion',
+  storybookVersion: '5.1.0',
   viewLayer: 'viewLayer',
 }));
+jest.mock('./upload-to-s3');
+jest.mock('./log', () => () => jest.fn());
 
 let processEnv;
 beforeEach(() => {
   processEnv = process.env;
   process.env = { DISABLE_LOGGING: true };
   confirm.mockReset();
-  startApp.mockReset();
+  startApp.mockReset().mockReturnValue({ on: jest.fn() });
   checkResponse.mockReset();
   openTunnel.mockReset().mockReturnValue({
     url: 'http://tunnel.com/?clientId=foo',
@@ -106,7 +118,7 @@ it('runs in simple situations', async () => {
       fromCI: false,
       isTravisPrBuild: false,
       packageVersion,
-      storybookVersion: 'storybookVersion',
+      storybookVersion: '5.1.0',
       viewLayer: 'viewLayer',
       committerEmail: 'test@test.com',
       committerName: 'tester',
@@ -242,14 +254,48 @@ it('calls out to npm script passed', async () => {
   expect(startApp).toHaveBeenCalledWith({
     scriptName: 'storybook',
     url: 'http://localhost:1337/iframe.html',
+    args: ['--', '--ci'],
   });
+});
+
+it('calls out to npm build script passed and uploads to s3', async () => {
+  startApp.mockReturnValueOnce({
+    on: jest.fn().mockImplementation((event, cb) => {
+      if (event === 'close') {
+        cb(0);
+      }
+    }),
+  });
+  await runTest({
+    ...defaultOptions,
+    scriptName: null,
+    buildScriptName: 'build-storybook',
+    noStart: true,
+  });
+  expect(startApp).toHaveBeenCalledWith(
+    expect.objectContaining({
+      scriptName: 'build-storybook',
+    })
+  );
+  expect(uploadToS3).toHaveBeenCalled();
+});
+
+it('uploads to s3 if storybookBuildDir passed', async () => {
+  await runTest({
+    ...defaultOptions,
+    scriptName: null,
+    storybookBuildDir: 'dirname',
+    noStart: true,
+  });
+  expect(startApp).not.toHaveBeenCalled();
+  expect(uploadToS3).toHaveBeenCalledWith(expect.objectContaining({ dirname: 'dirname' }));
 });
 
 it('calls out to command passed', async () => {
   await runTest({
     ...defaultOptions,
     scriptName: undefined,
-    commandName: 'run something',
+    exec: 'run something',
   });
   expect(startApp).toHaveBeenCalledWith({
     commandName: 'run something',

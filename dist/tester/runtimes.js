@@ -115,10 +115,57 @@ function addShimsToJSDOM(dom) {
     writable: true,
   });
 
+  class IntlMock {
+    static supportedLocalesOf() {
+      return [];
+    }
+
+    resolvedOptions() {
+      return {};
+    }
+  }
+  class IntlFormatMock extends IntlMock {
+    format() {
+      return '';
+    }
+
+    formatToParts() {
+      return [];
+    }
+  }
+  class IntlCollatorMock extends IntlMock {
+    compare() {
+      return 0;
+    }
+  }
+  class IntlPluralRulesMock extends IntlMock {
+    select() {
+      return '';
+    }
+  }
+  class IntlDateTimeFormatMock extends IntlFormatMock {}
+  class IntlListFormatMock extends IntlFormatMock {}
+  class IntlNumberFormatMock extends IntlFormatMock {}
+  class IntlRelativeTimeFormatMock extends IntlFormatMock {}
+  Object.defineProperty(dom.window, 'Intl', {
+    value: {
+      Collator: IntlCollatorMock,
+      DateTimeFormat: IntlDateTimeFormatMock,
+      ListFormat: IntlListFormatMock,
+      NumberFormat: IntlNumberFormatMock,
+      PluralRules: IntlPluralRulesMock,
+      RelativeTimeFormat: IntlRelativeTimeFormatMock,
+    },
+    writable: true,
+  });
+
   mockCanvas(dom.window);
 }
 
-export default async function getRuntimeSpecs(url, { verbose = false } = {}) {
+export default async function getRuntimeSpecs(
+  url,
+  { verbose = false, names: { product, packageName } } = {}
+) {
   const logs = [];
   const virtualConsole = new VirtualConsole();
   Object.keys(console).forEach(logType => {
@@ -156,9 +203,9 @@ export default async function getRuntimeSpecs(url, { verbose = false } = {}) {
 
         if (!dom.window.__chromaticRuntimeSpecs__) {
           console.error(
-            `Didn't find Chromatic addon in your storybook.
+            `Didn't find ${product} addon in your storybook.
         
-Did you add it with \`import 'storybook-chromatic'\` in your \`.storybook/config.js\`?
+Did you add it with \`import '${packageName}'\` in your \`.storybook/config.js\`?
 
 Read more: http://docs.chromaticqa.com`
           );

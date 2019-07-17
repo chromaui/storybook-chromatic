@@ -1,13 +1,15 @@
 import { spawn } from 'child_process';
-import fetch from 'isomorphic-fetch';
+import https from 'https';
+import fetch from 'node-fetch';
 import path from 'path';
 
 const CHECK_EVERY = 1000;
 const TIMEOUT = 5 * 60 * 1000;
+const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
 export async function checkResponse(url) {
   try {
-    await fetch(url);
+    await fetch(url, { agent: url.startsWith('https:') ? httpsAgent : undefined });
     return true;
   } catch (e) {
     return false;
@@ -52,7 +54,13 @@ async function waitForResponse(child, url) {
   });
 }
 
-export default async function startApp({ scriptName, commandName, url }) {
+export default async function startApp({
+  scriptName,
+  commandName,
+  args = [],
+  url,
+  inheritStdio = false,
+}) {
   const env = {
     ...process.env,
     NODE_ENV: 'development',
@@ -74,8 +82,9 @@ export default async function startApp({ scriptName, commandName, url }) {
     // Run either:
     //   npm/yarn run scriptName (depending on npm_execpath)
     //   node path/to/npm.js run scriptName (if npm run via node)
-    child = spawn(execPath, [...(npmPathIsJs ? [npmPath] : []), 'run', scriptName], {
+    child = spawn(execPath, [...(npmPathIsJs ? [npmPath] : []), 'run', scriptName, ...args], {
       env,
+      ...(inheritStdio && { stdio: 'inherit' }),
     });
   } else {
     if (!commandName) {
@@ -84,6 +93,9 @@ export default async function startApp({ scriptName, commandName, url }) {
     child = spawn(commandName, { env, shell: true });
   }
 
-  await waitForResponse(child, url);
+  if (url) {
+    await waitForResponse(child, url);
+  }
+
   return child;
 }
