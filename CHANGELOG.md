@@ -1,3 +1,11 @@
+# 2.0.0 - 2019-07-17
+
+- We now default to building and uploading your storybook, rather than starting and tunneling it. This has many benefits including increased reliability and better support for Live View. You'll need to ensure you have a `build-storybook` script defined in `package.json` (as added by the Storybook CLI). To get the old behaviour, pass `-s` to the `chromatic test` command.
+
+- We now support HTTPS storybooks (using the `--ssl` flag and friends).
+
+- We polyfill the `Intl` in our JSDOM environment.
+
 # 1.4.0 - 2019-06-20
 
 - Retry requests to the API server if one fails rather than bailing out on builds.
