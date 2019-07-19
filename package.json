@@ -1,6 +1,6 @@
 {
   "name": "storybook-chromatic",
-  "version": "1.4.1-dev",
+  "version": "2.0.1-dev",
   "description": "Visual Testing for Storybook",
   "scripts": {
     "prebuild": "rm -rf ./dist",
@@ -36,6 +36,7 @@
     "pino": "4.10.2",
     "progress": "^2.0.3",
     "progress-stream": "^2.0.0",
+    "semver": "^6.2.0",
     "strip-color": "^0.1.0",
     "tmp": "^0.1.0",
     "tree-kill": "^1.1.0",
