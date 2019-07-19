@@ -13,9 +13,9 @@ export default async function openTunnel({ tunnelUrl, port, https }) {
     local_host: 'localhost',
     host: tunnelUrl,
     https: !!https,
-    cert: https.cert,
-    key: https.key,
-    ca: https.ca,
+    cert: https && https.cert,
+    key: https && https.key,
+    ca: https && https.ca,
   });
 
   // The ones that are commented out are debugged already by our localtunnel fork

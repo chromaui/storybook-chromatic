@@ -7,6 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { parse, format } from 'url';
 import minimatch from 'minimatch';
 import { dirSync } from 'tmp';
+import { gte } from 'semver';
 
 import getRuntimeSpecs from './runtimes';
 import getStorybookInfo from './storybook';
@@ -27,10 +28,16 @@ const BUILD_POLL_INTERVAL = 1000;
 // about the user's build environment
 const ENVIRONMENT_WHITELIST = [/^GERRIT/, /^TRAVIS/];
 
+const STORYBOOK_CLI_FLAGS_BY_VERSION = {
+  '--ci': '4.0.0',
+  '--loglevel': '5.1.0',
+};
+
 const names =
   packageName === 'storybook-chromatic'
     ? {
         product: 'Chromatic',
+        packageName: 'storybook-chromatic',
         script: 'chromatic',
         command: 'chromatic test',
         envVar: 'CHROMATIC_APP_CODE',
@@ -38,6 +45,7 @@ const names =
       }
     : {
         product: 'Chroma',
+        packageName: 'storybook-chroma',
         script: 'chroma',
         command: 'chroma publish',
         envVar: 'CHROMA_APP_CODE',
@@ -208,6 +216,7 @@ async function prepareAppOrBuild({
   url,
   createTunnel,
   tunnelUrl,
+  storybookVersion,
 }) {
   if (dirname || buildScriptName) {
     let buildDirName = dirname;
@@ -219,7 +228,15 @@ async function prepareAppOrBuild({
       const child = await startApp({
         scriptName: buildScriptName,
         // Make storybook build as quiet as possible
-        args: ['--', '-o', buildDirName, '--quiet', '--loglevel', 'error'],
+        args: [
+          '--',
+          '-o',
+          buildDirName,
+          ...(storybookVersion &&
+          gte(storybookVersion, STORYBOOK_CLI_FLAGS_BY_VERSION['--loglevel'])
+            ? ['--loglevel', 'error']
+            : []),
+        ],
         inheritStdio: true,
       });
 
@@ -246,8 +263,15 @@ async function prepareAppOrBuild({
   let cleanup;
   if (!noStart) {
     log(`Starting storybook`);
-    const child = await startApp({ scriptName, commandName, url });
-    cleanup = async () => denodeify(kill)(child.pid, 'SIGHUP');
+    const child = await startApp({
+      scriptName,
+      commandName,
+      url,
+      args: scriptName &&
+        storybookVersion &&
+        gte(storybookVersion, STORYBOOK_CLI_FLAGS_BY_VERSION['--ci']) && ['--', '--ci'],
+    });
+    cleanup = child && (async () => denodeify(kill)(child.pid, 'SIGHUP'));
     log(`Started storybook at ${url}`);
   } else if (url) {
     if (!(await checkResponse(url))) {
@@ -320,7 +344,7 @@ async function prepareAppOrBuild({
   };
 }
 
-async function getStoriesAndInfo({ only, list, isolatorUrl, verbose }) {
+async function getStories({ only, list, isolatorUrl, verbose }) {
   let predicate = () => true;
   if (only) {
     const match = only.match(/(.*):([^:]*)/);
@@ -345,7 +369,7 @@ async function getStoriesAndInfo({ only, list, isolatorUrl, verbose }) {
       return story;
     };
   }
-  const runtimeSpecs = (await getRuntimeSpecs(isolatorUrl, { verbose }))
+  const runtimeSpecs = (await getRuntimeSpecs(isolatorUrl, { verbose, names }))
     .map(listStory)
     .filter(predicate);
 
@@ -355,13 +379,7 @@ async function getStoriesAndInfo({ only, list, isolatorUrl, verbose }) {
 
   log(`Found ${pluralize(runtimeSpecs.length, 'story')}`);
 
-  const { storybookVersion, viewLayer } = getStorybookInfo();
-
-  debug(
-    `Detected package version:${packageVersion}, storybook version:${storybookVersion}, view layer: ${viewLayer}`
-  );
-
-  return { runtimeSpecs, storybookVersion, viewLayer };
+  return runtimeSpecs;
 }
 
 async function getEnvironment() {
@@ -471,8 +489,14 @@ Or find your code on the manage page of an existing project.`);
   });
   debug(`Found baselineCommits: ${baselineCommits}`);
 
+  const { storybookVersion, viewLayer } = getStorybookInfo();
+  debug(
+    `Detected package version:${packageVersion}, storybook version:${storybookVersion}, view layer: ${viewLayer}`
+  );
+
   let exitCode = 5;
   const { cleanup, isolatorUrl, cachedUrl } = await prepareAppOrBuild({
+    storybookVersion,
     client,
     dirname,
     noStart,
@@ -488,12 +512,13 @@ Or find your code on the manage page of an existing project.`);
   log(`Uploading and verifying build (this may take a few minutes depending on your connection)`);
 
   try {
-    const { runtimeSpecs, storybookVersion, viewLayer } = await getStoriesAndInfo({
+    const runtimeSpecs = await getStories({
       only,
       list,
       isolatorUrl,
       verbose,
     });
+
     const environment = await getEnvironment();
 
     const {
@@ -636,7 +661,7 @@ NOTE: I wrote your app code to the \`${
 No problem. You can add it later with:
 {
   "scripts": {
-    "${names.scriptName}": "${scriptCommand}"
+    "${names.script}": "${scriptCommand}"
   }
 }`,
         { noPrefix: true }
