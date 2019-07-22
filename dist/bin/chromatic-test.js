@@ -215,18 +215,20 @@ function _executeTest() {
           case 8:
             _context.prev = 8;
             _context.t0 = _context["catch"](1);
+            // eslint-disable-next-line no-console
             console.error("**Chromatic build failed. Please note the session id: '".concat(sessionId, "' and contact support@hichroma.com -or- open a support ticket at https://chromaticqa.com**\n"));
 
             if (_context.t0.length) {
-              // eslint-disable-next-line no-console
               // This is a GraphQL Error, our server is reasonable
+              // eslint-disable-next-line no-console
               _context.t0.map(function (e) {
                 return console.error(e.message);
               });
             } else {
               // eslint-disable-next-line no-console
               console.error(_context.t0);
-            }
+            } // eslint-disable-next-line no-console
+
 
             console.log(); // Not sure what exit code to use but this can mean error.
 
