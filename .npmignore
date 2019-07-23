@@ -2,3 +2,5 @@ TRUE-README.md
 src
 *.stories.*
 *.test.*
+webpack.config.babel.js
+.eslintignore
