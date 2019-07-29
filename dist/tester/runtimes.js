@@ -159,6 +159,26 @@ function addShimsToJSDOM(dom) {
     writable: true,
   });
 
+  const customElements = {};
+  Object.defineProperty(dom.window, 'customElements', {
+    value: {
+      define: (name, constructor) => {
+        customElements[name] = customElements[name] || { resolvers: [] };
+        customElements[name].constructor = constructor;
+        customElements[name].resolvers.forEach(resolve => resolve());
+      },
+      get: name => customElements[name] && customElements[name].constructor,
+      upgrade: () => {},
+      whenDefined: name =>
+        new Promise(resolve => {
+          customElements[name] = customElements[name] || { resolvers: [] };
+          if (customElements[name].constructor) resolve();
+          else customElements[name].resolvers.push(resolve);
+        }),
+    },
+    writable: false,
+  });
+
   mockCanvas(dom.window);
 }
 
