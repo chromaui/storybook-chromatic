@@ -80,12 +80,6 @@ const TesterCreateBuildMutation = `
   }
 `;
 
-const TesterSkipBuildMutation = `
-  mutation TesterSkipBuildMutation($appId: ObjID, $commit: String!) {
-    skipBuild(appId: $appId, commit: $commit)
-  }
-`;
-
 const TesterBuildQuery = `
   query TesterBuildQuery($buildNumber: Int!) {
     app {
@@ -410,7 +404,6 @@ export default async function runTest({
   url,
   storybookBuildDir: dirname,
   only,
-  skip,
   list,
   fromCI: inputFromCI = false,
   autoAcceptChanges = false,
@@ -451,6 +444,10 @@ Pass your app code with the \`${names.envVar}\` environment variable or the \`--
     );
   }
 
+  if (!(buildScriptName || scriptName || commandName || noStart)) {
+    throw new Error('Either buildScriptName, scriptName, commandName or noStart is required');
+  }
+
   try {
     const { createAppToken: jwtToken } = await client.runQuery(TesterCreateAppTokenMutation, {
       appCode,
@@ -475,18 +472,6 @@ Or find your code on the manage page of an existing project.`);
     isTravisPrBuild,
     fromCI,
   } = await getCommitAndBranch({ inputFromCI });
-
-  if (skip) {
-    if (await client.runQuery(TesterSkipBuildMutation, { commit })) {
-      log(`Build skipped for commit ${commit}.`);
-      return 0;
-    }
-    throw new Error('Failed to skip build.');
-  }
-
-  if (!(buildScriptName || scriptName || commandName || noStart)) {
-    throw new Error('Either buildScriptName, scriptName, commandName or noStart is required');
-  }
 
   // These three options can be branch specific
   const doAutoAcceptChanges =
@@ -653,15 +638,21 @@ ${onlineHint}.`
       .trim();
 
     const confirmed = await confirm(
-      `\nYou have not added the \`${names.script}\` script to your \`package.json\`. Would you like me to do it for you?`
+      `\nYou have not added the \`${
+        names.script
+      }\` script to your \`package.json\`. Would you like me to do it for you?`
     );
     if (confirmed) {
       addScriptToPackageJson(names.script, scriptCommand);
       log(
         `
-Added script \`${names.script}\`. You can now run it here or in CI with \`npm run ${names.script}\` (or \`yarn ${names.script}\`)
+Added script \`${names.script}\`. You can now run it here or in CI with \`npm run ${
+          names.script
+        }\` (or \`yarn ${names.script}\`)
 
-NOTE: I wrote your app code to the \`${names.envVar}\` environment variable. The app code cannot be used to read story data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from \`package.json\` and set it via an environment variable instead.`,
+NOTE: I wrote your app code to the \`${
+          names.envVar
+        }\` environment variable. The app code cannot be used to read story data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from \`package.json\` and set it via an environment variable instead.`,
         { noPrefix: true }
       );
     } else {

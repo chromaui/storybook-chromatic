@@ -1,6 +1,5 @@
 import { execSync } from 'child_process';
 import setupDebug from 'debug';
-import gql from 'fake-tag';
 
 const debug = setupDebug('storybook-chromatic:tester:git');
 
@@ -37,7 +36,7 @@ Chromatic requires that you have created a commit before it can be run.
 
 export const FETCH_N_INITIAL_BUILD_COMMITS = 20;
 
-const TesterFirstCommittedAtQuery = gql`
+const TesterFirstCommittedAtQuery = `
   query TesterFirstCommittedAtQuery($branch: String!) {
     app {
       firstBuild(sortByCommittedAt: true) {
@@ -51,7 +50,7 @@ const TesterFirstCommittedAtQuery = gql`
   }
 `;
 
-const TesterHasBuildsWithCommitsQuery = gql`
+const TesterHasBuildsWithCommitsQuery = `
   query TesterHasBuildsWithCommitsQuery($commits: [String!]!) {
     app {
       hasBuildsWithCommits(commits: $commits)
