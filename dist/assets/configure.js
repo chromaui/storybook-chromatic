@@ -9,11 +9,13 @@ exports.default = void 0;
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
-var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
+var _objectSpread3 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
 
 var _client = require("@storybook/core/client");
 
@@ -24,12 +26,13 @@ var _client2 = _interopRequireDefault(require("../client"));
 /* eslint-disable import/no-extraneous-dependencies, global-require */
 // eslint-disable-next-line no-restricted-globals
 if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
+  // eslint-disable-next-line no-console
   console.error("storybook-chromatic should be installed in your `.storybook/config.js`");
 }
 
 var _default = function _default() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  return (0, _client2.default)((0, _objectSpread2.default)({
+  return (0, _client2.default)((0, _objectSpread3.default)({
     renderSpec: function () {
       var _renderSpec = (0, _asyncToGenerator2.default)(
       /*#__PURE__*/
@@ -70,6 +73,9 @@ var _default = function _default() {
                   });
                   channel.on('storyThrewException', function (error) {
                     return reject(error);
+                  });
+                  channel.on('storyMissing', function () {
+                    return reject(new Error('storyMissing'));
                   });
                   channel.emit('setCurrentStory', {
                     storyId: storyId || (0, _client.toId)(kind, story)
@@ -141,26 +147,14 @@ var _default = function _default() {
             _ref2$parameters = _ref2.parameters;
         _ref2$parameters = _ref2$parameters === void 0 ? {} : _ref2$parameters;
         var chromatic = _ref2$parameters.chromatic;
-        var parameters;
 
-        if (chromatic) {
-          var viewports = chromatic.viewports,
-              delay = chromatic.delay,
-              disable = chromatic.disable,
-              noScroll = chromatic.noScroll,
-              diffThreshold = chromatic.diffThreshold;
-          parameters = (0, _objectSpread2.default)({}, viewports && {
-            viewports: viewports
-          }, delay && {
-            delay: delay
-          }, disable && {
-            disable: disable
-          }, noScroll && {
-            noScroll: noScroll
-          }, diffThreshold && {
-            diffThreshold: diffThreshold
-          });
-        }
+        var param = function param(value) {
+          return typeof value === 'function' ? value({
+            id: id,
+            kind: kind,
+            name: name
+          }) : value;
+        };
 
         return {
           storyId: id,
@@ -169,7 +163,9 @@ var _default = function _default() {
             name: kind,
             displayName: kind.split(/\||\/|\./).slice(-1)[0]
           },
-          parameters: parameters
+          parameters: chromatic && ['viewports', 'delay', 'disable', 'noScroll', 'diffThreshold'].reduce(function (acc, key) {
+            return chromatic[key] ? (0, _objectSpread3.default)({}, acc, (0, _defineProperty2.default)({}, key, param(chromatic[key]))) : acc;
+          }, {})
         };
       } // Storybook 5+ API
 
