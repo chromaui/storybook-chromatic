@@ -10,7 +10,9 @@
 
 - We now support HTTPS storybooks (using the `--ssl` flag and friends).
 
-- We polyfill the `Intl` in our JSDOM environment.
+- We polyfill `window.Intl` in our JSDOM environment.
+
+- We polyfill `window.customElements` in our JSDOM environment.
 
 # 1.4.0 - 2019-06-20
 
