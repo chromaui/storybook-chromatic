@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+
+/* eslint-disable no-console */
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -57,7 +59,7 @@ function findOption(storybookScript, shortName, longName) {
 }
 
 function parseArgv(argv) {
-  var commander = new _commander.Command().option('-a, --app-code <code>', 'the code for your app, get from chromaticqa.com').option('-b, --build-script-name [name]', 'The npm script that builds your storybook [build-storybook]').option('-d, --storybook-build-dir <dirname>', "Provide a directory with your built storybook; use if you've already built your storybook").option('-s, --script-name [name]', 'The npm script that starts your storybook [storybook]').option('-e, --exec <command>', 'Alternatively, a full command to run to start your storybook.').option('-S, --do-not-start', "Don't attempt to start or build; use if your storybook is already running").option('--storybook-https', 'Use if Storybook is running on https (auto detected from -s, if set)?').option('--storybook-cert <path>', 'Use if Storybook is running on https (auto detected from -s, if set)?').option('--storybook-key <path>', 'Use if Storybook is running on https (auto detected from -s, if set)?').option('--storybook-ca <ca>', 'Use if Storybook is running on https (auto detected from -s, if set)?').option('-p, --storybook-port <port>', 'What port is your Storybook running on (auto detected from -s, if set)?').option('-u, --storybook-url <url>', 'Storybook is already running at (external) url (implies -S)').option('--ci', 'This build is running on CI, non-interactively (alternatively, pass CI=true)').option('--auto-accept-changes [branch]', 'Accept any (non-error) changes or new stories for this build [only for <branch> if specified]').option('--exit-zero-on-changes [branch]', "Use a 0 exit code if changes are detected (i.e. don't stop the build) [only for <branch> if specified]").option('--ignore-last-build-on-branch [branch]', 'Do not use the last build on this branch as a baseline if it is no longer in history (i.e. branch was rebased) [only for <branch> if specified]').option('--preserve-missing', 'Treat missing stories as unchanged (as opposed to deleted) when comparing to the baseline').option('--no-interactive', 'Do not prompt for package.json changes').option('--only <component:story>', 'Only run a single story or a glob-style subset of stories (for debugging purposes)').option('--list', 'List available stories (for debugging purposes)').option('--debug', 'Output more debugging information') // We keep this for back compat it does nothing (ie. it is the default)
+  var commander = new _commander.Command().option('-a, --app-code <code>', 'the code for your app, get from chromaticqa.com').option('-b, --build-script-name [name]', 'The npm script that builds your storybook [build-storybook]').option('-d, --storybook-build-dir <dirname>', "Provide a directory with your built storybook; use if you've already built your storybook").option('-s, --script-name [name]', 'The npm script that starts your storybook [storybook]').option('-e, --exec <command>', 'Alternatively, a full command to run to start your storybook.').option('-S, --do-not-start', "Don't attempt to start or build; use if your storybook is already running").option('--storybook-https', 'Use if Storybook is running on https (auto detected from -s, if set)?').option('--storybook-cert <path>', 'Use if Storybook is running on https (auto detected from -s, if set)?').option('--storybook-key <path>', 'Use if Storybook is running on https (auto detected from -s, if set)?').option('--storybook-ca <ca>', 'Use if Storybook is running on https (auto detected from -s, if set)?').option('-p, --storybook-port <port>', 'What port is your Storybook running on (auto detected from -s, if set)?').option('-u, --storybook-url <url>', 'Storybook is already running at (external) url (implies -S)').option('--ci', 'This build is running on CI, non-interactively (alternatively, pass CI=true)').option('--auto-accept-changes [branch]', 'Accept any (non-error) changes or new stories for this build [only for <branch> if specified]').option('--exit-zero-on-changes [branch]', "Use a 0 exit code if changes are detected (i.e. don't stop the build) [only for <branch> if specified]").option('--ignore-last-build-on-branch [branch]', 'Do not use the last build on this branch as a baseline if it is no longer in history (i.e. branch was rebased) [only for <branch> if specified]').option('--preserve-missing', 'Treat missing stories as unchanged (as opposed to deleted) when comparing to the baseline').option('--no-interactive', 'Do not prompt for package.json changes').option('--only <component:story>', 'Only run a single story or a glob-style subset of stories (for debugging purposes)').option('--skip', 'Skip chromatic tests (mark as passing)').option('--list', 'List available stories (for debugging purposes)').option('--debug', 'Output more debugging information') // We keep this for back compat it does nothing (ie. it is the default)
   .option('--storybook-addon', '(deprecated) use the storybook addon').parse(argv);
   var commanderOptions = {
     config: commander.config,
@@ -73,6 +75,7 @@ function parseArgv(argv) {
     port: commander.storybookPort,
     storybookUrl: commander.storybookUrl,
     storybookBuildDir: commander.storybookBuildDir,
+    skip: commander.skip,
     only: commander.only,
     list: commander.list,
     fromCI: !!commander.ci,
@@ -106,13 +109,13 @@ function parseArgv(argv) {
   if (singularCommands.length > 1) {
     throw new Error("Can only use one of ".concat(singularCommands.map(function (n) {
       return "--".concat((0, _paramCase.default)(n));
-    }).join(', ')));
-  } // Do we serve or build?
+    }).join(', '), "."));
+  } // No need to start or build Storybook if we're going to fetch from a URL
 
 
-  var serve = !!scriptName || exec || noStart || storybookUrl || port;
+  if (storybookUrl) noStart = true; // Build Storybook instead of starting it
 
-  if (!serve) {
+  if (!scriptName && !exec && !noStart && !storybookUrl && !port) {
     if (storybookBuildDir) {
       return (0, _objectSpread2.default)({}, commanderOptions, {
         noStart: true
@@ -120,32 +123,30 @@ function parseArgv(argv) {
     }
 
     buildScriptName = typeof buildScriptName === 'string' ? buildScriptName : 'build-storybook';
-    var buildScript = packageJson.scripts && packageJson.scripts[buildScriptName];
 
-    if (!buildScript) {
-      throw new Error("Chromatic Tester: Didn't find a script called '".concat(buildScriptName, "' in your `package.json`.\n") + 'Make sure you set the `--build-script-name` option to the value of the npm script that builds your storybook');
+    if (packageJson.scripts && packageJson.scripts[buildScriptName]) {
+      return (0, _objectSpread2.default)({}, commanderOptions, {
+        noStart: true,
+        buildScriptName: buildScriptName
+      });
     }
 
-    return (0, _objectSpread2.default)({}, commanderOptions, {
-      noStart: true,
-      buildScriptName: buildScriptName
-    });
-  }
+    throw new Error("Didn't find a script called '".concat(buildScriptName, "' in your `package.json`.\n") + 'Make sure you set the `--build-script-name` option to the value of the npm script that builds your Storybook.');
+  } // Start Storybook on localhost and generate the URL to it
 
-  if (storybookUrl) {
-    noStart = true;
-  } else {
-    if (exec) {
-      if (!port) {
-        throw new Error("You must pass a port with the --storybook-port option when using --exec.");
-      } // If you don't provide a port or we need to start the command, let's look it up
 
-    } else if (!noStart || !port) {
+  if (!storybookUrl) {
+    if (exec && !port) {
+      throw new Error("You must pass a port with the --storybook-port option when using --exec.");
+    }
+
+    if (!exec && (!port || !noStart)) {
+      // If you don't provide a port or we need to start the command, let's look up the script for it
       scriptName = typeof scriptName === 'string' ? scriptName : 'storybook';
       var storybookScript = packageJson.scripts && packageJson.scripts[scriptName];
 
       if (!storybookScript) {
-        throw new Error("Chromatic Tester: Didn't find a script called '".concat(scriptName, "' in your `package.json`.\n") + 'Make sure you set the `--script-name` option to the value of the npm script that starts your storybook');
+        throw new Error("Didn't find a script called '".concat(scriptName, "' in your `package.json`.\n") + 'Make sure you set the `--script-name` option to the value of the npm script that starts your Storybook.');
       }
 
       https = https || findOption(storybookScript, '--https') && {
@@ -157,10 +158,9 @@ function parseArgv(argv) {
 
       if (!port) {
         throw new Error("Didn't detect a port in your '".concat(scriptName, "' script. You must pass a port with the --storybook-port option."));
-      } // eslint-disable-next-line no-console
+      }
 
-
-      console.log("Chromatic Tester: Detected '".concat(scriptName, "' script, running with inferred options:\n    --script-name=").concat(scriptName, " --storybook-port=").concat(port, "\n  Override any of the above if they were inferred incorrectly.\n  "));
+      console.log("Detected '".concat(scriptName, "' script, running with inferred options:\n    --script-name=").concat(scriptName, " --storybook-port=").concat(port, "\n  Override any of the above if they were inferred incorrectly.\n  "));
     }
 
     storybookUrl = "".concat(https ? 'https' : 'http', "://localhost:").concat(port);

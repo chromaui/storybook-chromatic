@@ -74,6 +74,9 @@ var _default = function _default() {
                   channel.on('storyThrewException', function (error) {
                     return reject(error);
                   });
+                  channel.on('storyMissing', function () {
+                    return reject(new Error('storyMissing'));
+                  });
                   channel.emit('setCurrentStory', {
                     storyId: storyId || (0, _client.toId)(kind, story)
                   });
