@@ -1,6 +1,6 @@
 {
   "name": "storybook-chromatic",
-  "version": "2.1.1-dev",
+  "version": "2.1.1",
   "description": "Visual Testing for Storybook",
   "scripts": {
     "prebuild": "rm -rf ./dist",
