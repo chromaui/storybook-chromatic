@@ -71,7 +71,7 @@ jest.mock('../lib/tunnel');
 
 jest.mock('./package-json');
 jest.mock('./storybook', () => () => ({
-  storybookVersion: 'storybookVersion',
+  storybookVersion: '5.1.0',
   viewLayer: 'viewLayer',
 }));
 jest.mock('./upload-to-s3');
@@ -118,7 +118,7 @@ it('runs in simple situations', async () => {
       fromCI: false,
       isTravisPrBuild: false,
       packageVersion,
-      storybookVersion: 'storybookVersion',
+      storybookVersion: '5.1.0',
       viewLayer: 'viewLayer',
       committerEmail: 'test@test.com',
       committerName: 'tester',
@@ -254,6 +254,7 @@ it('calls out to npm script passed', async () => {
   expect(startApp).toHaveBeenCalledWith({
     scriptName: 'storybook',
     url: 'http://localhost:1337/iframe.html',
+    args: ['--', '--ci'],
   });
 });
 

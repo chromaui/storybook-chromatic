@@ -159,10 +159,33 @@ function addShimsToJSDOM(dom) {
     writable: true,
   });
 
+  const customElements = {};
+  Object.defineProperty(dom.window, 'customElements', {
+    value: {
+      define: (name, constructor) => {
+        customElements[name] = customElements[name] || { resolvers: [] };
+        customElements[name].constructor = constructor;
+        customElements[name].resolvers.forEach(resolve => resolve());
+      },
+      get: name => customElements[name] && customElements[name].constructor,
+      upgrade: () => {},
+      whenDefined: name =>
+        new Promise(resolve => {
+          customElements[name] = customElements[name] || { resolvers: [] };
+          if (customElements[name].constructor) resolve();
+          else customElements[name].resolvers.push(resolve);
+        }),
+    },
+    writable: false,
+  });
+
   mockCanvas(dom.window);
 }
 
-export default async function getRuntimeSpecs(url, { verbose = false } = {}) {
+export default async function getRuntimeSpecs(
+  url,
+  { verbose = false, names: { product, packageName } } = {}
+) {
   const logs = [];
   const virtualConsole = new VirtualConsole();
   Object.keys(console).forEach(logType => {
@@ -200,9 +223,9 @@ export default async function getRuntimeSpecs(url, { verbose = false } = {}) {
 
         if (!dom.window.__chromaticRuntimeSpecs__) {
           console.error(
-            `Didn't find Chromatic addon in your Storybook.
+            `Didn't find ${product} addon in your Storybook.
         
-Did you add it with \`import 'storybook-chromatic'\` in your \`.storybook/config.js\`?
+Did you add it with \`import '${packageName}'\` in your \`.storybook/config.js\`?
 
 Read more: http://docs.chromaticqa.com`
           );

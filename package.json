@@ -1,6 +1,6 @@
 {
   "name": "storybook-chromatic",
-  "version": "1.4.1-dev",
+  "version": "2.1.2-dev",
   "description": "Visual Testing for Storybook",
   "scripts": {
     "prebuild": "rm -rf ./dist",
@@ -19,11 +19,13 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.3.1",
-    "@chromaui/localtunnel": "1.10.0",
+    "@chromaui/localtunnel": "2.0.0",
+    "async-retry": "^1.1.4",
     "commander": "^2.9.0",
     "debug": "^3.0.1",
     "denodeify": "^1.2.1",
     "env-ci": "^2.1.0",
+    "fake-tag": "^1.0.0",
     "jsdom": "^11.5.1",
     "jsonfile": "^4.0.0",
     "minimatch": "^3.0.4",
@@ -31,8 +33,10 @@
     "node-fetch": "^2.6.0",
     "node-loggly-bulk": "^2.2.4",
     "param-case": "^2.1.1",
+    "pino": "4.10.2",
     "progress": "^2.0.3",
     "progress-stream": "^2.0.0",
+    "semver": "^6.2.0",
     "strip-color": "^0.1.0",
     "tmp": "^0.1.0",
     "tree-kill": "^1.1.0",

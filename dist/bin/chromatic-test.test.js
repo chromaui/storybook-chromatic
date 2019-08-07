@@ -54,8 +54,9 @@ it('picks up app-code from environment', function () {
   });
 });
 it('allows you to override defaults for boolean options', function () {
-  expect((0, _chromaticTest.parseArgv)(['node', 'chromatic-test', '--ci', '--do-not-start', '--auto-accept-changes', '--exit-zero-on-changes', '--debug', '--no-interactive'])).toMatchObject({
+  expect((0, _chromaticTest.parseArgv)(['node', 'chromatic-test', '--ci', '--do-not-start', '--auto-accept-changes', '--exit-zero-on-changes', '--skip', '--debug', '--no-interactive'])).toMatchObject({
     noStart: true,
+    skip: true,
     fromCI: true,
     autoAcceptChanges: true,
     exitZeroOnChanges: true,
