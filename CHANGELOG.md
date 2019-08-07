@@ -1,3 +1,7 @@
+# 2.1.1 - 2019-08-06
+
+- Upgrade `axios` dependency for security update
+
 # 2.1.0 - 2019-07-17
 
 - Add a `--skip` flag to indicate a commit is not going to be built (and still tag the PR as passing).
