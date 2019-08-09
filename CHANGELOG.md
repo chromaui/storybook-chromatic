@@ -1,10 +1,22 @@
+# 2.1.1 - 2019-08-06
+
+- Upgrade `axios` dependency for security update
+
+# 2.1.0 - 2019-07-17
+
+- Add a `--skip` flag to indicate a commit is not going to be built (and still tag the PR as passing).
+- Allow `chromatic` story parameters to be functions of `({ id, kind name })` -- in particular e.g. `chromatic: { viewport: () => [/*something dynamic based on story info */]}`
+- A fix for issues involving story listings differing between browsers.
+
 # 2.0.0 - 2019-07-17
 
 - We now default to building and uploading your storybook, rather than starting and tunneling it. This has many benefits including increased reliability and better support for Live View. You'll need to ensure you have a `build-storybook` script defined in `package.json` (as added by the Storybook CLI). To get the old behaviour, pass `-s` to the `chromatic test` command.
 
 - We now support HTTPS storybooks (using the `--ssl` flag and friends).
 
-- We polyfill the `Intl` in our JSDOM environment.
+- We polyfill `window.Intl` in our JSDOM environment.
+
+- We polyfill `window.customElements` in our JSDOM environment.
 
 # 1.4.0 - 2019-06-20
 
