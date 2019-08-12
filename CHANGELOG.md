@@ -24,11 +24,11 @@
 
 # 1.3.3 - 2019-04-19
 
-- Fixed issue with uploaded builds and storybook 5 URLs.
+- Fixed issue with uploaded builds and Storybook 5 URLs.
 
 # 1.3.2 - 2019-04-02
 
-- Added a new `diffThreshold` storybook parameter you can use to control the anti-aliasing threshold we use for diffing if you find that certain images are tripping our diff.
+- Added a new `diffThreshold` Storybook parameter you can use to control the anti-aliasing threshold we use for diffing if you find that certain images are tripping our diff.
 
 - Fix an issue with handling rebased branches in unusual CI systems.
 
@@ -40,7 +40,7 @@
 
 - Change the default behaviour around starting the storybook; if we find something running on the port, we assume it's your storybook, instead of requiring you to pass `-S/--do-not-start`.
 
-- Add a new flag `--preserve-missing` which means any stories that are missing from the last build will be assumed to be unchanged. Use this if you are doing tricky things around dynamically building your storybook based on code changes.
+- Add a new flag `--preserve-missing` which means any stories that are missing from the last build will be assumed to be unchanged. Use this if you are doing tricky things around dynamically building your Storybook based on code changes.
 
 # 1.2.6 - 2019-02-05
 
@@ -110,7 +110,7 @@
 
 - Renamed the package from `react-chromatic` to `storybook-chromatic`, to indicate support for all view layers that Storybook supports!
 
-- Tweaked to focus soley on storybook -- simply `import 'storybook-chromatic';` (no `/storybook-addon` required). Run tests with `chromatic test --app-code` (no `--storybook-addon` required).
+- Tweaked to focus soley on Storybook -- simply `import 'storybook-chromatic';` (no `/storybook-addon` required). Run tests with `chromatic test --app-code` (no `--storybook-addon` required).
 
 - Changed some URL parameters for the test command:
 
@@ -124,7 +124,7 @@
 
 - Small bug fixes for missing git repositories, various failure modes.
 
-- We now track your storybook version and view layer so we know when to ship/change features.
+- We now track your Storybook version and view layer so we know when to ship/change features.
 
 # As `react-chromatic`
 
@@ -168,7 +168,7 @@
 
 # 0.7.9 - 2018-01-23
 
-- Our test script now warns you if your storybook logs any errors. This can sometimes help reveal subtle problems that are caused by the script evaluating your storybook in JSDOM. If you have legitimate things logged to `console.error` this may cause noise---you should probably get rid of them.
+- Our test script now warns you if your Storybook logs any errors. This can sometimes help reveal subtle problems that are caused by the script evaluating your Storybook in JSDOM. If you have legitimate things logged to `console.error` this may cause noise---you should probably get rid of them.
 
 # 0.7.8 - 2018-01-18
 

@@ -80,6 +80,6 @@ export default async function uploadToS3({ client, dirname }) {
 
   await Promise.all(uploads);
 
-  // NOTE: storybook-specific
+  // NOTE: Storybook-specific
   return new URL('/iframe.html', domain).toString();
 }

@@ -1,4 +1,4 @@
-// Figure out the storybook version and view layer
+// Figure out the Storybook version and view layer
 
 const viewLayers = [
   'react',
@@ -19,7 +19,7 @@ const viewLayers = [
 const require2 = eval('require');
 
 export default function getStorybookInfo() {
-  // Allow setting storybook version via CHROMATIC_STORYBOOK_VERSION='react@4.0-alpha.8' for unusual
+  // Allow setting Storybook version via CHROMATIC_STORYBOOK_VERSION='react@4.0-alpha.8' for unusual
   // cases (such as our permacache examples)
   const { CHROMATIC_STORYBOOK_VERSION } = process.env;
   if (CHROMATIC_STORYBOOK_VERSION) {
@@ -41,6 +41,6 @@ export default function getStorybookInfo() {
   }
 
   throw new Error(
-    `Couldn't discover storybook version. Try upgrading the storybook-chromatic package?`
+    `Couldn't discover Storybook version. Try upgrading the storybook-chromatic package?`
   );
 }
