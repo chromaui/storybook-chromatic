@@ -340,7 +340,7 @@ it('passes the url directly to the build if noTunnel is set', async () => {
   });
 });
 
-it('stops the storybook if something goes wrong', async () => {
+it('stops the Storybook if something goes wrong', async () => {
   openTunnel.mockImplementation(() => {
     throw new Error('tunnel error');
   });

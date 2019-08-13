@@ -227,9 +227,9 @@ async function prepareAppOrBuild({
   if (dirname || buildScriptName) {
     let buildDirName = dirname;
     if (buildScriptName) {
-      log(`Building your storybook`);
+      log(`Building your Storybook`);
       ({ name: buildDirName } = dirSync({ unsafeCleanup: true, prefix: `${names.script}-` }));
-      debug(`Building storybook to ${buildDirName}`);
+      debug(`Building Storybook to ${buildDirName}`);
 
       const child = await startApp({
         scriptName: buildScriptName,
@@ -258,7 +258,7 @@ async function prepareAppOrBuild({
       });
     }
 
-    log(`Uploading your built storybook...`);
+    log(`Uploading your built Storybook...`);
     const isolatorUrl = await uploadToS3({ client, dirname: buildDirName });
     debug(`uploading to s3, got ${isolatorUrl}`);
     log(`Uploaded your build, verifying`);
@@ -268,7 +268,7 @@ async function prepareAppOrBuild({
 
   let cleanup;
   if (!noStart) {
-    log(`Starting storybook`);
+    log(`Starting Storybook`);
     const child = await startApp({
       scriptName,
       commandName,
@@ -278,12 +278,12 @@ async function prepareAppOrBuild({
         gte(storybookVersion, STORYBOOK_CLI_FLAGS_BY_VERSION['--ci']) && ['--', '--ci'],
     });
     cleanup = child && (async () => denodeify(kill)(child.pid, 'SIGHUP'));
-    log(`Started storybook at ${url}`);
+    log(`Started Storybook at ${url}`);
   } else if (url) {
     if (!(await checkResponse(url))) {
       throw new Error(`No server responding at ${url} -- make sure you've started it.`);
     }
-    log(`Detected storybook at ${url}`);
+    log(`Detected Storybook at ${url}`);
   }
 
   const { port, pathname, query, hash } = parse(url, true);
