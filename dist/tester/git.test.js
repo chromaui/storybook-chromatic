@@ -16,7 +16,7 @@ import twoRootsDescription from './utils/repositories/two-roots';
 
 // Bumping up the Jest timeout for this file because it is timing out sometimes
 // I think this just a bit of a slow file due to git stuff, takes ~2-3s on my computer.
-jest.setTimeout(10 * 1000);
+jest.setTimeout(30 * 1000);
 
 const descriptions = {
   simpleLoop: simpleLoopDescription,
