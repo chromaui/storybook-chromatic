@@ -1,11 +1,13 @@
 import setupDebug from 'debug';
 import { readdirSync, statSync, createReadStream } from 'fs';
-import fetch from 'node-fetch';
 import { join } from 'path';
 import { URL } from 'url';
 import progress from 'progress-stream';
 import ProgressBar from 'progress';
 
+import HTTPClient from '../../../../lib/util/HTTPClient';
+
+const RETRIES = 5;
 const debug = setupDebug('storybook-chromatic:tester:upload');
 
 const TesterGetUploadUrlsMutation = `
@@ -61,14 +63,18 @@ export default async function uploadToS3({ client, dirname }) {
     const { contentLength } = pathAndLengths.find(({ pathname }) => pathname === path);
     uploads.push(
       (async () => {
-        const res = await fetch(url, {
-          method: 'PUT',
-          body: createReadStream(pathWithDirname).pipe(progressStream),
-          headers: {
-            'content-type': contentType,
-            'content-length': contentLength,
+        const res = await HTTPClient.fetch(
+          url,
+          {
+            method: 'PUT',
+            body: createReadStream(pathWithDirname).pipe(progressStream),
+            headers: {
+              'content-type': contentType,
+              'content-length': contentLength,
+            },
           },
-        });
+          { retries: RETRIES }
+        );
 
         if (!res.ok) {
           debug(`Uploading '${path}' failed: %O`, res);
