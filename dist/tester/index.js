@@ -504,9 +504,11 @@ Or find your code on the manage page of an existing project.`);
   });
   debug(`Found baselineCommits: ${baselineCommits}`);
 
-  const { storybookVersion, viewLayer } = getStorybookInfo();
+  const { storybookVersion, viewLayer, addons } = getStorybookInfo();
   debug(
-    `Detected package version:${packageVersion}, storybook version:${storybookVersion}, view layer: ${viewLayer}`
+    `Detected package version: ${packageVersion}, storybook version: ${storybookVersion}, view layer: ${viewLayer}, addons: ${
+      addons.length ? addons.map(addon => addon.name).join(', ') : 'none'
+    }`
   );
 
   let exitCode = 5;
@@ -564,6 +566,7 @@ Or find your code on the manage page of an existing project.`);
         packageVersion,
         storybookVersion,
         viewLayer,
+        addons,
         committerEmail,
         committerName,
         environment,
@@ -653,15 +656,21 @@ ${onlineHint}.`
       .trim();
 
     const confirmed = await confirm(
-      `\nYou have not added the \`${names.script}\` script to your \`package.json\`. Would you like me to do it for you?`
+      `\nYou have not added the \`${
+        names.script
+      }\` script to your \`package.json\`. Would you like me to do it for you?`
     );
     if (confirmed) {
       addScriptToPackageJson(names.script, scriptCommand);
       log(
         `
-Added script \`${names.script}\`. You can now run it here or in CI with \`npm run ${names.script}\` (or \`yarn ${names.script}\`)
+Added script \`${names.script}\`. You can now run it here or in CI with \`npm run ${
+          names.script
+        }\` (or \`yarn ${names.script}\`)
 
-NOTE: I wrote your app code to the \`${names.envVar}\` environment variable. The app code cannot be used to read story data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from \`package.json\` and set it via an environment variable instead.`,
+NOTE: I wrote your app code to the \`${
+          names.envVar
+        }\` environment variable. The app code cannot be used to read story data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from \`package.json\` and set it via an environment variable instead.`,
         { noPrefix: true }
       );
     } else {
