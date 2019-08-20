@@ -504,9 +504,11 @@ Or find your code on the manage page of an existing project.`);
   });
   debug(`Found baselineCommits: ${baselineCommits}`);
 
-  const { storybookVersion, viewLayer } = getStorybookInfo();
+  const { storybookVersion, viewLayer, addons } = getStorybookInfo();
   debug(
-    `Detected package version:${packageVersion}, storybook version:${storybookVersion}, view layer: ${viewLayer}`
+    `Detected package version: ${packageVersion}, storybook version: ${storybookVersion}, view layer: ${viewLayer}, addons: ${
+      addons.length ? addons.map(addon => addon.name).join(', ') : 'none'
+    }`
   );
 
   let exitCode = 5;
@@ -564,6 +566,7 @@ Or find your code on the manage page of an existing project.`);
         packageVersion,
         storybookVersion,
         viewLayer,
+        addons,
         committerEmail,
         committerName,
         environment,
