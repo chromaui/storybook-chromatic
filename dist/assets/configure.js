@@ -53,10 +53,10 @@ var _default = function _default() {
                   break;
                 }
 
-                throw new Error("Chromatic requires Storybook version at least 3.4. Please update your storybook!");
+                throw new Error("Chromatic requires Storybook version at least 3.4. Please update your Storybook!");
 
               case 4:
-                channel = __STORYBOOK_ADDONS_CHANNEL__; // In storybook 5+ we can be sure of the emitting, and we need to use a storyId API
+                channel = __STORYBOOK_ADDONS_CHANNEL__; // In Storybook 5+ we can be sure of the emitting, and we need to use a storyId API
 
                 if (!_client.toId) {
                   _context.next = 7;
@@ -75,6 +75,9 @@ var _default = function _default() {
                   });
                   channel.on('storyThrewException', function (error) {
                     return reject(error);
+                  });
+                  channel.on('storyMissing', function () {
+                    return reject(new Error('storyMissing'));
                   });
                   channel.emit('setCurrentStory', {
                     storyId: storyId || (0, _client.toId)(kind, story)
@@ -133,7 +136,7 @@ var _default = function _default() {
           __STORYBOOK_ADDONS_CHANNEL__ = _window2.__STORYBOOK_ADDONS_CHANNEL__;
 
       if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
-        throw new Error("Chromatic requires Storybook version at least 3.4. Please update your storybook!");
+        throw new Error("Chromatic requires Storybook version at least 3.4. Please update your Storybook!");
       } // eslint-disable-next-line no-underscore-dangle
 
 
