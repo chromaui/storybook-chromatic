@@ -30,6 +30,8 @@ if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
   console.error("storybook-chromatic should be installed in your `.storybook/config.js`");
 }
 
+var CHROMATIC_PARAMETERS = ['viewports', 'delay', 'disable', 'noScroll', 'diffThreshold', 'pauseAnimationAtEnd'];
+
 var _default = function _default() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   return (0, _client2.default)((0, _objectSpread3.default)({
@@ -163,7 +165,7 @@ var _default = function _default() {
             name: kind,
             displayName: kind.split(/\||\/|\./).slice(-1)[0]
           },
-          parameters: chromatic && ['viewports', 'delay', 'disable', 'noScroll', 'diffThreshold'].reduce(function (acc, key) {
+          parameters: chromatic && CHROMATIC_PARAMETERS.reduce(function (acc, key) {
             return chromatic[key] ? (0, _objectSpread3.default)({}, acc, (0, _defineProperty2.default)({}, key, param(chromatic[key]))) : acc;
           }, {})
         };
