@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/bin/chroma-publish.js"],"names":["require","main","module","process","argv"],"mappings":";;AAAA;;AAEA,IAAIA,OAAO,CAACC,IAAR,KAAiBC,MAArB,EAA6B;AAC3B,kCAAYC,OAAO,CAACC,IAApB;AACD","sourcesContent":["import { executeTest } from './chromatic-test';\n\nif (require.main === module) {\n  executeTest(process.argv);\n}\n"],"file":"chroma-publish.js"}
