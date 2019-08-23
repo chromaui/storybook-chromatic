@@ -1,3 +1,11 @@
+# 2.2.0 - 2019-08-23
+
+- Add support for docs-mode (Storybook 5.2 feature).
+
+- Add support for a new parameter: `pauseAnimationsAtEnd`. Read about it here: https://docs.chromaticqa.com/animations
+
+- Retry requests to uploading storybooks in case of network problems.
+
 # 2.1.1 - 2019-08-06
 
 - Upgrade `axios` dependency for security update
