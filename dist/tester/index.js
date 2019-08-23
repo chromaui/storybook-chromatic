@@ -143,7 +143,6 @@ async function getCommitAndBranch({ inputFromCI }) {
   // eslint-disable-next-line prefer-const
   let { commit, committedAt, committerEmail, committerName } = await getCommit();
   let branch = await getBranch();
-  const isTravisPrBuild = process.env.TRAVIS_EVENT_TYPE === 'pull_request';
 
   const {
     TRAVIS_EVENT_TYPE,
@@ -152,7 +151,8 @@ async function getCommitAndBranch({ inputFromCI }) {
     TRAVIS_PULL_REQUEST_SHA,
     TRAVIS_PULL_REQUEST_BRANCH,
   } = process.env;
-  if (TRAVIS_EVENT_TYPE === 'pull_request' && TRAVIS_PULL_REQUEST_SLUG === TRAVIS_REPO_SLUG) {
+  const isTravisPrBuild = TRAVIS_EVENT_TYPE === 'pull_request';
+  if (isTravisPrBuild && TRAVIS_PULL_REQUEST_SLUG === TRAVIS_REPO_SLUG) {
     log(
       `WARNING: Running Chromatic on a Travis PR build from an internal branch.
 
@@ -227,9 +227,9 @@ async function prepareAppOrBuild({
   if (dirname || buildScriptName) {
     let buildDirName = dirname;
     if (buildScriptName) {
-      log(`Building your storybook`);
+      log(`Building your Storybook`);
       ({ name: buildDirName } = dirSync({ unsafeCleanup: true, prefix: `${names.script}-` }));
-      debug(`Building storybook to ${buildDirName}`);
+      debug(`Building Storybook to ${buildDirName}`);
 
       const child = await startApp({
         scriptName: buildScriptName,
@@ -258,7 +258,7 @@ async function prepareAppOrBuild({
       });
     }
 
-    log(`Uploading your built storybook...`);
+    log(`Uploading your built Storybook...`);
     const isolatorUrl = await uploadToS3({ client, dirname: buildDirName });
     debug(`uploading to s3, got ${isolatorUrl}`);
     log(`Uploaded your build, verifying`);
@@ -268,7 +268,7 @@ async function prepareAppOrBuild({
 
   let cleanup;
   if (!noStart) {
-    log(`Starting storybook`);
+    log(`Starting Storybook`);
     const child = await startApp({
       scriptName,
       commandName,
@@ -278,12 +278,12 @@ async function prepareAppOrBuild({
         gte(storybookVersion, STORYBOOK_CLI_FLAGS_BY_VERSION['--ci']) && ['--', '--ci'],
     });
     cleanup = child && (async () => denodeify(kill)(child.pid, 'SIGHUP'));
-    log(`Started storybook at ${url}`);
+    log(`Started Storybook at ${url}`);
   } else if (url) {
     if (!(await checkResponse(url))) {
       throw new Error(`No server responding at ${url} -- make sure you've started it.`);
     }
-    log(`Detected storybook at ${url}`);
+    log(`Detected Storybook at ${url}`);
   }
 
   const { port, pathname, query, hash } = parse(url, true);
@@ -504,9 +504,11 @@ Or find your code on the manage page of an existing project.`);
   });
   debug(`Found baselineCommits: ${baselineCommits}`);
 
-  const { storybookVersion, viewLayer } = getStorybookInfo();
+  const { storybookVersion, viewLayer, addons } = getStorybookInfo();
   debug(
-    `Detected package version:${packageVersion}, storybook version:${storybookVersion}, view layer: ${viewLayer}`
+    `Detected package version: ${packageVersion}, storybook version: ${storybookVersion}, view layer: ${viewLayer}, addons: ${
+      addons.length ? addons.map(addon => addon.name).join(', ') : 'none'
+    }`
   );
 
   let exitCode = 5;
@@ -564,6 +566,7 @@ Or find your code on the manage page of an existing project.`);
         packageVersion,
         storybookVersion,
         viewLayer,
+        addons,
         committerEmail,
         committerName,
         environment,
@@ -653,15 +656,21 @@ ${onlineHint}.`
       .trim();
 
     const confirmed = await confirm(
-      `\nYou have not added the \`${names.script}\` script to your \`package.json\`. Would you like me to do it for you?`
+      `\nYou have not added the \`${
+        names.script
+      }\` script to your \`package.json\`. Would you like me to do it for you?`
     );
     if (confirmed) {
       addScriptToPackageJson(names.script, scriptCommand);
       log(
         `
-Added script \`${names.script}\`. You can now run it here or in CI with \`npm run ${names.script}\` (or \`yarn ${names.script}\`)
+Added script \`${names.script}\`. You can now run it here or in CI with \`npm run ${
+          names.script
+        }\` (or \`yarn ${names.script}\`)
 
-NOTE: I wrote your app code to the \`${names.envVar}\` environment variable. The app code cannot be used to read story data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from \`package.json\` and set it via an environment variable instead.`,
+NOTE: I wrote your app code to the \`${
+          names.envVar
+        }\` environment variable. The app code cannot be used to read story data, it can only be used to create new builds. If you would still prefer not to check it into source control, you can remove it from \`package.json\` and set it via an environment variable instead.`,
         { noPrefix: true }
       );
     } else {

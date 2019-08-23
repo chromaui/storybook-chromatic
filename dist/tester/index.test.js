@@ -73,6 +73,7 @@ jest.mock('./package-json');
 jest.mock('./storybook', () => () => ({
   storybookVersion: '5.1.0',
   viewLayer: 'viewLayer',
+  addons: [],
 }));
 jest.mock('./upload-to-s3');
 jest.mock('./log', () => () => jest.fn());
@@ -340,7 +341,7 @@ it('passes the url directly to the build if noTunnel is set', async () => {
   });
 });
 
-it('stops the storybook if something goes wrong', async () => {
+it('stops the Storybook if something goes wrong', async () => {
   openTunnel.mockImplementation(() => {
     throw new Error('tunnel error');
   });

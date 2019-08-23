@@ -70,7 +70,7 @@ export default async function startApp({
   let child;
   if (scriptName) {
     if (await checkResponse(url)) {
-      // We assume the process that is already running on the url is indeed our storybook
+      // We assume the process that is already running on the url is indeed our Storybook
       return null;
     }
 

@@ -223,7 +223,7 @@ export default async function getRuntimeSpecs(
 
         if (!dom.window.__chromaticRuntimeSpecs__) {
           console.error(
-            `Didn't find ${product} addon in your storybook.
+            `Didn't find ${product} addon in your Storybook.
         
 Did you add it with \`import '${packageName}'\` in your \`.storybook/config.js\`?
 

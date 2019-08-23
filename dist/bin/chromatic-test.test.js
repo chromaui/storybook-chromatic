@@ -84,13 +84,13 @@ it('allows you to specify alternate script, still picks up port', function () {
     noStart: false
   });
 });
-it('allows you to specify alternate script, that does not start storybook, if you set port', function () {
+it('allows you to specify alternate script, that does not start Storybook, if you set port', function () {
   expect((0, _chromaticTest.parseArgv)(['node', 'chromatic-test', '--script-name', 'notStorybook', '--storybook-port', '6060'])).toMatchObject({
     scriptName: 'notStorybook',
     url: 'http://localhost:6060/iframe.html'
   });
 });
-it('throws if you try to specify a script name that is not a storybook, if you do NOT set port', function () {
+it('throws if you try to specify a script name that is not a Storybook, if you do NOT set port', function () {
   expect(function () {
     return (0, _chromaticTest.parseArgv)(['node', 'chromatic-test', '--script-name', 'notStorybook']);
   }).toThrow(/must pass a port/);

@@ -30,6 +30,8 @@ if (!location.pathname.match('/iframe.html') && typeof jest === 'undefined') {
   console.error("storybook-chromatic should be installed in your `.storybook/config.js`");
 }
 
+var CHROMATIC_PARAMETERS = ['viewports', 'delay', 'disable', 'noScroll', 'diffThreshold', 'pauseAnimationAtEnd'];
+
 var _default = function _default() {
   var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   return (0, _client2.default)((0, _objectSpread3.default)({
@@ -51,10 +53,10 @@ var _default = function _default() {
                   break;
                 }
 
-                throw new Error("Chromatic requires Storybook version at least 3.4. Please update your storybook!");
+                throw new Error("Chromatic requires Storybook version at least 3.4. Please update your Storybook!");
 
               case 4:
-                channel = __STORYBOOK_ADDONS_CHANNEL__; // In storybook 5+ we can be sure of the emitting, and we need to use a storyId API
+                channel = __STORYBOOK_ADDONS_CHANNEL__; // In Storybook 5+ we can be sure of the emitting, and we need to use a storyId API
 
                 if (!_client.toId) {
                   _context.next = 7;
@@ -134,7 +136,7 @@ var _default = function _default() {
           __STORYBOOK_ADDONS_CHANNEL__ = _window2.__STORYBOOK_ADDONS_CHANNEL__;
 
       if (!__STORYBOOK_CLIENT_API__ || !__STORYBOOK_ADDONS_CHANNEL__) {
-        throw new Error("Chromatic requires Storybook version at least 3.4. Please update your storybook!");
+        throw new Error("Chromatic requires Storybook version at least 3.4. Please update your Storybook!");
       } // eslint-disable-next-line no-underscore-dangle
 
 
@@ -163,7 +165,7 @@ var _default = function _default() {
             name: kind,
             displayName: kind.split(/\||\/|\./).slice(-1)[0]
           },
-          parameters: chromatic && ['viewports', 'delay', 'disable', 'noScroll', 'diffThreshold'].reduce(function (acc, key) {
+          parameters: chromatic && CHROMATIC_PARAMETERS.reduce(function (acc, key) {
             return chromatic[key] ? (0, _objectSpread3.default)({}, acc, (0, _defineProperty2.default)({}, key, param(chromatic[key]))) : acc;
           }, {})
         };
