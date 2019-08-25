@@ -1,3 +1,7 @@
+# 2.2.1 - 2019-08-25
+
+- Bugfix for compatibility with localtunnel`
+
 # 2.2.0 - 2019-08-23
 
 - Add support for docs-mode (Storybook 5.2 feature).

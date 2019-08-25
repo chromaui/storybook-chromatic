@@ -1,6 +1,6 @@
 {
   "name": "storybook-chromatic",
-  "version": "2.2.1-dev",
+  "version": "2.2.1",
   "description": "Visual Testing for Storybook",
   "scripts": {
     "prebuild": "rm -rf ./dist",
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.3.1",
-    "@chromaui/localtunnel": "2.0.0",
+    "@chromaui/localtunnel": "2.0.1",
     "async-retry": "^1.1.4",
     "commander": "^2.9.0",
     "debug": "^3.0.1",
