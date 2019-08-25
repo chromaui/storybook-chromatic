@@ -1,4 +1,4 @@
-# 2.2.1 - 2019-08-25
+# 2.2.2 - 2019-08-25
 
 - Bugfix for compatibility with localtunnel`
 
