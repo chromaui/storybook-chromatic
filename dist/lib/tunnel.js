@@ -24,7 +24,7 @@ export default async function openTunnel({ tunnelUrl, port, https }) {
   tunnel.on('request', request => debug(`Got request: %O`, request));
   // tunnel.tunnel_cluster.on('open', socket => debug(`Got tunnel cluster open`));
   // tunnel.tunnel_cluster.on('request', request => debug(`Got tunnel cluster request: %O`, request));
-  tunnel.tunnel_cluster.on('error', error => debug(`Got tunnel cluster error: %O`, error));
+  tunnel.tunnelCluster.on('error', error => debug(`Got tunnel cluster error: %O`, error));
   // tunnel.tunnel_cluster.on('dead', () => debug(`Got tunnel cluster dead`));
 
   return tunnel;
