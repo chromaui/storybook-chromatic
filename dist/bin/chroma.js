@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 
 var _commander = _interopRequireDefault(require("commander"));
 
-_commander.default.version(require('../../package.json').version).command('test', 'run a Chromatic test', {
+_commander.default.version(require('../../package.json').version).command('publish', 'publish a Storybook to Chroma', {
   isDefault: true
 }).parse(process.argv);
-//# sourceMappingURL=chromatic.js.map
+//# sourceMappingURL=chroma.js.map
